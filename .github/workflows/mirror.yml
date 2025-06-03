@@ -1,0 +1,28 @@
+name: Mirror Push
+
+on:
+  push:
+    branches:
+      - main  # or any branch you want to track
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history needed to preserve authorship
+
+      - name: Set up Git
+        run: |
+          git config user.name "GitHub Action"
+          git config user.email "action@github.com"
+
+      - name: Add target repo as remote and push
+        env:
+          MIRROR_TOKEN: ${{ secrets.MIRROR_TOKEN }}
+        run: |
+          git remote add mirror https://x-access-token:${MIRROR_TOKEN}@github.com/PLISMUN/Website.git
+          git push mirror HEAD:refs/heads/main --force
