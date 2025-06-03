@@ -17,8 +17,8 @@ jobs:
 
       - name: Set up Git
         run: |
-          git config user.name "GitHub Action"
-          git config user.email "action@github.com"
+          git config user.name "PLISMUN"
+          git config user.email "plismun@parklane-is.com"
 
       - name: Add target repo as remote and push
         env:
