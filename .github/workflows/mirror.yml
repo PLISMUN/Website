@@ -1,26 +1,30 @@
-name: Mirror Push
+# .github/workflows/mirror.yml
+name: Mirror to PLISMUN/Website
 
 on:
   push:
     branches:
-      - main  # or any branch you want to track
+      - main   # or whatever branch you want to mirror
 
 jobs:
   mirror:
     runs-on: ubuntu-latest
 
     steps:
+      # Checkout with full history, but DON’T persist GITHUB_TOKEN as Git creds
       - name: Checkout source repo
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Full history needed to preserve authorship
+          fetch-depth: 0
+          persist-credentials: false
 
-      - name: Set up Git
+      # Fall back commit author.
+      - name: Configure Git user
         run: |
-          git config user.name "PLISMUN"
-          git config user.email "plismun@parklane-is.com"
+          git config user.name "GitHub Action"
+          git config user.email "action@github.com"
 
-      - name: Add target repo as remote and push
+      - name: Push to PLISMUN/Website
         env:
           MIRROR_TOKEN: ${{ secrets.MIRROR_TOKEN }}
         run: |
