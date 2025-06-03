@@ -1,0 +1,9 @@
+Dear {FIRSTNAME} {LASTNAME},
+
+This email has been sent to inform you that your delegate application to PLISMUN '24 has been rejected.
+If you believe that this is a mistake, please let us know.
+
+If you have paid money towards the conference, you will be refunded shortly.
+
+Sincerely,
+The PLISMUN '24 Team
