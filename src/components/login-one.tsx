@@ -77,7 +77,7 @@ export default function LoginPage() {
 
                 <div className="px-6">
                     <p className="text-muted-foreground text-sm">
-                        Don't have an account ?
+                        Don&apos;t have an account ?
                         <Button
                             asChild
                             variant="link"

@@ -25,7 +25,7 @@ export default function AboutSection() {
                             <div className="space-y-2">
                                 <span className="mb-4 block text-3xl">🎨</span>
                                 <h3 className="text-xl font-medium">Design Layouts</h3>
-                                <p className="text-muted-foreground">Create visually appealing layouts that capture your audience's attention.</p>
+                                <p className="text-muted-foreground">Create visually appealing layouts that capture your audience&apos;s attention.</p>
                             </div>
                         </div>
 

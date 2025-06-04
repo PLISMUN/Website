@@ -1,6 +1,6 @@
 'use client'
 import { cn } from '@/lib/utils'
-import { Bold, Calendar1, Ellipsis, Italic, Strikethrough, Underline } from 'lucide-react'
+import { Calendar1, Ellipsis } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
 export default function Partners() {
@@ -11,7 +11,7 @@ export default function Partners() {
                     <div>
                         <span className="text-primary">Smart Editor</span>
                         <h2 className="text-foreground mt-4 text-4xl font-semibold">Our Partners</h2>
-                        <p className="text-muted-foreground mb-12 mt-4 text-lg">These are the companies that we couldn't have made it without.</p>
+                        <p className="text-muted-foreground mb-12 mt-4 text-lg">These are the companies that we couldn&apos;t have made it without.</p>
                     </div>
 
                     <div className="border-foreground/5 space-y-6 [--color-border:color-mix(in_oklab,var(--color-foreground)10%,transparent)] sm:space-y-0 sm:divide-y">
@@ -19,13 +19,13 @@ export default function Partners() {
                             <CodeIllustration className="sm:col-span-2" />
                             <div className="mt-6 sm:col-span-3 sm:mt-0 sm:border-l sm:pl-12">
                                 <h3 className="text-foreground text-xl font-semibold">Marketing Campaigns</h3>
-                                <p className="text-muted-foreground mt-4 text-lg">We'll put together your schedule on automatically. You'll keep app deadlines, and will work on the highest priority items first.</p>
+                                <p className="text-muted-foreground mt-4 text-lg">We&apos;ll put together your schedule on automatically. You&apos;ll keep app deadlines, and will work on the highest priority items first.</p>
                             </div>
                         </div>
                         <div className="grid sm:grid-cols-5 sm:divide-x">
                             <div className="pt-12 sm:col-span-3 sm:border-r sm:pr-12">
                                 <h3 className="text-foreground text-xl font-semibold">AI Meeting Scheduler</h3>
-                                <p className="text-muted-foreground mt-4 text-lg">Ask the chat to create or update your events. Ask it how much time you've spent on demo calls last week. Or have it prepare today's agendas.</p>
+                                <p className="text-muted-foreground mt-4 text-lg">Ask the chat to create or update your events. Ask it how much time you&apos;ve spent on demo calls last week. Or have it prepare today&apos;s agendas.</p>
                             </div>
                             <div className="row-start-1 flex items-center justify-center pt-12 sm:col-span-2 sm:row-start-auto">
                                 <ScheduleIllustation className="pt-8" />

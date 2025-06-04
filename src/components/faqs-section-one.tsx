@@ -23,7 +23,7 @@ export default function FAQs() {
         {
             id: 'item-4',
             question: 'Do you ship internationally?',
-            answer: "Yes, we ship to over 50 countries worldwide. International shipping typically takes 7-14 business days. Additional customs fees may apply depending on your country's import regulations.",
+            answer: "Yes, we ship to over 50 countries worldwide. International shipping typically takes 7-14 business days. Additional customs fees may apply depending on your country\'s import regulations.",
         },
         {
             id: 'item-5',

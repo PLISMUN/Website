@@ -1,7 +1,5 @@
 'use client'
 import React from "react"
-import { cn } from '@/lib/utils'
-import { Bold, Calendar1, Ellipsis, Italic, Strikethrough, Underline } from 'lucide-react'
 
 
 export default function ContentSection() {

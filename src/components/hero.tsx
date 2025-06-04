@@ -2,7 +2,7 @@ import React from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { HeroHeader } from './header'
-import { ChevronRight, CirclePlay } from 'lucide-react'
+import { ChevronRight } from 'lucide-react'
 import Image from 'next/image'
 
 export default function HeroSection() {
@@ -15,7 +15,7 @@ export default function HeroSection() {
                         <div className="relative z-10 mx-auto w-full max-w-5xl px-6">
                             <div className="md:w-1/2">
                                 <div>
-                                    <h1 className="max-w-md text-balance text-5xl font-medium md:text-6xl">PLISMUN'26</h1>
+                                    <h1 className="max-w-md text-balance text-5xl font-medium md:text-6xl">PLISMUN&apos;26</h1>
                                     <h2 className="max-w-md text-balance text-lg font-normal text-muted-foreground md:text-xl">
                                         Feburary 5th - 8th, 2026
                                     </h2>
