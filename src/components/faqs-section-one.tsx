@@ -23,7 +23,7 @@ export default function FAQs() {
         {
             id: 'item-4',
             question: 'Do you ship internationally?',
-            answer: "Yes, we ship to over 50 countries worldwide. International shipping typically takes 7-14 business days. Additional customs fees may apply depending on your country\'s import regulations.",
+            answer: "Yes, we ship to over 50 countries worldwide. International shipping typically takes 7-14 business days. Additional customs fees may apply depending on your countryʹs import regulations.",
         },
         {
             id: 'item-5',
@@ -59,11 +59,11 @@ export default function FAQs() {
                     </Accordion>
 
                     <p className="text-muted-foreground mt-6">
-                        Can't find what you're looking for? Contact our{' '}
+                        Can&apos;t find what you&apos;re looking for? Contact {' '}
                         <Link
-                            href="#"
+                            href="mailto:plismun@parklane-is.com"
                             className="text-primary font-medium hover:underline">
-                            customer support team
+                            us
                         </Link>
                     </p>
                 </div>
