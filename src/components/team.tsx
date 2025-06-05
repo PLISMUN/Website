@@ -1,15 +1,18 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 
 const members = [
-    { src: 'https://avatars.githubusercontent.com/u/47919550?v=4', name: 'Meschac Irung', role: 'Frontend Engineer' },
-    { src: 'https://avatars.githubusercontent.com/u/31113941?v=4', name: 'Bernard Ngandu', role: 'Backend Developer' },
-    { src: 'https://avatars.githubusercontent.com/u/68236786?v=4', name: 'Theo Balick', role: 'UI/UX Designer' },
-    { src: 'https://avatars.githubusercontent.com/u/99137927?v=4', name: 'Glodie Lukose', role: 'Project Manager' },
-    { src: 'https://avatars.githubusercontent.com/u/12345678?v=4', name: 'Sarah Johnson', role: 'DevOps Engineer' },
-    { src: 'https://avatars.githubusercontent.com/u/23456789?v=4', name: 'Michael Chen', role: 'QA Specialist' },
-    { src: 'https://avatars.githubusercontent.com/u/34567890?v=4', name: 'Aisha Patel', role: 'Data Scientist' },
-    { src: 'https://avatars.githubusercontent.com/u/45678901?v=4', name: 'Carlos Rodriguez', role: 'Product Manager' },
-    { src: 'https://avatars.githubusercontent.com/u/56789012?v=4', name: 'Emma Wilson', role: 'Content Strategist' },
+    { src: 'https://avatars.githubusercontent.com/u/47919550?v=4', name: 'Igor Zajac', role: 'Secretary General' },
+    { src: 'https://avatars.githubusercontent.com/u/31113941?v=4', name: 'David Bouck', role: 'Deputy Secrutary General, Admissions, Finance' },
+    { src: 'https://avatars.githubusercontent.com/u/68236786?v=4', name: 'Vic Maceckova', role: 'Chief of Staff' },
+    { src: 'https://avatars.githubusercontent.com/u/23456789?v=4', name: 'Tomáš Stoklásek ', role: 'Head of IT & Website' },
+    { src: 'https://avatars.githubusercontent.com/u/99137927?v=4', name: 'Aoife McCormick ', role: 'Head of Research' },
+    { src: 'https://avatars.githubusercontent.com/u/12345678?v=4', name: 'Klara Elisa Müller', role: 'Head of Admins' },
+    { src: 'https://avatars.githubusercontent.com/u/34567890?v=4', name: 'Amira Tabasaranskaya', role: 'Head of Social Media/Press' },
+    { src: 'https://avatars.githubusercontent.com/u/45678901?v=4', name: 'Elodie Wray', role: 'Head of Catering & Venue' },
+    { src: 'https://avatars.githubusercontent.com/u/56789012?v=4', name: 'Lilly Ann Hohmann', role: 'Head of Merchandise & Design' },
+    { src: 'https://avatars.githubusercontent.com/u/47919550?v=4', name: 'Thomas Michael Hill', role: 'Head of Social Media' },
+    { src: 'https://avatars.githubusercontent.com/u/31113941?v=4', name: 'Mariya Krykhtina', role: 'Head of Photography' },
+    { src: 'https://avatars.githubusercontent.com/u/68236786?v=4', name: 'Vera Motrenko', role: 'Head of Finance' },
 ]
 
 export default function TeamSection() {

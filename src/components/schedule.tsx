@@ -8,7 +8,6 @@ export default function Schedule() {
                     <div className="mx-auto max-w-2xl">
                         <div>
                             <h2 className="text-foreground text-4xl font-semibold">Schedule</h2>
-                            <p className="text-muted-foreground mb-12 mt-4 text-xl">Our AI assistant helps you create better content faster. Generate ideas, improve your writing, and design layouts with simple prompts.</p>
                         </div>
 
                         <div className="relative mt-12 overflow-hidden rounded-3xl bg-black/10">

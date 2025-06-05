@@ -1,18 +1,59 @@
+
+"use client"
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import Link from 'next/link'
+import { useState } from "react"
+import { signIn } from "next-auth/react"
+import { useSession } from 'next-auth/react'
+import { useRouter } from "next/navigation"
+import { useEffect } from 'react'
 
 export default function LoginPage() {
+    const [email, setEmail] = useState("")
+    const [password, setPassword] = useState("")
+    const [loading, setLoading] = useState(false)
+    const [error, setError] = useState<string | null>(null)
+    const [success, setSuccess] = useState(false)
+    const { data: session, status } = useSession()
+    const router = useRouter()
+
+    useEffect(() => {
+        if (status === "authenticated") {
+            router.push("/user/dashboard")
+        }
+    }, [status, router])
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault()
+        setLoading(true)
+        setError(null)
+        setSuccess(false)
+
+        const res = await signIn("credentials", {
+            redirect: false,
+            email,
+            password,
+        })
+
+        if (res?.error) {
+            setError(res.error)
+        } else if (res?.ok) {
+            setSuccess(true)
+            window.location.href = "/user/dashboard"
+        }
+        setLoading(false)
+    }
     return (
         <section className="bg-linear-to-b from-muted to-background flex min-h-screen px-4 py-16 md:py-32">
             <form
-                action=""
+                onSubmit={handleSubmit}
                 className="max-w-92 m-auto h-fit w-full">
                 <div className="p-6">
                     <div>
                         <Link
-                            href="/mist"
+                            href="/"
                             aria-label="go home">
                             <img src="/logo.png" alt="Logo" className="h-8 w-auto" />
                         </Link>
@@ -64,13 +105,40 @@ export default function LoginPage() {
                                 id="email"
                                 placeholder="Your email"
                                 className="ring-foreground/15 border-transparent ring-1"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                            />
+                            <Label
+                                htmlFor="password"
+                                className="block text-sm">
+                                Password
+                            </Label>
+                            <Input
+                                type="password"
+                                required
+                                name="password"
+                                id="password"
+                                placeholder="Your password"
+                                className="ring-foreground/15 border-transparent ring-1"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
                             />
                         </div>
 
                         <Button
-                            className="w-full"
+                            className="w-full mb-2"
                             size="default">
-                            Continue
+                            {loading ? 'Signing in...' : 'Continue'}
+                        </Button>
+                        {error && <div className="text-red-500">{error}</div>}
+                        {success && <div className="text-green-500">Signin successful!</div>}
+                        <Button
+                            className="w-full"
+                            size="sm"
+                            variant="outline"
+                            onClick={() => window.location.href = '/user/forgot'}>
+                            
+                            Forgot your password?
                         </Button>
                     </div>
                 </div>
@@ -83,15 +151,6 @@ export default function LoginPage() {
                             variant="link"
                             className="px-2">
                             <Link href="/user/signup">Create account</Link>
-                        </Button>
-                    </p>
-                    <p className="text-muted-foreground text-sm">
-                        Forgot your password ?
-                        <Button
-                            asChild
-                            variant="link"
-                            className="px-2">
-                            <Link href="/user/forgot">Reset password</Link>
                         </Button>
                     </p>
                 </div>

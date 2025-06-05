@@ -3,50 +3,12 @@ import { ArrowRight } from 'lucide-react'
 export default function AboutSection() {
     return (
         <section>
-            <div className="py-24">
+            <div className="pt-24">
                 <div className="mx-auto w-full max-w-5xl px-6">
                     <div className="@container mx-auto max-w-2xl">
                         <div>
-                            <h2 className="text-foreground text-4xl font-semibold">Something something mun plismun good</h2>
-                            <p className="text-muted-foreground mb-12 mt-4 text-xl">Our AI assistant helps you create better content faster. Generate ideas, improve your writing, and design layouts with simple prompts.</p>
-                        </div>
-
-                        <div className="@sm:grid-cols-2 @2xl:grid-cols-3 my-12 grid gap-6">
-                            <div className="space-y-2">
-                                <span className="mb-4 block text-3xl">💡</span>
-                                <h3 className="text-xl font-medium">Generate Ideas</h3>
-                                <p className="text-muted-foreground">Spark creativity with AI-powered content suggestions and inspiration.</p>
-                            </div>
-                            <div className="space-y-2">
-                                <span className="mb-4 block text-3xl">✏️</span>
-                                <h3 className="text-xl font-medium">Improve Writing</h3>
-                                <p className="text-muted-foreground">Enhance your text with smart editing suggestions and style refinements.</p>
-                            </div>
-                            <div className="space-y-2">
-                                <span className="mb-4 block text-3xl">🎨</span>
-                                <h3 className="text-xl font-medium">Design Layouts</h3>
-                                <p className="text-muted-foreground">Create visually appealing layouts that capture your audience&apos;s attention.</p>
-                            </div>
-                        </div>
-
-                        <div className="border-t">
-                            <ul
-                                role="list"
-                                className="text-muted-foreground mt-8 space-y-2">
-                                {[
-                                    { value: '90+', label: 'Integrations' },
-                                    { value: '56%', label: 'Productivity Boost' },
-                                    { value: '24/7', label: 'Customer Support' },
-                                    { value: '10k+', label: 'Active Users' },
-                                ].map((stat, index) => (
-                                    <li
-                                        key={index}
-                                        className="-ml-0.5 flex items-center gap-1.5">
-                                        <ArrowRight className="size-4 opacity-50" />
-                                        <span className="text-foreground font-medium">{stat.value}</span> {stat.label}
-                                    </li>
-                                ))}
-                            </ul>
+                            <h2 className="text-foreground text-4xl font-semibold">About PLISMUN: Diplomacy in Action</h2>
+                            <p className="text-muted-foreground mb-12 mt-4 text-xl">At PLISMUN — Park Lane International School Model United Nations — we believe in the power of dialogue, critical thinking, and global awareness. Founded with the goal of empowering students to engage with the most pressing international issues of our time, PLISMUN is more than a conference; it's a platform for young voices to shape the future. <br /><br />Held annually in the heart of Prague, PLISMUN brings together delegates from around the world for three days of passionate debate, collaborative problem-solving, and cultural exchange. With diverse committees reflecting the structure of the United Nations, participants are challenged to think globally, speak diplomatically, and act responsibly. <br /><br />Whether you're a first-time delegate or an experienced MUN veteran, PLISMUN provides an inclusive, academically rigorous, and inspiring environment to develop leadership skills and lifelong friendships.</p>
                         </div>
                     </div>
                 </div>

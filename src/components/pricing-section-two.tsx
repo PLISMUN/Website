@@ -7,8 +7,8 @@ export default function Pricing() {
         <div className="bg-muted relative py-16 md:py-32">
             <div className="mx-auto max-w-5xl px-6">
                 <div className="mx-auto max-w-2xl text-center">
-                    <h2 className="text-balance text-3xl font-bold md:text-4xl lg:text-5xl">Pricing that scale with your business</h2>
-                    <p className="text-muted-foreground mx-auto mt-4 max-w-xl text-balance text-lg">Choose the perfect plan for your needs and start optimizing your workflow today</p>
+                    <h2 className="text-balance text-3xl font-bold md:text-4xl lg:text-5xl">A price that&apos;s affordable</h2>
+                    <p className="text-muted-foreground mx-auto mt-4 max-w-xl text-balance text-lg">While we know that noone wants to see a price tag on their hobbies, your financial contributions pay not only for your food & drinks, but for everything that makes PLISMUN great.</p>
                 </div>
                 <div className="@container relative mt-12 md:mt-20">
                     <Card className="@4xl:max-w-full relative mx-auto max-w-sm">

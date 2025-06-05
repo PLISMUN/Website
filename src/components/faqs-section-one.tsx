@@ -59,11 +59,11 @@ export default function FAQs() {
                     </Accordion>
 
                     <p className="text-muted-foreground mt-6">
-                        Can&apos;t find what you&apos;re looking for? Contact {' '}
+                        Can&apos;t find what you&apos;re looking for? {' '}
                         <Link
                             href="mailto:plismun@parklane-is.com"
                             className="text-primary font-medium hover:underline">
-                            us
+                            Contact us
                         </Link>
                     </p>
                 </div>

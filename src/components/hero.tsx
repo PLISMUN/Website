@@ -1,11 +1,16 @@
+"use client";
 import React from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { HeroHeader } from './header'
 import { ChevronRight } from 'lucide-react'
 import Image from 'next/image'
+import { useSession } from 'next-auth/react'
 
 export default function HeroSection() {
+
+    const { data: session } = useSession()
+
     return (
         <>
             <HeroHeader />
@@ -26,21 +31,25 @@ export default function HeroSection() {
                                             asChild
                                             size="lg"
                                             className="pr-4.5">
-                                            <Link href="#link">
+                                            <Link href="/user/signup">
                                                 <span className="text-nowrap">Get Started</span>
                                                 <ChevronRight className="opacity-50" />
                                             </Link>
                                         </Button>
+                                        {!session && (
+                                            <>
                                         <Button
                                             key={2}
                                             asChild
                                             size="lg"
                                             variant="outline"
                                             className="pl-5">
-                                            <Link href="#link">
+                                            <Link href="/user/login">
                                                 <span className="text-nowrap">Log in</span>
                                             </Link>
                                         </Button>
+                                        </>
+                                        )}
                                     </div>
                                 </div>
 
