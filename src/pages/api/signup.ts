@@ -1,6 +1,5 @@
 // pages/api/signup.ts
 import { NextApiRequest, NextApiResponse } from 'next';
-import { createClient } from '@libsql/client';
 import bcrypt from 'bcryptjs';
 import { getTursoClient } from '@/pages/api/components/dbAuth';
 
