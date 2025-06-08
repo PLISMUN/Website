@@ -10,7 +10,7 @@ const members = [
     { src: 'https://avatars.githubusercontent.com/u/34567890?v=4', name: 'Amira Tabasaranskaya', role: 'Head of Social Media/Press' },
     { src: 'https://avatars.githubusercontent.com/u/45678901?v=4', name: 'Elodie Wray', role: 'Head of Catering & Venue' },
     { src: 'https://avatars.githubusercontent.com/u/56789012?v=4', name: 'Lilly Ann Hohmann', role: 'Head of Merchandise & Design' },
-    { src: 'https://avatars.githubusercontent.com/u/47919550?v=4', name: 'Thomas Michael Hill', role: 'Head of Social Media' },
+    { src: 'https://avatars.githubusercontent.com/u/47919550?v=4', name: 'Thomas Michael Hill', role: 'Head of Social Event' },
     { src: 'https://avatars.githubusercontent.com/u/31113941?v=4', name: 'Mariya Krykhtina', role: 'Head of Photography' },
     { src: 'https://avatars.githubusercontent.com/u/68236786?v=4', name: 'Vera Motrenko', role: 'Head of Finance' },
 ]
