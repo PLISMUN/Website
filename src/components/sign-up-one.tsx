@@ -7,6 +7,7 @@ import { useState } from "react"
 import { useSession } from 'next-auth/react'
 import { useRouter } from "next/navigation"
 import { useEffect } from 'react'
+import { signIn } from "next-auth/react"
 
 export default function LoginPage() {
     
@@ -37,7 +38,7 @@ export default function LoginPage() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email, password, google: false }),
       });
 
       const data = await res.json();
@@ -76,7 +77,9 @@ export default function LoginPage() {
                             type="button"
                             variant="outline"
                             size="default"
-                            className="w-full">
+                            className="w-full"
+                            onClick={() => signIn("google")}
+                            >
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 className="size-4"

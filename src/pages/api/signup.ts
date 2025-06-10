@@ -9,7 +9,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(405).json({ message: 'Method Not Allowed' });
   }
 
-  const { email, password } = req.body;
+  const { email, password, isGoogleUser } = req.body;
 
   if (!email || !password) {
     return res.status(400).json({ message: 'Email and password are required' });
@@ -35,6 +35,8 @@ if (typeof password !== 'string' || password.length < 8 || password.length > 100
 // Hash the password before storing
 const hashedPassword = await bcrypt.hash(password, 10);
 
+const isGoogleUserBool = Boolean(isGoogleUser)
+
   try {
     const turso = getTursoClient()
 
@@ -42,13 +44,14 @@ const hashedPassword = await bcrypt.hash(password, 10);
       CREATE TABLE IF NOT EXISTS users (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         email TEXT NOT NULL UNIQUE,
-        password TEXT NOT NULL
+        password TEXT NOT NULL,
+        isGoogleUser BOOLEAN NOT NULL
       )
     `);
 
     await turso.execute({
-      sql: 'INSERT INTO users (email, password) VALUES (?, ?)',
-      args: [email, hashedPassword],
+      sql: 'INSERT INTO users (email, password, isGoogleUser) VALUES (?, ?, ?)',
+      args: [email, hashedPassword, isGoogleUserBool],
     });
     
     res.status(200).json({ message: 'Signup successful' });
