@@ -11,7 +11,7 @@ import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import { useEffect } from 'react'
 
-export default function DelegateInfoQuestion() {
+export default function DelegateInfoQuestion({ onSuccess }: { onSuccess?: () => void }) {
 
     const { data: session } = useSession()
 
@@ -37,7 +37,6 @@ export default function DelegateInfoQuestion() {
         setLoading(true)
         setError(null)
         setSuccess(false)
-        
         try {
             const res = await fetch('/api/setPeopleInfo', {
                 method: 'POST',
@@ -46,6 +45,7 @@ export default function DelegateInfoQuestion() {
             })
             if (res.ok) {
                 setSuccess(true)
+                if (onSuccess) onSuccess()
             } else {
                 const data = await res.json()
                 setError(data.message || 'Submission failed')
@@ -71,7 +71,7 @@ export default function DelegateInfoQuestion() {
                         const data = await res.json()
                         setForm((prev) => ({
                             ...prev,
-                            name: data[0].name || '',
+                            name: data[0].name || session?.user?.name || '',
                             birth: data[0].birth || '',
                             nationality: data[0].nationality || '',
                             delegation: data[0].delegation || '',
@@ -409,7 +409,7 @@ export default function DelegateInfoQuestion() {
                                     onChange={e => handleChange('notes', e.target.value)}
                                 />
                             </div>
-                            <Button type="submit" disabled={loading}>{loading ? 'Submitting...' : 'Submit'}</Button>
+                            <Button className="cursor-pointer" type="submit" disabled={loading}>{loading ? 'Submitting...' : 'Submit'}</Button>
                             {success && <p className="text-green-600">Signup successful!</p>}
                             {error && <p className="text-red-600">{error}</p>}
                         </div>
