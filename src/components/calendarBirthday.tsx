@@ -14,11 +14,18 @@ import {
 
 interface CalendarBirthdayProps {
   onChange: (date: string) => void
+  selected?: string
 }
 
-export default function CalendarBirthday({ onChange }: CalendarBirthdayProps) {
+export default function CalendarBirthday({ onChange, selected }: CalendarBirthdayProps) {
   const [open, setOpen] = React.useState(false)
-  const [date, setDate] = React.useState<Date | undefined>(undefined)
+  const [date, setDate] = React.useState<Date | undefined>(
+    selected ? new Date(selected) : undefined
+  )
+
+  React.useEffect(() => {
+    if (selected) setDate(new Date(selected))
+  }, [selected])
 
   return (
     <div className="flex flex-col gap-3">

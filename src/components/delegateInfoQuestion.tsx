@@ -56,9 +56,33 @@ export default function DelegateInfoQuestion() {
         setLoading(false)
     }
 
+    
     const [delegations, setDelegations] = useState<{ id: number, name: string }[]>([])
-
-        useEffect(() => {
+    
+    useEffect(() => {
+            const getInfo = async (email: string) => {
+                try {
+                    const res = await fetch('/api/getPeopleInfo', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email }),
+                    })
+                    if (res.ok) {
+                        const data = await res.json()
+                        setForm((prev) => ({
+                            ...prev,
+                            name: data[0].name || '',
+                            birth: data[0].birth || '',
+                            nationality: data[0].nationality || '',
+                            delegation: data[0].delegation || '',
+                            diet: data[0].diet || '',
+                            notes: data[0].notes || '',
+                        }))
+                    }
+                } catch (err) {
+                    console.error('Error fetching user info:', err)
+                }
+            }
         const fetchDelegations = async () => {
             try {
                 const res = await fetch('/api/getDelegations', { method: 'POST' })
@@ -70,7 +94,11 @@ export default function DelegateInfoQuestion() {
                 // Optionally handle error
             }
         }
+        setForm(prev => ({ ...prev, name: session?.user?.name || '' }))
         fetchDelegations()
+        if (session?.user?.email) {
+            getInfo(session.user.email)
+        }
     }, [])
 
     return (
@@ -108,7 +136,7 @@ export default function DelegateInfoQuestion() {
                             <div className="@md:grid-cols-2 grid gap-3 *:space-y-3">
                                 <div>
                                     <Label htmlFor="country">Nationality</Label>
-                                    <Select required onValueChange={val => handleChange('nationality', val)}>
+                                    <Select required value={form.nationality} onValueChange={val => handleChange('nationality', val)}>
                                         <SelectTrigger>
                                             <SelectValue placeholder="Select a country" />
                                         </SelectTrigger>
@@ -341,7 +369,7 @@ export default function DelegateInfoQuestion() {
                                 </div>
                                 <div>
                                     <Label htmlFor="delegation">Delegation</Label>
-                                    <Select required onValueChange={val => handleChange('delegation', val)}>
+                                    <Select required value={form.delegation} onValueChange={val => handleChange('delegation', val)}>
                                         <SelectTrigger>
                                             <SelectValue placeholder="Select a delegation" />
                                         </SelectTrigger>
@@ -356,7 +384,7 @@ export default function DelegateInfoQuestion() {
                             <div className="@md:grid-cols-2 grid gap-3 *:space-y-3">
                                 <div>
                                     <Label htmlFor="diet">Diet</Label>
-                                    <Select required onValueChange={val => handleChange('diet', val)}>
+                                    <Select required value={form.diet} onValueChange={val => handleChange('diet', val)}>
                                         <SelectTrigger>
                                             <SelectValue placeholder="Select your diet" />
                                         </SelectTrigger>
@@ -369,7 +397,7 @@ export default function DelegateInfoQuestion() {
                                 </div>
                                 <div>
                                     <Label htmlFor="birth">Date of birth</Label>
-                                    <CalendarBirthday onChange={date => handleChange('birth', date)} />
+                                    <CalendarBirthday selected={form.birth} onChange={date => handleChange('birth', date)} />
                                 </div>
                             </div>
                             <div>
