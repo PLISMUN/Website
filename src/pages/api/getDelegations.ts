@@ -13,17 +13,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     try {
     const turso = getTursoClient()
 
-    await turso.execute(`
-      CREATE TABLE IF NOT EXISTS delegations (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT NOT NULL UNIQUE,
-        shorthand TEXT NOT NULL UNIQUE,
-        country TEXT NOT NULL,
-        adminId TEXT NOT NULL,
-        notes TEXT
-      )
-    `);
-
     const delegationsResult = await turso.execute({
       sql: 'SELECT * FROM delegations',
     });

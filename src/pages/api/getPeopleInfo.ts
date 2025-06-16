@@ -15,22 +15,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     try {
     const turso = getTursoClient()
 
-    await turso.execute(`
-      CREATE TABLE IF NOT EXISTS people (
-      id INTEGER PRIMARY KEY UNIQUE,
-      email TEXT NOT NULL UNIQUE,
-      name TEXT NOT NULL,
-      birth DATE NOT NULL,
-      nationality TEXT NOT NULL,
-      delegation TEXT NOT NULL,
-      diet TEXT NOT NULL,
-      notes TEXT
-      )
-    `);
+    const userResult = await turso.execute({
+      sql: 'SELECT id FROM users WHERE email = ?',
+      args: [email],
+    });
+
+    if (!userResult.rows.length) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    const userId = userResult.rows[0].id;
 
     const personResult = await turso.execute({
-      sql: 'SELECT name, birth, nationality, delegation, diet, notes FROM people WHERE email = ?',
-      args: [email],
+      sql: 'SELECT name, birth, nationality, delegation, diet, notes FROM people WHERE id = ?',
+      args: [userId],
     });
     
     const personInfo = personResult.rows.map((row: any) => ({

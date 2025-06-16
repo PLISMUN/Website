@@ -71,12 +71,12 @@ export default function DelegateInfoQuestion({ onSuccess }: { onSuccess?: () => 
                         const data = await res.json()
                         setForm((prev) => ({
                             ...prev,
-                            name: data[0].name || session?.user?.name || '',
-                            birth: data[0].birth || '',
-                            nationality: data[0].nationality || '',
-                            delegation: data[0].delegation || '',
-                            diet: data[0].diet || '',
-                            notes: data[0].notes || '',
+                            name: data[0]?.name || session?.user?.name || '',
+                            birth: data[0]?.birth || '',
+                            nationality: data[0]?.nationality || '',
+                            delegation: data[0]?.delegation || '',
+                            diet: data[0]?.diet || '',
+                            notes: data[0]?.notes || '',
                         }))
                     }
                 } catch (err) {

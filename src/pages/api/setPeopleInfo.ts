@@ -117,27 +117,14 @@ if (typeof notes !== 'string' || notes.length > 500) {
 
     const userId = userResult.rows[0].id;
 
-    await turso.execute(`
-      CREATE TABLE IF NOT EXISTS people (
-      id INTEGER PRIMARY KEY UNIQUE,
-      email TEXT NOT NULL UNIQUE,
-      name TEXT NOT NULL,
-      birth DATE NOT NULL,
-      nationality TEXT NOT NULL,
-      delegation TEXT NOT NULL,
-      diet TEXT NOT NULL,
-      notes TEXT
-      )
-    `);
-
     await turso.execute({
       sql: 'DELETE FROM people WHERE id = ?',
       args: [userId],
     });
 
     await turso.execute({
-      sql: 'INSERT INTO people (id, email, name, birth, nationality, delegation, diet, notes) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-      args: [userId, email, name, birth, nationality, delegation, diet, notes],
+      sql: 'INSERT INTO people (id, name, birth, nationality, delegation, diet, notes) VALUES (?, ?, ?, ?, ?, ?, ?)',
+      args: [userId, name, birth, nationality, delegation, diet, notes],
     });
     
     res.status(200).json({ message: 'Signup successful' });

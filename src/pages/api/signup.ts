@@ -40,15 +40,6 @@ const isGoogleUserBool = Boolean(isGoogleUser)
   try {
     const turso = getTursoClient()
 
-    await turso.execute(`
-      CREATE TABLE IF NOT EXISTS users (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        email TEXT NOT NULL UNIQUE,
-        password TEXT NOT NULL,
-        isGoogleUser BOOLEAN NOT NULL
-      )
-    `);
-
     await turso.execute({
       sql: 'INSERT INTO users (email, password, isGoogleUser) VALUES (?, ?, ?)',
       args: [email, hashedPassword, isGoogleUserBool],

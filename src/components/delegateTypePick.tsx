@@ -20,7 +20,7 @@ export default function DelegateTypePick({ onPickType }: { onPickType: (type: 'd
                     <div className="@container lg:col-span-3 w-full">
                         <Card className="p-8 sm:p-12">
                             <h3 className="text-xl font-semibold">Now it's time to pick what to apply for!</h3>
-                            <p className="text-sm">Don't worry, you can apply to be a delegate in case being a chair fails.</p>
+                            <p className="text-sm">Don't worry, you can apply to be a delegate in case your chair aspirations fail.</p>
                             <div
                                 className="flex items-center justify-center mt-8"
                             >
