@@ -141,7 +141,7 @@ export default function DelegateApply({ onSuccess }: { onSuccess?: () => void })
                                     </Select>
                                 </div>
                                 <div className="col-span-2">
-                                    <Label htmlFor="notes">Why would you like this role? </Label>
+                                    <Label htmlFor="notes">Why would you like this role? Any other things to note?</Label>
                                     <Textarea
                                         required
                                         id="notes"
@@ -182,7 +182,7 @@ export default function DelegateApply({ onSuccess }: { onSuccess?: () => void })
                                     </Select>
                                 </div>
                                 <div className="col-span-2">
-                                    <Label htmlFor="notes">Why would you like this role? </Label>
+                                    <Label htmlFor="notes">Why would you like this role? Any other things to note?</Label>
                                     <Textarea
                                         id="notes"
                                         rows={1}
@@ -222,7 +222,7 @@ export default function DelegateApply({ onSuccess }: { onSuccess?: () => void })
                                     </Select>
                                 </div>
                                 <div className="col-span-2">
-                                    <Label htmlFor="notes">Why would you like this role? </Label>
+                                    <Label htmlFor="notes">Why would you like this role? Any other things to note?</Label>
                                     <Textarea
                                         id="notes"
                                         rows={1}

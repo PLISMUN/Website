@@ -10,6 +10,7 @@ import {
 import DelegateInfoQuestion from "@/components/delegateInfoQuestion"
 import DelegateTypePick from "@/components/delegateTypePick"
 import DelegateApply from "@/components/delegateApply"
+import ChairApply from "@/components/chairApply"
 
 export default function Page() {
   const [infoSubmitted, setInfoSubmitted] = useState(false)
@@ -29,13 +30,13 @@ export default function Page() {
         <SiteHeader title="Dashboard" />
         <div className="flex flex-1 flex-col">
           <div className="@container/main flex flex-1 flex-col gap-2">
-            <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
+            <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6 min-h-screen">
               {!infoSubmitted ? (
                 <DelegateInfoQuestion onSuccess={() => setInfoSubmitted(true)} />
               ) : typeSubmitted === "" ? (
                 <DelegateTypePick onPickType={(type) => {setTypeSubmitted(type)}} />
               ) : typeSubmitted === "chair" ? (
-                <div>chair</div>
+                <ChairApply />
               ) : (
                 <DelegateApply />
               )}
