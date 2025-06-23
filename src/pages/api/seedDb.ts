@@ -50,9 +50,35 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       )
     `);
 
+    await turso.execute(`
+      CREATE TABLE IF NOT EXISTS committees (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL UNIQUE,
+        shorthand TEXT NOT NULL UNIQUE,
+        description TEXT NOT NULL,
+        difficulty TEXT NOT NULL,
+        roles TEXT NOT NULL,
+        icon TEXT NOT NULL
+      )
+    `);
+
+    await turso.execute(`
+      CREATE TABLE IF NOT EXISTS applications (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        type TEXT NOT NULL,
+        userId INTEGER NOT NULL,
+        committeeId INTEGER NOT NULL,
+        role TEXT NOT NULL,
+        notes TEXT,
+        status TEXT NOT NULL DEFAULT 'pending',
+        FOREIGN KEY (userId) REFERENCES users(id),
+        FOREIGN KEY (committeeId) REFERENCES committees(id)
+      )
+    `);
+
     res.status(200).json({ message: 'Database seeded successfully' });
   } catch (err: any) {
-    console.error('Error fetching delegations:', err);
+    console.error('Error seeding:', err);
     res.status(500).json({ message: err.message || 'Something went wrong' });
   }
 }

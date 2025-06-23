@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/sidebar"
 import DelegateInfoQuestion from "@/components/delegateInfoQuestion"
 import DelegateTypePick from "@/components/delegateTypePick"
+import DelegateApply from "@/components/delegateApply"
 
 export default function Page() {
   const [infoSubmitted, setInfoSubmitted] = useState(false)
@@ -36,7 +37,7 @@ export default function Page() {
               ) : typeSubmitted === "chair" ? (
                 <div>chair</div>
               ) : (
-                <div>delegate</div>
+                <DelegateApply />
               )}
             </div>
           </div>

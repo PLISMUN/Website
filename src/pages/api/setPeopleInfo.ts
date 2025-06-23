@@ -11,7 +11,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
   
   const { email, name, birth, nationality, delegation, diet, notes } = req.body;
-  //TODO validate input data
 
   if (
     typeof email !== 'string' ||

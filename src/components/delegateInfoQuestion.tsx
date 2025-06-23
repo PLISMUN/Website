@@ -401,7 +401,7 @@ export default function DelegateInfoQuestion({ onSuccess }: { onSuccess?: () => 
                                 </div>
                             </div>
                             <div>
-                                <Label htmlFor="notes">Notes</Label>
+                                <Label htmlFor="notes">MUN achievements, conferences attended & notes</Label>
                                 <Textarea
                                     id="notes"
                                     rows={3}
