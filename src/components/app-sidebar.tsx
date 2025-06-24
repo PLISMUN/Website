@@ -5,6 +5,8 @@ import {
   IconReport,
   IconUsers,
   IconUser,
+  IconCreditCardPay,
+  IconConfetti
 } from "@tabler/icons-react"
 
 import { NavCategory } from "@/components/nav-category"
@@ -22,11 +24,14 @@ import {
 
 import { useSession } from "next-auth/react"
 import { useRouter } from "next/navigation"
+import { title } from "process"
 
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { data: session, status } = useSession()
   const router = useRouter()
+
+  const [isAdmin, setIsAdmin] = React.useState(false)
 
   const data = {
     user: {
@@ -34,17 +39,33 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       email: session?.user?.email || "",
       avatar: session?.user?.image || <IconUser className="size-6" />,
     },
-    navMain: [
+    navMain: [],
+    delegate: [
+      {
+        name: "Apply",
+        url: "/user/apply",
+        icon: IconConfetti,
+      },
+      {
+        name: "Applications",
+        url: "/user/applications",
+        icon: IconReport,
+      },
+      {
+        name: "Payment",
+        url: "/user/payment",
+        icon: IconCreditCardPay,
+      }
     ],
     admin: [
       {
         name: "Users",
-        url: "#",
+        url: "/user/admin/users",
         icon: IconUsers,
       },
       {
         name: "Applications",
-        url: "#",
+        url: "/user/admin/applications",
         icon: IconReport,
       },
     ],
@@ -55,6 +76,26 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       router.replace("/user/login")
     }
   }, [status, router])
+
+  React.useEffect(() => {
+    async function checkAdmin() {
+      if (!session?.user?.email) return
+      try {
+        const res = await fetch("/api/getAdmin", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: session.user.email }),
+        })
+        if (res.ok) {
+          const result = await res.json()
+          setIsAdmin(result[0]?.isAdmin === "1")
+        }
+      } catch (e) {
+        setIsAdmin(false)
+      }
+    }
+    checkAdmin()
+  }, [session?.user?.email])
   return (
     <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>
@@ -74,7 +115,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
-        <NavCategory items={data.admin} title="Admin" />
+        <NavCategory items={data.delegate} title="Delegate" />
+        {isAdmin && <NavCategory items={data.admin} title="Admin" />}
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={data.user} />

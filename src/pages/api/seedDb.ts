@@ -20,7 +20,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         password TEXT NOT NULL,
         isGoogleUser BOOLEAN NOT NULL,
         isAdmin BOOLEAN NOT NULL DEFAULT FALSE
-        
       )
     `);
 
@@ -58,6 +57,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         description TEXT NOT NULL,
         difficulty TEXT NOT NULL,
         roles TEXT NOT NULL,
+        topics TEXT NOT NULL,
         icon TEXT NOT NULL
       )
     `);

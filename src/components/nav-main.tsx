@@ -31,7 +31,7 @@ export function NavMain({
               url="/user/dashboard/"
             >
               <IconCirclePlusFilled />
-              <span>Get Started</span>
+              <span>Dashboard</span>
             </SidebarMenuButton>
             <Button
               asChild
