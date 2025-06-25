@@ -11,10 +11,12 @@ import DelegateInfoQuestion from "@/components/delegateInfoQuestion"
 import DelegateTypePick from "@/components/delegateTypePick"
 import DelegateApply from "@/components/delegateApply"
 import ChairApply from "@/components/chairApply"
+import PaymentWidget from "@/components/paymentWidget"
 
 export default function Page() {
   const [infoSubmitted, setInfoSubmitted] = useState(false)
   const [typeSubmitted, setTypeSubmitted] = useState("")
+  const [applySuccess, setApplySuccess] = useState(false)
 
   return (
     <SidebarProvider
@@ -31,15 +33,17 @@ export default function Page() {
         <div className="flex flex-1 flex-col">
           <div className="@container/main flex flex-1 flex-col gap-2">
             <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6 min-h-screen">
-              {!infoSubmitted ? (
+                {applySuccess ? (
+                <PaymentWidget />
+                ) : !infoSubmitted ? (
                 <DelegateInfoQuestion onSuccess={() => setInfoSubmitted(true)} />
-              ) : typeSubmitted === "" ? (
+                ) : typeSubmitted === "" ? (
                 <DelegateTypePick onPickType={(type) => {setTypeSubmitted(type)}} />
-              ) : typeSubmitted === "chair" ? (
-                <ChairApply />
-              ) : (
-                <DelegateApply />
-              )}
+                ) : typeSubmitted === "chair" ? (
+                <ChairApply onSuccess={() => setApplySuccess(true)}/>
+                ) : (
+                <DelegateApply onSuccess={() => setApplySuccess(true)}/>
+                )}
             </div>
           </div>
         </div>

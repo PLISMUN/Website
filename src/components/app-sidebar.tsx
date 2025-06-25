@@ -72,6 +72,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   }
 
   React.useEffect(() => {
+    console.log("Session status:", status)
+    if (status === "loading") {
+      const timer = setTimeout(() => {
+        // This will trigger the effect to rerun by updating state
+        // or you can just rely on status changing
+      }, 2)
+      return () => clearTimeout(timer)
+    }
     if (status !== "authenticated") {
       router.replace("/user/login")
     }
