@@ -9,26 +9,35 @@ export default function Partners() {
             <div className="bg-muted/50 py-24">
                 <div className="mx-auto w-full max-w-5xl px-6">
                     <div>
-                        <span className="text-primary">Smart Editor</span>
                         <h2 className="text-foreground mt-4 text-4xl font-semibold">Our Partners</h2>
                         <p className="text-muted-foreground mb-12 mt-4 text-lg">These are the companies that we couldn&apos;t have made it without.</p>
                     </div>
 
                     <div className="border-foreground/5 space-y-6 [--color-border:color-mix(in_oklab,var(--color-foreground)10%,transparent)] sm:space-y-0 sm:divide-y">
                         <div className="grid sm:grid-cols-5 sm:divide-x">
-                            <CodeIllustration className="sm:col-span-2" />
+                            <div className="flex items-center justify-center sm:col-span-2">
+                                <img
+                                    src="https://upload.wikimedia.org/wikipedia/commons/6/6e/Logo_Praha.svg"
+                                    alt="Prague Logo"
+                                    style={{height: '7lh', width: 'auto'}}
+                                />
+                            </div>
                             <div className="mt-6 sm:col-span-3 sm:mt-0 sm:border-l sm:pl-12">
-                                <h3 className="text-foreground text-xl font-semibold">Marketing Campaigns</h3>
-                                <p className="text-muted-foreground mt-4 text-lg">We&apos;ll put together your schedule on automatically. You&apos;ll keep app deadlines, and will work on the highest priority items first.</p>
+                                <h3 className="text-foreground text-xl font-semibold">Hl.m. Prague</h3>
+                                <p className="text-muted-foreground mt-4 text-lg">Thanks to cooperation of the city of Prague, we're able to use the New City Hall; the very same one where Prague law makers decide on the future of this city.</p>
                             </div>
                         </div>
                         <div className="grid sm:grid-cols-5 sm:divide-x">
                             <div className="pt-12 sm:col-span-3 sm:border-r sm:pr-12">
-                                <h3 className="text-foreground text-xl font-semibold">AI Meeting Scheduler</h3>
-                                <p className="text-muted-foreground mt-4 text-lg">Ask the chat to create or update your events. Ask it how much time you&apos;ve spent on demo calls last week. Or have it prepare today&apos;s agendas.</p>
+                                <h3 className="text-foreground text-xl font-semibold">Parklane International School</h3>
+                                <p className="text-muted-foreground mt-4 text-lg">Parklane International School, being the parent organization of PLISMUN, has contributed venues, finances, and overall a lot of help.</p>
                             </div>
                             <div className="row-start-1 flex items-center justify-center pt-12 sm:col-span-2 sm:row-start-auto">
-                                <ScheduleIllustation className="pt-8" />
+                                <img
+                                    src="https://www.teacherhorizons.com/static/mediav2/schools/2358/images/505186_main.webp"
+                                    alt="Parklane International School Logo"
+                                    style={{height: '7lh', width: 'auto'}}
+                                />
                             </div>
                         </div>
                     </div>
@@ -36,55 +45,4 @@ export default function Partners() {
             </div>
         </section>
     )
-}
-type IllustrationProps = {
-    className?: string
-    variant?: 'elevated' | 'outlined' | 'mixed'
-}
-
-export const ScheduleIllustation = ({ className, variant = 'elevated' }: IllustrationProps) => {
-    return (
-        <div className={cn('relative', className)}>
-            <div
-                className={cn('bg-background -translate-x-1/8 absolute flex -translate-y-[110%] items-center gap-2 rounded-lg p-1', {
-                    'shadow-black-950/10 shadow-lg': variant === 'elevated',
-                    'border-foreground/10 border': variant === 'outlined',
-                    'border-foreground/10 border shadow-md shadow-black/5': variant === 'mixed',
-                })}>
-                <Button
-                    size="sm"
-                    className="rounded-sm">
-                    <Calendar1 className="size-3" />
-                    <span className="text-sm font-medium">Schedule</span>
-                </Button>
-                <span className="bg-border block h-4 w-px"></span>
-                <span className="bg-border block h-4 w-px"></span>
-                <Button
-                    size="icon"
-                    className="size-8"
-                    variant="ghost">
-                    <Ellipsis className="size-3" />
-                </Button>
-            </div>
-            <span>
-                <span className="bg-secondary text-secondary-foreground py-1">Tomorrow 8:30 pm</span> is our priority.
-            </span>
-        </div>
-    )
-}
-
-export const CodeIllustration = ({ className }: { className?: string }) => {
-    return (
-        <div className={cn('[mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_50%,transparent_100%)]', className)}>
-            <ul className="text-muted-foreground mx-auto w-fit font-mono text-2xl font-medium">
-                {['Images', 'Variables', 'Pages', 'Components', 'Styles'].map((item, index) => (
-                    <li
-                        key={index}
-                        className={cn(index == 2 && "text-foreground before:absolute before:-translate-x-[110%] before:text-orange-500 before:content-['Import']")}>
-                        {item}
-                    </li>
-                ))}
-            </ul>
-        </div>
-    )
-}
+}   

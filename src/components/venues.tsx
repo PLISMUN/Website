@@ -26,11 +26,15 @@ export default function Features() {
                         <div className="space-y-4">
                             <Card
                                 className="aspect-video overflow-hidden p-6">
-                                <Card className="h-full" />
+                                <img
+                                    src="/logo.png"
+                                    alt="Úvoz Campus"
+                                    className="h-full w-full object-cover object-center scale-120 rounded-lg transition-transform duration-300"
+                                />
                             </Card>
                             <div className="sm:max-w-sm">
-                                <h3 className="text-foreground text-xl font-semibold">Bike Jesus</h3>
-                                <p className="text-muted-foreground my-4 text-lg">This is an example Social Event venue. Stay on top of your schedule.</p>
+                                <h3 className="text-foreground text-xl font-semibold">Social Event</h3>
+                                <p className="text-muted-foreground my-4 text-lg">Our mysterious social event venue is yet to be announced!.</p>
                             </div>
                         </div>
                         <div className="space-y-4">

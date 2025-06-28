@@ -22,7 +22,7 @@ export default function HeroSection() {
                                 <div>
                                     <h1 className="max-w-md text-balance text-5xl font-medium md:text-6xl">PLISMUN&apos;26</h1>
                                     <h2 className="max-w-md text-balance text-lg font-normal text-muted-foreground md:text-xl">
-                                        Feburary 5th - 8th, 2026
+                                        January 29th - February 1st, 2026
                                     </h2>
                                     <p className="text-muted-foreground mt-4 mb-8 max-w-2xl text-balance text-xl">The internationally renowned conference organized by Parklane International School is returning for its seventh year.</p>
 
@@ -55,32 +55,19 @@ export default function HeroSection() {
 
                                 <div className="mt-10">
                                     <p className="text-muted-foreground">Partnered with :</p>
-                                    <div className="mt-6 grid max-w-sm grid-cols-3 gap-6">
+                                    <div className="mt-6 grid max-w-sm grid-cols-3 gap-3">
                                         <div className="flex">
                                             <img
-                                                className="h-4 w-fit"
-                                                src="https://html.tailus.io/blocks/customers/column.svg"
-                                                alt="Column Logo"
-                                                height="16"
-                                                width="auto"
+                                                className="h-9 w-fit"
+                                                src="https://upload.wikimedia.org/wikipedia/commons/6/6e/Logo_Praha.svg"
+                                                alt="Prague Logo"
                                             />
                                         </div>
                                         <div className="flex">
                                             <img
                                                 className="h-5 w-fit"
-                                                src="https://html.tailus.io/blocks/customers/nvidia.svg"
-                                                alt="Nvidia Logo"
-                                                height="20"
-                                                width="auto"
-                                            />
-                                        </div>
-                                        <div className="flex">
-                                            <img
-                                                className="h-4 w-fit"
-                                                src="https://html.tailus.io/blocks/customers/github.svg"
-                                                alt="GitHub Logo"
-                                                height="16"
-                                                width="auto"
+                                                src="https://www.parklane-is.cz/wp-content/uploads/2025/03/parklane-logo.svg"
+                                                alt="Parklane International School Logo"
                                             />
                                         </div>
                                     </div>

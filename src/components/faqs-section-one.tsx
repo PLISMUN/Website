@@ -7,29 +7,44 @@ export default function FAQs() {
     const faqItems = [
         {
             id: 'item-1',
-            question: 'How long does shipping take?',
-            answer: 'Standard shipping takes 3-5 business days, depending on your location. Express shipping options are available at checkout for 1-2 business day delivery.',
+            question: 'How can I contact you?',
+            answer: 'Write an email to plismun@parklane-is.com',
         },
         {
             id: 'item-2',
-            question: 'What payment methods do you accept?',
-            answer: 'We accept all major credit cards (Visa, Mastercard, American Express), PayPal, Apple Pay, and Google Pay. For enterprise customers, we also offer invoicing options.',
+            question: 'How do I apply?',
+            answer: 'Sign up and follow the instructions! If you apply as a chair, you can also apply as a delegate at the same time in case you get rejected.',
         },
         {
             id: 'item-3',
-            question: 'Can I change or cancel my order?',
-            answer: 'You can modify or cancel your order within 1 hour of placing it. After this window, please contact our customer support team who will assist you with any changes.',
+            question: 'Where can I find this yearʹs committees & topics?',
+            answer: 'Go to the This Year page. If you want to know more about the committees, just click on them!',
         },
         {
             id: 'item-4',
-            question: 'Do you ship internationally?',
-            answer: "Yes, we ship to over 50 countries worldwide. International shipping typically takes 7-14 business days. Additional customs fees may apply depending on your countryʹs import regulations.",
+            question: 'Whatʹs the best way to get to the Úvoz Campus?',
+            answer: 'The full address is: Úvoz 227, 118 00 Malá Strana, Czechia\n\nThere are a few different ways to travel to our campus.\n• By tram downhill: Travel on the 22 or 23 tram to Pohořelec and walk down the hill.\n• By tram uphill: Take the trams 12,15,20,22 to Malostranské náměstí and walk up the hill.\n• By bus through the garden: Alternatively, you can take 194 bus from Malostranská to Nemocnice pod Petřínem and walk up the hill from the rear enterance of the Úvoz campus.\n\nPlease note that this is the standard operation, may be changed. Check DPP (the cityʹs public transport provider) for more details on your route.',
         },
         {
             id: 'item-5',
-            question: 'What is your return policy?',
-            answer: 'We offer a 30-day return policy for most items. Products must be in original condition with tags attached. Some specialty items may have different return terms, which will be noted on the product page.',
+            question: 'What if I want to change my application?',
+            answer: "Use the applications tab in the dashboard when logged in. If your application has already been accepted, email the team and we'll see what we can do :)",
         },
+        {
+            id: 'item-6',
+            question: 'What is the price of attending?',
+            answer: 'Scroll down to the pricing section in the This Year page.',
+        },
+        {
+            id: 'item-7',
+            question: 'What if I do not receive any information about my application?',
+            answer: 'You should always receive some sort of notification for your application. If you do not receive any information within 24 hours of submission of your application please contact via our email.'
+        },
+        {
+            id: 'item-8',
+            question: 'I got an unknown error or an error that wasnʹt my fault when submitting my application, what should I do?',
+            answer: 'Firstly email us at plismun@parklane-is.com for you to be able to get your confirmation email.\nAdditionally, in the email send us the screenshot of the console so we are able to know how to fix it for next time. (Right click anywhere on the page, then Inspect Element, then the console.)\nWe apologise for the issues and we will attempt to get back to you within 24 hours an error occuring.'
+        }
     ]
 
     return (
@@ -52,7 +67,14 @@ export default function FAQs() {
                                 className="border-dotted">
                                 <AccordionTrigger className="cursor-pointer text-base hover:no-underline">{item.question}</AccordionTrigger>
                                 <AccordionContent>
-                                    <p className="text-base">{item.answer}</p>
+                                    <p className="text-base">
+                                        {item.answer.split('\n').map((line, idx) => (
+                                            <span key={idx}>
+                                                {line}
+                                                <br />
+                                            </span>
+                                        ))}
+                                    </p>
                                 </AccordionContent>
                             </AccordionItem>
                         ))}

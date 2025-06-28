@@ -23,7 +23,7 @@ export default function ContentSection() {
                         </div>
                         <div className="grid sm:grid-cols-5">
                             <div className="mt-6 sm:col-span-3 sm:mt-0 sm:border-l sm:pl-12 sm:pt-6">
-                                <h3 className="text-foreground text-xl font-semibold">🎉 PLSIMUN 2026 planning has started!</h3>
+                                <h3 className="text-foreground text-xl font-semibold">🎉 PLISMUN 2026 planning has started!</h3>
                                 <span className="text-muted-foreground block text-base font-medium">06/05/2025</span>
                                 <p className="text-muted-foreground mt-3 text-lg">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
                             </div>
