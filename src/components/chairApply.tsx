@@ -76,7 +76,7 @@ export default function ChairApply({ onSuccess }: { onSuccess?: () => void }) {
         setLoading(false)
     }
 
-    const [committees, setCommittees] = useState<{ id: number, name: string, roles: string }[]>([])
+    const [committees, setCommittees] = useState<{ id: number, name: string }[]>([])
 
     useEffect(() => {
         const fetchCommittees = async () => {

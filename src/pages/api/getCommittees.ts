@@ -23,7 +23,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       shorthand: row.shorthand,
       description: row.description,
       difficulty: row.difficulty,
-      roles: row.roles || '',
+      roles: row.roles,
+      topics: row.topics,
+      icon: row.icon || '',
     }));
     res.status(200).json(committees);
   } catch (err: any) {

@@ -132,11 +132,23 @@ export default function DelegateApply({ onSuccess }: { onSuccess?: () => void })
                                             <SelectValue placeholder="Select a role" />
                                         </SelectTrigger>
                                             <SelectContent>
-                                                {committees.find(c => c.id.toString() === form.committee1)?.roles && 
-                                                    JSON.parse(committees.find(c => c.id.toString() === form.committee1)!.roles).map((role: string, index: number) => (
-                                                        <SelectItem key={index} value={role}>{role}</SelectItem>
-                                                    ))
-                                                }
+                                                {(() => {
+                                                    const committee = committees.find(c => c.id.toString() === form.committee1)
+                                                    if (!committee?.roles) return null
+                                                    try {
+                                                        const rolesArr = JSON.parse(committee.roles)
+                                                        return Array.isArray(rolesArr)
+                                                            ? rolesArr.map((roleObj: { role: string; difficulty?: string }, index: number) => (
+                                                                <SelectItem key={index} value={roleObj.role}>
+                                                                    {roleObj.role}
+                                                                    {roleObj.difficulty ? ` (${roleObj.difficulty})` : ""}
+                                                                </SelectItem>
+                                                            ))
+                                                            : null
+                                                    } catch {
+                                                        return null
+                                                    }
+                                                })()}
                                             </SelectContent>
                                     </Select>
                                 </div>
