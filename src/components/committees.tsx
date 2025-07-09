@@ -1,7 +1,6 @@
 'use client'
 import { Card } from '@/components/ui/card'
 import * as React from 'react'
-import { Gemini, Replit, MagicUI, VSCodium, MediaWiki, GooglePaLM } from '@/components/logos'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -165,7 +164,7 @@ export default function Committees() {
                             </AlertDialogDescription>
                             </div>
                         </div>
-                        <AlertDialogFooter>
+                        <AlertDialogFooter className='mt-6'>
                             <AlertDialogCancel>Ok</AlertDialogCancel>
                         </AlertDialogFooter>
                     </div>
