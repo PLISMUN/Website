@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import { useEffect } from 'react'
 import { IconPodium, IconLaurelWreath } from "@tabler/icons-react"
+import { stages } from "@/config/stages"
 
 export default function DelegateTypePick({ onPickType }: { onPickType: (type: 'delegate' | 'chair') => void }) {
 
@@ -32,6 +33,7 @@ export default function DelegateTypePick({ onPickType }: { onPickType: (type: 'd
                                     onClick={() => {
                                         onPickType('delegate')
                                     }}
+                                    disabled={!stages.delegateApplication}
                                 >
                                     <IconPodium
                                         className=""
@@ -52,6 +54,7 @@ export default function DelegateTypePick({ onPickType }: { onPickType: (type: 'd
                                     onClick={() => {
                                         onPickType('chair')
                                     }}
+                                    disabled={!stages.chairApplication}
                                 >
                                     <IconLaurelWreath
                                         className=""

@@ -11,10 +11,15 @@ import DelegateInfoQuestion from "@/components/delegateInfoQuestion"
 import DelegateTypePick from "@/components/delegateTypePick"
 import DelegateApply from "@/components/delegateApply"
 import ChairApply from "@/components/chairApply"
+import { stages } from "@/config/stages"
 
 export default function Page() {
   const [infoSubmitted, setInfoSubmitted] = useState(false)
   const [typeSubmitted, setTypeSubmitted] = useState("")
+
+  if (!stages.accountCreation) {
+    return null
+  }
 
   return (
     <SidebarProvider

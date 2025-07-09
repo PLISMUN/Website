@@ -8,8 +8,12 @@ import {
   SidebarProvider,
 } from "@/components/ui/sidebar"
 import PaymentWidget from "@/components/paymentWidget"
+import { stages } from "@/config/stages"
 
 export default function Page() {
+  if (!stages.accountCreation) {
+    return null
+  }
 
   return (
     <SidebarProvider
