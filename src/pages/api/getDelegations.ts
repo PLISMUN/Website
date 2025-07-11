@@ -25,6 +25,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       adminId: row.adminId,
       notes: row.notes || '',
     }));
+    res.setHeader('Cache-Control', 'public, max-age=43200');
     res.status(200).json(delegations);
   } catch (err: any) {
     console.error('Error fetching delegations:', err);

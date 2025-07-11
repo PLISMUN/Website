@@ -27,6 +27,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       topics: row.topics,
       icon: row.icon || '',
     }));
+    res.setHeader('Cache-Control', 'public, max-age=43200');
     res.status(200).json(committees);
   } catch (err: any) {
     console.error('Error fetching committees:', err);
