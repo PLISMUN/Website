@@ -8,6 +8,8 @@ on:
 
 jobs:
   mirror:
+    if: github.repository == 'PLISMUN-ORG/Website'
+
     runs-on: ubuntu-latest
 
     steps:
