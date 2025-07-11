@@ -6,6 +6,7 @@ import { HeroHeader } from './header'
 import { ChevronRight } from 'lucide-react'
 import Image from 'next/image'
 import { useSession } from 'next-auth/react'
+import { stages } from "@/config/stages"
 
 export default function HeroSection() {
 
@@ -30,7 +31,8 @@ export default function HeroSection() {
                                         <Button
                                             asChild
                                             size="lg"
-                                            className="pr-4.5">
+                                            className="pr-4.5"
+                                            disabled={!stages.accountCreation}>
                                             <Link href="/user/signup">
                                                 <span className="text-nowrap">Get Started</span>
                                                 <ChevronRight className="opacity-50" />
@@ -43,7 +45,8 @@ export default function HeroSection() {
                                             asChild
                                             size="lg"
                                             variant="outline"
-                                            className="pl-5">
+                                            className="pl-5"
+                                            disabled={!stages.accountCreation}>
                                             <Link href="/user/login">
                                                 <span className="text-nowrap">Log in</span>
                                             </Link>

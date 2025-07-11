@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
+import { stages } from "@/config/stages"
 
 export default function Pricing() {
     return (
@@ -23,7 +24,8 @@ export default function Pricing() {
                                     <Button
                                         asChild
                                         className="w-full"
-                                        variant="neutral">
+                                        variant="neutral"
+                                        disabled={!stages.chairApplication}>
                                         <Link href="/user/signup">Get Started</Link>
                                     </Button>
                                 </div>
@@ -38,7 +40,8 @@ export default function Pricing() {
                                     <div className="@3xl:mx-0 -mx-1 border-y px-8 py-4">
                                         <Button
                                             asChild
-                                            className="w-full">
+                                            className="w-full"
+                                            disabled={!stages.delegateApplication}>
                                             <Link href="/user/signup">Get Started</Link>
                                         </Button>
                                     </div>
@@ -54,7 +57,8 @@ export default function Pricing() {
                                     <Button
                                         asChild
                                         className="w-full"
-                                        variant="neutral">
+                                        variant="neutral"
+                                        disabled={!stages.chairApplication}>
                                         <Link href="/user/signup">Get Started</Link>
                                     </Button>
                                 </div>

@@ -52,7 +52,11 @@ function Button({
   return (
     <Comp
       data-slot="button"
-      className={cn(buttonVariants({ variant, size, className }))}
+      className={cn(
+        buttonVariants({ variant, size, className }),
+        props.disabled ? "pointer-events-none opacity-50" : ""
+      )}
+      {...(Comp === "button" ? { disabled: props.disabled } : { "aria-disabled": props.disabled })}
       {...props}
     />
   )

@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import React from 'react'
 import { cn } from '@/lib/utils'
 import { useSession } from 'next-auth/react'
+import { stages } from "@/config/stages"
 
 const menuItems = [
     { name: 'About', href: '/about' },
@@ -91,7 +92,8 @@ export const HeroHeader = () => {
                                             asChild
                                             variant="ghost"
                                             size="sm"
-                                            className={cn(isScrolled && 'lg:hidden')}>
+                                            className={cn(isScrolled && 'lg:hidden')}
+                                            disabled={!stages.accountCreation}>
                                             <Link href="/user/login">
                                                 <span>Login</span>
                                             </Link>
@@ -99,7 +101,8 @@ export const HeroHeader = () => {
                                         <Button
                                             asChild
                                             size="sm"
-                                            className={cn(isScrolled && 'lg:hidden')}>
+                                            className={cn(isScrolled && 'lg:hidden')}
+                                            disabled={!stages.accountCreation}>
                                             <Link href="/user/signup">
                                                 <span>Sign Up</span>
                                             </Link>
@@ -107,7 +110,8 @@ export const HeroHeader = () => {
                                         <Button
                                             asChild
                                             size="sm"
-                                            className={cn(isScrolled ? 'lg:inline-flex' : 'hidden')}>
+                                            className={cn(isScrolled ? 'lg:inline-flex' : 'hidden')}
+                                            disabled={!stages.accountCreation}>
                                             <Link href="/user/signup">
                                                 <span>Get Started</span>
                                             </Link>
@@ -117,7 +121,8 @@ export const HeroHeader = () => {
                                 {session && (
                                     <Button
                                         asChild
-                                        size="sm">
+                                        size="sm"
+                                        disabled={!stages.accountCreation}>
                                         <Link href="/user/dashboard">
                                             <span>Dashboard</span>
                                         </Link>
