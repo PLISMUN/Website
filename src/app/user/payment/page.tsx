@@ -1,14 +1,18 @@
 "use client"
-import { useState } from "react"
 import { AppSidebar } from "@/components/app-sidebar"
 import { SiteHeader } from "@/components/dashboard-header"
-import { Metadata } from "next"
 import {
   SidebarInset,
   SidebarProvider,
 } from "@/components/ui/sidebar"
 import PaymentWidget from "@/components/paymentWidget"
 import { stages } from "@/config/stages"
+import React from "react"
+
+export const metadata = {
+  title: "PLISMUN | Payment",
+  description: "PLISMUN Payment."
+}
 
 export default function Page() {
   if (!stages.accountCreation) {

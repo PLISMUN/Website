@@ -155,7 +155,7 @@ export default function Committees() {
                                 {selectedCommittee?.topics && (() => {
                                         const topicsObj = JSON.parse(selectedCommittee.topics);
                                         return Object.entries(topicsObj).map(([key, topic]: any, idx) => (
-                                            <div key={key} className="border rounded p-2 bg-gray-50">
+                                            <div key={key} className="border rounded p-2 mt-2 bg-gray-50">
                                                 <div className="font-semibold">{topic.name}</div>
                                                 <div className="text-sm">{topic.description}</div>
                                             </div>

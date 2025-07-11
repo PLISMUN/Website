@@ -3,6 +3,11 @@ import Header from "@/components/header"
 import FooterSection from "@/components/footer-one"
 import Partners from "@/components/partners"
 
+export const metadata = {
+  title: "PLISMUN | Partners",
+  description: "PLISMUN Partners."
+}
+
 function PartnersPage() {
     return (
         <>

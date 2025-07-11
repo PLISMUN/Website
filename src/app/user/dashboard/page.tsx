@@ -2,7 +2,6 @@
 import { useState } from "react"
 import { AppSidebar } from "@/components/app-sidebar"
 import { SiteHeader } from "@/components/dashboard-header"
-import { Metadata } from "next"
 import {
   SidebarInset,
   SidebarProvider,
@@ -13,6 +12,12 @@ import DelegateApply from "@/components/delegateApply"
 import ChairApply from "@/components/chairApply"
 import PaymentWidget from "@/components/paymentWidget"
 import { stages } from "@/config/stages"
+import React from "react"
+
+export const metadata = {
+  title: "PLISMUN | Dashboard",
+  description: "PLISMUN Dashboard."
+}
 
 export default function Page() {
   const [infoSubmitted, setInfoSubmitted] = useState(false)

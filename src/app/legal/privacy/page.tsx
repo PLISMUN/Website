@@ -10,6 +10,11 @@ import { Badge } from "@/components/ui/badge"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { MailIcon, ShieldAlert } from "lucide-react"
 
+export const metadata = {
+  title: "PLISMUN | Privacy Policy",
+  description: "PLISMUN Privacy Policy."
+}
+
 function PrivacyPage() {
     return (
      <>

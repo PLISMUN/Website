@@ -15,17 +15,17 @@ export default function ContentSection() {
 
                     <div className="border-foreground/5 space-y-6 [--color-border:color-mix(in_oklab,var(--color-foreground)10%,transparent)] sm:space-y-0 sm:divide-y">
                         <div className="grid sm:grid-cols-5">
-                            <div className="mt-6 sm:col-span-3 sm:mt-0 sm:border-l sm:pl-12 pb-6">
-                                <h3 className="text-foreground text-xl font-semibold">Lorem ipsum dolor sit amet</h3>
-                                <span className="text-muted-foreground block text-base font-medium">20/05/2025</span>
-                                <p className="text-muted-foreground mt-3 text-lg">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                            <div className="mt-6 sm:col-span-3 sm:mt-0 sm:border-l sm:pl-12 sm:pb-6">
+                                <h3 className="text-foreground text-xl font-semibold">📅 PLISMUN 2026 dates have been announced!</h3>
+                                <span className="text-muted-foreground block text-base font-medium">30/05/2025</span>
+                                <p className="text-muted-foreground mt-3 text-lg">Dear Delegates, Chairs and Honourable Guests,<br />PLISMUN’26 will take place from the 29th January through the 1st of February. Save the date — we can’t wait to see you there!</p>
                             </div>
                         </div>
                         <div className="grid sm:grid-cols-5">
                             <div className="mt-6 sm:col-span-3 sm:mt-0 sm:border-l sm:pl-12 sm:pt-6">
                                 <h3 className="text-foreground text-xl font-semibold">🎉 PLISMUN 2026 planning has started!</h3>
                                 <span className="text-muted-foreground block text-base font-medium">06/05/2025</span>
-                                <p className="text-muted-foreground mt-3 text-lg">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                                <p className="text-muted-foreground mt-3 text-lg">Dear Guests,<br />Our Organisation Team is working extremely hard behind the scenes to bring your favourite conference to you. Stay tuned for updates!</p>
                             </div>
                         </div>
                     </div>

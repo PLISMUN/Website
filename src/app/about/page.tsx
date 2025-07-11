@@ -5,7 +5,13 @@ import StatsSection from "@/components/stats-one"
 import TeamSection from "@/components/team"
 import FooterSection from "@/components/footer-one"
 
+export const metadata = {
+  title: "PLISMUN | About Us",
+  description: "Learn more about PLISMUN."
+}
+
 function AboutPage() {
+
     return (
      <>
         <Header />

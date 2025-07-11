@@ -6,6 +6,7 @@ import Committees from "@/components/committees"
 
 
 function Home() {
+  
   return (
     <>
         <HeroSection />
@@ -17,5 +18,10 @@ function Home() {
 }
 
 Home.mainPage = true
+
+export const metadata = {
+  title: "PLISMUN | Home",
+  description: "Welcome to PLISMUN, an internationally renowned MUN Conference hosted by Park Lane International School."
+}
 
 export default Home

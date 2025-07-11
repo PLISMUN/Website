@@ -2,7 +2,6 @@
 import { useState } from "react"
 import { AppSidebar } from "@/components/app-sidebar"
 import { SiteHeader } from "@/components/dashboard-header"
-import { Metadata } from "next"
 import {
   SidebarInset,
   SidebarProvider,
@@ -12,6 +11,12 @@ import DelegateTypePick from "@/components/delegateTypePick"
 import DelegateApply from "@/components/delegateApply"
 import ChairApply from "@/components/chairApply"
 import { stages } from "@/config/stages"
+import React from "react"
+
+export const metadata = {
+  title: "PLISMUN | Apply",
+  description: "Apply for PLISMUN."
+}
 
 export default function Page() {
   const [infoSubmitted, setInfoSubmitted] = useState(false)
