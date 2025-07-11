@@ -14,11 +14,6 @@ import PaymentWidget from "@/components/paymentWidget"
 import { stages } from "@/config/stages"
 import React from "react"
 
-export const metadata = {
-  title: "PLISMUN | Dashboard",
-  description: "PLISMUN Dashboard."
-}
-
 export default function Page() {
   const [infoSubmitted, setInfoSubmitted] = useState(false)
   const [typeSubmitted, setTypeSubmitted] = useState("")
@@ -27,6 +22,10 @@ export default function Page() {
   if (!stages.accountCreation) {
     return null
   }
+
+    React.useEffect(() => {
+      document.title = "PLISMUN | Dashboard";
+    }, []);
 
   return (
     <SidebarProvider

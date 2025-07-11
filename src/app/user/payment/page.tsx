@@ -9,15 +9,14 @@ import PaymentWidget from "@/components/paymentWidget"
 import { stages } from "@/config/stages"
 import React from "react"
 
-export const metadata = {
-  title: "PLISMUN | Payment",
-  description: "PLISMUN Payment."
-}
-
 export default function Page() {
   if (!stages.accountCreation) {
     return null
   }
+
+    React.useEffect(() => {
+      document.title = "PLISMUN | Payment";
+    }, []);
 
   return (
     <SidebarProvider

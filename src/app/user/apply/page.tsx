@@ -13,11 +13,6 @@ import ChairApply from "@/components/chairApply"
 import { stages } from "@/config/stages"
 import React from "react"
 
-export const metadata = {
-  title: "PLISMUN | Apply",
-  description: "Apply for PLISMUN."
-}
-
 export default function Page() {
   const [infoSubmitted, setInfoSubmitted] = useState(false)
   const [typeSubmitted, setTypeSubmitted] = useState("")
@@ -25,6 +20,10 @@ export default function Page() {
   if (!stages.accountCreation) {
     return null
   }
+
+  React.useEffect(() => {
+    document.title = "PLISMUN | Apply";
+  }, []);
 
   return (
     <SidebarProvider
