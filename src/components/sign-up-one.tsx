@@ -8,6 +8,7 @@ import { useSession } from 'next-auth/react'
 import { useRouter } from "next/navigation"
 import { useEffect } from 'react'
 import { signIn } from "next-auth/react"
+import { Checkbox } from "@/components/ui/checkbox"
 
 export default function LoginPage() {
     
@@ -137,6 +138,18 @@ export default function LoginPage() {
                             />
                         </div>
 
+                        <div className="flex items-center space-x-2">
+                            <Checkbox required />
+                            <p className="text-muted-foreground text-sm">
+                                By signing up, you confirm that you are at least 16 years old or are the guardian of the account holder.
+                        </p>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                            <Checkbox required />
+                            <p className="text-muted-foreground text-sm">
+                                By signing up, you agree to our <Link href="/legal/tos" className="text-blue-500 hover:underline">Terms of Service</Link> and <Link href="/legal/privacy" className="text-blue-500 hover:underline">Privacy Policy</Link>.
+                            </p>
+                        </div>
                         <Button
                             className="w-full"
                             size="default"

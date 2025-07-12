@@ -12,7 +12,7 @@ const members = [
     { src: '', name: 'Lilly Ann Hohmann', role: 'Head of Merchandise & Design' },
     { src: '', name: 'Thomas Michael Hill', role: 'Head of Social Event' },
     { src: '', name: 'Mariya Krykhtina', role: 'Head of Photography' },
-    { src: '', name: 'Vera Motrenko', role: 'Head of Finance' },
+    { src: '', name: 'Nina Marianna Gawlasova', role: 'Head of Finance' },
     { src: '', name: 'Henry Bowdler', role: 'Head of Social Event' },
 ]
 

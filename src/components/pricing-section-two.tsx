@@ -17,8 +17,8 @@ export default function Pricing() {
                             <div>
                                 <CardHeader className="p-8">
                                     <CardTitle className="font-medium">Chair</CardTitle>
-                                    <span className="mb-0.5 mt-2 block text-2xl font-semibold">1,100 CZK</span>
-                                    <CardDescription className="text-sm">€45</CardDescription>
+                                    <span className="mb-0.5 mt-2 block text-2xl font-semibold">750 CZK</span>
+                                    <CardDescription className="text-sm">€32</CardDescription>
                                 </CardHeader>
                                 <div className="border-y px-8 py-4">
                                     <Button
@@ -50,8 +50,8 @@ export default function Pricing() {
                             <div>
                                 <CardHeader className="p-8">
                                     <CardTitle className="font-medium">Supervisor</CardTitle>
-                                    <span className="mb-0.5 mt-2 block text-2xl font-semibold">1,000 CZK</span>
-                                    <CardDescription className="text-sm">€40</CardDescription>
+                                    <span className="mb-0.5 mt-2 block text-2xl font-semibold">700 CZK</span>
+                                    <CardDescription className="text-sm">€30</CardDescription>
                                 </CardHeader>
                                 <div className="border-y px-8 py-4">
                                     <Button
