@@ -110,139 +110,31 @@ export default function DelegateApply({ onSuccess }: { onSuccess?: () => void })
                         <h3 className="text-xl font-semibold">The time has come: it's time to apply!</h3>
                         <p className="text-sm">You can leave rows empty if you have a smaller number of choices, or you can fill out this form again if you have more than 3! We hope that your chosen committee & topic don't disappoint you!</p>
                         <div className="**:[&>label]:block mt-1 space-y-6">
-                        <h3 className="text-lg font-semibold">Choice 1</h3>
-                            <div className="@md:grid-cols-2 grid gap-3 *:space-y-3">
-                                <div>
-                                    <Label htmlFor="delegation">Committee</Label>
-                                    <Select required value={form.committee1} onValueChange={val => handleChange('committee1', val)}>
-                                        <SelectTrigger>
-                                            <SelectValue placeholder="Select a committee" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            {committees.map(d => (
-                                                <SelectItem key={d.id} value={d.id.toString()}>{d.name}</SelectItem>
-                                            ))}
-                                        </SelectContent>
-                                    </Select>
-                                </div>
-                                <div>
-                                    <Label htmlFor="country">Role</Label>
-                                    <Select required value={form.role1} onValueChange={val => handleChange('role1', val)}>
-                                        <SelectTrigger>
-                                            <SelectValue placeholder="Select a role" />
-                                        </SelectTrigger>
-                                            <SelectContent>
-                                                {(() => {
-                                                    const committee = committees.find(c => c.id.toString() === form.committee1)
-                                                    if (!committee?.roles) return null
-                                                    try {
-                                                        const rolesArr = JSON.parse(committee.roles)
-                                                        return Array.isArray(rolesArr)
-                                                            ? rolesArr.map((roleObj: { role: string; difficulty?: string }, index: number) => (
-                                                                <SelectItem key={index} value={roleObj.role}>
-                                                                    {roleObj.role}
-                                                                    {roleObj.difficulty ? ` (${roleObj.difficulty})` : ""}
-                                                                </SelectItem>
-                                                            ))
-                                                            : null
-                                                    } catch {
-                                                        return null
-                                                    }
-                                                })()}
-                                            </SelectContent>
-                                    </Select>
-                                </div>
-                                <div className="col-span-2">
-                                    <Label htmlFor="notes">Why would you like this role? Any other things to note?</Label>
-                                    <Textarea
-                                        required
-                                        id="notes"
-                                        rows={1}
-                                        value={form.notes1}
-                                        onChange={e => handleChange('notes1', e.target.value)}
-                                    />
-                                </div>
-                            </div>
-                        <h3 className="text-lg font-semibold">Choice 2</h3>
-                            <div className="@md:grid-cols-2 grid gap-3 *:space-y-3">
-                                <div>
-                                    <Label htmlFor="delegation">Committee</Label>
-                                    <Select value={form.committee2} onValueChange={val => handleChange('committee2', val)}>
-                                        <SelectTrigger>
-                                            <SelectValue placeholder="Select a committee" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            {committees.map(d => (
-                                                <SelectItem key={d.id} value={d.id.toString()}>{d.name}</SelectItem>
-                                            ))}
-                                        </SelectContent>
-                                    </Select>
-                                </div>
-                                <div>
-                                    <Label htmlFor="country">Role</Label>
-                                    <Select value={form.role2} onValueChange={val => handleChange('role2', val)}>
-                                        <SelectTrigger>
-                                            <SelectValue placeholder="Select a role" />
-                                        </SelectTrigger>
-                                            <SelectContent>
-                                                {committees.find(c => c.id.toString() === form.committee2)?.roles && 
-                                                    JSON.parse(committees.find(c => c.id.toString() === form.committee2)!.roles).map((role: string, index: number) => (
-                                                        <SelectItem key={index} value={role}>{role}</SelectItem>
-                                                    ))
-                                                }
-                                            </SelectContent>
-                                    </Select>
-                                </div>
-                                <div className="col-span-2">
-                                    <Label htmlFor="notes">Why would you like this role? Any other things to note?</Label>
-                                    <Textarea
-                                        id="notes"
-                                        rows={1}
-                                        value={form.notes2}
-                                        onChange={e => handleChange('notes2', e.target.value)}
-                                    />
-                                </div>
-                            </div>
-                            <h3 className="text-lg font-semibold">Choice 3</h3>
-                            <div className="@md:grid-cols-2 grid gap-3 *:space-y-3">
-                                <div>
-                                    <Label htmlFor="delegation">Committee</Label>
-                                    <Select value={form.committee3} onValueChange={val => handleChange('committee3', val)}>
-                                        <SelectTrigger>
-                                            <SelectValue placeholder="Select a committee" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            {committees.map(d => (
-                                                <SelectItem key={d.id} value={d.id.toString()}>{d.name}</SelectItem>
-                                            ))}
-                                        </SelectContent>
-                                    </Select>
-                                </div>
-                                <div>
-                                    <Label htmlFor="country">Role</Label>
-                                    <Select value={form.role3} onValueChange={val => handleChange('role3', val)}>
-                                        <SelectTrigger>
-                                            <SelectValue placeholder="Select a role" />
-                                        </SelectTrigger>
-                                            <SelectContent>
-                                                {committees.find(c => c.id.toString() === form.committee3)?.roles && 
-                                                    JSON.parse(committees.find(c => c.id.toString() === form.committee3)!.roles).map((role: string, index: number) => (
-                                                        <SelectItem key={index} value={role}>{role}</SelectItem>
-                                                    ))
-                                                }
-                                            </SelectContent>
-                                    </Select>
-                                </div>
-                                <div className="col-span-2">
-                                    <Label htmlFor="notes">Why would you like this role? Any other things to note?</Label>
-                                    <Textarea
-                                        id="notes"
-                                        rows={1}
-                                        value={form.notes3}
-                                        onChange={e => handleChange('notes3', e.target.value)}
-                                    />
-                                </div>
-                            </div>
+                            <ChoiceSection
+                                choiceNumber={1}
+                                committeeValue={form.committee1}
+                                roleValue={form.role1}
+                                notesValue={form.notes1}
+                                required={true}
+                                committees={committees}
+                                handleChange={handleChange}
+                            />
+                            <ChoiceSection
+                                choiceNumber={2}
+                                committeeValue={form.committee2}
+                                roleValue={form.role2}
+                                notesValue={form.notes2}
+                                committees={committees}
+                                handleChange={handleChange}
+                            />
+                            <ChoiceSection
+                                choiceNumber={3}
+                                committeeValue={form.committee3}
+                                roleValue={form.role3}
+                                notesValue={form.notes3}
+                                committees={committees}
+                                handleChange={handleChange}
+                            />
                             <Button className="cursor-pointer" type="submit" disabled={loading}>{loading ? 'Submitting...' : 'Submit'}</Button>
                             {success && <p className="text-green-600">Signup successful!</p>}
                             {error && <p className="text-red-600">{error}</p>}
@@ -253,3 +145,89 @@ export default function DelegateApply({ onSuccess }: { onSuccess?: () => void })
         </section>
     )
 }
+
+
+    function ChoiceSection({
+        choiceNumber,
+        committeeValue,
+        roleValue,
+        notesValue,
+        required = false,
+        committees,
+        handleChange,
+    }: {
+        choiceNumber: number,
+        committeeValue: string,
+        roleValue: string,
+        notesValue: string,
+        required?: boolean,
+        committees: { id: number, name: string, roles: string }[],
+        handleChange: (field: string, value: string) => void,
+    }) {
+        return (
+            <>
+                <h3 className="text-lg font-semibold">{`Choice ${choiceNumber}`}</h3>
+                <div className="@md:grid-cols-2 grid gap-3 *:space-y-3">
+                    <div>
+                        <Label htmlFor={`committee${choiceNumber}`}>Committee</Label>
+                        <Select
+                            required={required}
+                            value={committeeValue}
+                            onValueChange={val => handleChange(`committee${choiceNumber}`, val)}
+                            
+                        >
+                            <SelectTrigger className="max-w-[100%]">
+                                <SelectValue placeholder="Select a committee" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {committees.map(d => (
+                                    <SelectItem key={d.id} value={d.id.toString()}>{d.name}</SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                    </div>
+                    <div>
+                        <Label htmlFor={`role${choiceNumber}`}>Role</Label>
+                        <Select
+                            required={required}
+                            value={roleValue}
+                            onValueChange={val => handleChange(`role${choiceNumber}`, val)}
+                        >
+                            <SelectTrigger className="max-w-[100%]">
+                                <SelectValue placeholder="Select a role" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {(() => {
+                                    const committee = committees.find(c => c.id.toString() === committeeValue)
+                                    if (!committee?.roles) return null
+                                    try {
+                                        const rolesArr = JSON.parse(committee.roles)
+                                        return Array.isArray(rolesArr)
+                                            ? rolesArr.map((roleObj: any, index: number) => (
+                                                <SelectItem key={index} value={roleObj.role || roleObj}>
+                                                    {roleObj.role || roleObj}
+                                                    {roleObj.difficulty ? ` (${roleObj.difficulty})` : ""}
+                                                </SelectItem>
+                                            ))
+                                            : null
+                                    } catch {
+                                        return null
+                                    }
+                                })()}
+                            </SelectContent>
+                        </Select>
+                    </div>
+                    <div className="col-span-2">
+                        <Label htmlFor={`notes${choiceNumber}`}>Why would you like this role? Any other things to note?</Label>
+                        <Textarea
+                            required={required}
+                            id={`notes${choiceNumber}`}
+                            rows={1}
+                            value={notesValue}
+                            onChange={e => handleChange(`notes${choiceNumber}`, e.target.value)}
+                        />
+                    </div>
+                </div>
+            </>
+        )
+    }

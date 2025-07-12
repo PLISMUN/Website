@@ -10,6 +10,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
+import Link from 'next/link'
 
 export function NavMain({
   items,
@@ -31,7 +32,7 @@ export function NavMain({
               url="/user/dashboard/"
             >
               <IconCirclePlusFilled />
-              <span>Dashboard</span>
+              <Link href="/user/dashboard">Dashboard</Link>
             </SidebarMenuButton>
             <Button
               asChild
