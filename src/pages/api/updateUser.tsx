@@ -39,38 +39,59 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       args: [email, !!isAdmin, !!isGoogleUser, id],
     })
 
-    // Update people table
-    await turso.execute({
+    // Upsert people table: update if exists, insert if not
+    const peopleUpdateResult = await turso.execute({
       sql: `
-        UPDATE people
-        SET name = ?, birth = ?, nationality = ?, delegation = ?, diet = ?, notes = ?
-        WHERE id = ?
+      UPDATE people
+      SET name = ?, birth = ?, nationality = ?, delegation = ?, diet = ?, notes = ?
+      WHERE id = ?
       `,
       args: [name, birth, nationality, delegation, diet, notes, id],
     })
 
-    // Update payments table
-    await turso.execute({
+    if (peopleUpdateResult.rowsAffected === 0) {
+      await turso.execute({
       sql: `
-        UPDATE payments
-        SET value = ?, status = ?, code = ?
-        WHERE id = ?
+        INSERT INTO people (id, name, birth, nationality, delegation, diet, notes)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+      `,
+      args: [id, name, birth, nationality, delegation, diet, notes],
+      })
+    }
+
+    // Update payments table; insert if not exists
+    const paymentsUpdateResult = await turso.execute({
+      sql: `
+      UPDATE payments
+      SET value = ?, status = ?, code = ?
+      WHERE id = ?
       `,
       args: [value, status, code, id],
     })
 
-    // Optionally, return updated user info
-    const userResult = await turso.execute({
+    if (paymentsUpdateResult.rowsAffected === 0) {
+      await turso.execute({
       sql: `
-        SELECT u.*, p.birth, p.nationality, p.delegation, p.diet, p.notes, pay.value, pay.status, pay.code
+        INSERT INTO payments (id, value, status, code)
+        VALUES (?, ?, ?, ?)
+      `,
+      args: [id, value, status, code],
+      })
+    }
+
+    const peopleResult = await turso.execute({
+      sql: `
+        SELECT 
+          u.*, 
+          p.*,
+          pay.*
         FROM users u
         LEFT JOIN people p ON u.id = p.id
         LEFT JOIN payments pay ON u.id = pay.id
       `,
-      args: [],
-    })
+    });
 
-    res.status(200).json({ people: userResult.rows })
+    res.status(200).json({ people: peopleResult.rows })
   } catch (err: any) {
     res.status(500).json({ message: err.message || 'Something went wrong' })
   }

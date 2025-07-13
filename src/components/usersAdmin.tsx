@@ -30,7 +30,6 @@ export default function UsersAdmin({ onSuccess }: { onSuccess?: () => void }) {
                 if (res.ok) {
                     const data = await res.json()
                     setUsersInfo(data)
-                    console.log(data)
                 }
             } catch (err) {
                 console.error('Error fetching users info:', err)
@@ -39,7 +38,7 @@ export default function UsersAdmin({ onSuccess }: { onSuccess?: () => void }) {
         fetchUsers()
     }, [])
 
-    const handleEditChange = (id: number, field: string, value: string) => {
+    const handleEditChange = (id: number, field: string, value: string | boolean) => {
         setEditRows(prev => ({
             ...prev,
             [id]: {
