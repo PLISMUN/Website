@@ -100,7 +100,7 @@ export default function ChairApply({ onSuccess }: { onSuccess?: () => void }) {
                 <form onSubmit={handleSubmit} className="@container lg:col-span-3">
                     <Card className="p-8 sm:p-12">
                         <h3 className="text-xl font-semibold">The time has come: it's time to apply!</h3>
-                        <p className="text-sm">You can leave rows empty if you have a smaller number of choices, or you can fill out this form again if you have more than 3! We hope that your chosen committee & topic don't disappoint you!</p>
+                        <p className="text-sm">We hope that your chosen committee & topic don't disappoint you! As a chair applicant, we ask you to withold on paying until you're accepted. Your due ammount will be adjusted automatically. You can also apply to be a delegate in case your chair aspirations fail!</p>
                         <div className="**:[&>label]:block mt-1 space-y-6">
                             <div className="@md:grid-cols-2 grid gap-3 *:space-y-3">
                                 <div>

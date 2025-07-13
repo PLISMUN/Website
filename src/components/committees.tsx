@@ -98,6 +98,9 @@ export default function Committees() {
             <AlertDialog open={!!selectedCommittee} onOpenChange={() => setSelectedCommittee(null)}>
                 <AlertDialogContent>
                     <div className="max-h-[70vh] overflow-y-auto">
+                        <div className="flex justify-end">
+                            <AlertDialogCancel className="p-1 text-xs h-6 w-6 rounded-full">×</AlertDialogCancel>
+                        </div>
                         <div className="grid grid-cols-2 gap-4">
                             <div>
                             {selectedCommittee?.icon && (

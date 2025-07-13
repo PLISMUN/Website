@@ -91,14 +91,12 @@ export default function DelegateInfoQuestion({ onSuccess }: { onSuccess?: () => 
                     setDelegations(data)
                 }
             } catch (err) {
-                // Optionally handle error
+                setError('Failed to fetch delegations: ' + err)
             }
         }
         setForm(prev => ({ ...prev, name: session?.user?.name || '' }))
         fetchDelegations()
-        if (session?.user?.email) {
-            getInfo(session.user.email)
-        }
+        getInfo(session?.user?.email || "")
     }, [])
 
     return (
