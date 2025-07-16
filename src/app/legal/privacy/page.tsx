@@ -1,12 +1,5 @@
 import React from "react"
-import Header from "@/components/header"
-import AboutSection from "@/components/about"
-import StatsSection from "@/components/stats-one"
-import TeamSection from "@/components/team"
-import FooterSection from "@/components/footer-one"
-import { Card, CardContent } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
-import { Badge } from "@/components/ui/badge"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { MailIcon, ShieldAlert } from "lucide-react"
 
@@ -18,7 +11,6 @@ export const metadata = {
 function PrivacyPage() {
     return (
      <>
-        <Header />
         <section>
             <div className="pt-24">
                 <div className="mx-auto w-full max-w-5xl px-6">
@@ -211,7 +203,6 @@ function PrivacyPage() {
                 </div>
             </div>
         </section>
-        <FooterSection />
     </>
     )
     }

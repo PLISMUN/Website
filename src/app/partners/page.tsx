@@ -1,6 +1,4 @@
 import React from "react"
-import Header from "@/components/header"
-import FooterSection from "@/components/footer-one"
 import Partners from "@/components/partners"
 
 export const metadata = {
@@ -11,9 +9,7 @@ export const metadata = {
 function PartnersPage() {
     return (
         <>
-        <Header />
         <Partners />
-        <FooterSection />
         </>
     )
 }
