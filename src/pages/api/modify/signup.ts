@@ -1,9 +1,7 @@
-// pages/api/signup.ts
 import { NextApiRequest, NextApiResponse } from 'next';
 import bcrypt from 'bcryptjs';
 import { getTursoClient } from '@/pages/api/components/dbAuth';
 
-//TODO validate input data
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') {
     return res.status(405).json({ message: 'Method Not Allowed' });

@@ -1,6 +1,16 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getTursoClient } from '@/pages/api/components/dbAuth';
 
+/**
+ * Creates a new application for the user.
+ * 
+ * @param {NextApiRequest[string]} req.body.email User's email
+ * @param {NextApiRequest[string]} req.body.type Type of application (e.g., "delegate", "chair")
+ * @param {NextApiRequest[string]} req.body.committee Committee ID the user is applying to
+ * @param {NextApiRequest[string]} req.body.role Role the user is applying for
+ * @param {NextApiRequest[string]} req.body.notes Additional notes for the application
+ * @returns {NextApiResponse} res.status(200).json({ message: 'Signup successful', applicationId: <int> })
+ */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') {
     return res.status(405).json({ message: 'Method Not Allowed' });
@@ -11,7 +21,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
   
   const { email, type, committee, role, notes } = req.body;
-  //TODO validate input data
 
   try {
     const turso = getTursoClient();

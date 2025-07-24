@@ -23,7 +23,7 @@ export default function UsersAdmin({ onSuccess }: { onSuccess?: () => void }) {
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                const res = await fetch('/api/getUsers', { 
+                const res = await fetch('/api/retrieve/getUsers', { 
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                 })
@@ -66,7 +66,7 @@ export default function UsersAdmin({ onSuccess }: { onSuccess?: () => void }) {
     const handleEditSave = async (id: number) => {
         setLoading(true)
         try {
-            const res = await fetch('/api/updateUser', {
+            const res = await fetch('/api/modify/updateUser', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(editRows[id]),

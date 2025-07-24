@@ -18,7 +18,7 @@ export default function paymentWidget({ onSuccess }: { onSuccess?: () => void })
     useEffect(() => {
         const fetchPayment = async () => {
             try {
-                const res = await fetch('/api/getPayment', { 
+                const res = await fetch('/api/retrieve/getPayment', { 
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email: session?.user?.email }), 

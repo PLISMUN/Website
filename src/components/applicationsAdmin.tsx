@@ -41,7 +41,7 @@ export default function ApplicationsAdmin() {
   const fetchAllApplications = async () => {
     try {
       setLoading(true)
-      const res = await fetch("/api/getAllApplications", { method: "POST" })
+      const res = await fetch("/api/retrieve/getAllApplications", { method: "POST" })
       if (!res.ok) {
         console.error(res)
         throw new Error("Failed to fetch applications")
@@ -102,7 +102,7 @@ export default function ApplicationsAdmin() {
       useEffect(() => {
         const fetchCommittees = async () => {
             try {
-                const res = await fetch('/api/getCommittees', { method: 'POST' })
+                const res = await fetch('/api/retrieve/getCommittees', { method: 'POST' })
                 if (res.ok) {
                     const data = await res.json()
                     setCommittees(data)
@@ -117,7 +117,7 @@ export default function ApplicationsAdmin() {
 
     const setApplication = async (event: React.FormEvent, user: UserApplications) => {
       event.preventDefault();
-      const res_setapp = await fetch('/api/setApplication', {
+      const res_setapp = await fetch('/api/modify/setApplication', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -167,7 +167,7 @@ export default function ApplicationsAdmin() {
     const acceptApplication = async (applicationId: string, email: string) => {
       try {
         const acceptedMap: Record<string, boolean> = {};
-        const res_getuserapps = await fetch('/api/getApplications', { 
+        const res_getuserapps = await fetch('/api/retrieve/getApplications', { 
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email: email }), 
@@ -183,7 +183,7 @@ export default function ApplicationsAdmin() {
             acceptedMap[application.id] = application.id === applicationId
           })
         }
-        const res_updateapps = await fetch('/api/acceptApplication', {
+        const res_updateapps = await fetch('/api/modify/acceptApplication', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(acceptedMap),

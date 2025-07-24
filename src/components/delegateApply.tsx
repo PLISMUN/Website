@@ -89,7 +89,7 @@ export default function DelegateApply({ onSuccess }: { onSuccess?: () => void })
     useEffect(() => {
         const fetchCommittees = async () => {
             try {
-                const res = await fetch('/api/getCommittees', { method: 'POST' })
+                const res = await fetch('/api/retrieve/getCommittees', { method: 'POST' })
                 if (res.ok) {
                     const data = await res.json()
                     setCommittees(data)

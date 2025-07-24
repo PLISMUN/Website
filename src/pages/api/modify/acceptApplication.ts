@@ -1,6 +1,11 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getTursoClient } from '@/pages/api/components/dbAuth';
-
+/**
+ * Accepts application with provided application ID, rejecting all other applications of the user
+ * 
+ * @param {NextApiRequest[string]} req.body.id Application ID to accept
+ * @param {NextApiRequest[string]} req.body.email User email to identify the user
+ */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 if (req.method !== 'POST') {
     return res.status(405).json({ message: 'Method Not Allowed' });

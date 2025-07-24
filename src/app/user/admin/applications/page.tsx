@@ -19,7 +19,7 @@ export default function Page() {
     async function checkAdmin() {
       if (!session?.user?.email) return setIsAdmin(false)
       try {
-        const res = await fetch("/api/getAdmin", {
+        const res = await fetch("/api/retrieve/getAdmin", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email: session.user.email }),

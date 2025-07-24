@@ -38,7 +38,7 @@ export default function DelegateInfoQuestion({ onSuccess }: { onSuccess?: () => 
         setError(null)
         setSuccess(false)
         try {
-            const res = await fetch('/api/setPeopleInfo', {
+            const res = await fetch('/api/modify/setPeopleInfo', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(form),
@@ -62,7 +62,7 @@ export default function DelegateInfoQuestion({ onSuccess }: { onSuccess?: () => 
     useEffect(() => {
             const getInfo = async (email: string) => {
                 try {
-                    const res = await fetch('/api/getPeopleInfo', {
+                    const res = await fetch('/api/retrieve/getPeopleInfo', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ email }),
@@ -85,7 +85,7 @@ export default function DelegateInfoQuestion({ onSuccess }: { onSuccess?: () => 
             }
         const fetchDelegations = async () => {
             try {
-                const res = await fetch('/api/getDelegations', { method: 'POST' })
+                const res = await fetch('/api/retrieve/getDelegations', { method: 'POST' })
                 if (res.ok) {
                     const data = await res.json()
                     setDelegations(data)

@@ -16,7 +16,7 @@ export default function applicationsList({ onSuccess }: { onSuccess?: () => void
     useEffect(() => {
         const fetchApplications = async () => {
             try {
-                const res = await fetch('/api/getApplications', { 
+                const res = await fetch('/api/retrieve/getApplications', { 
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email: session?.user?.email }), 
