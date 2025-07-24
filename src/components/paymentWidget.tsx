@@ -68,7 +68,7 @@ return (
                                     </div>
                                 )}
                                 <p className="text-sm text-muted-foreground">
-                                    Please note it may take up to 7 business days for the payment to be processed. 
+                                    Please note it may take up to 7 business days for the payment to be processed. Delegate applications are not considered until payment is made.
                                 </p>
                             </div>
                         </div>
