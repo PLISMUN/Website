@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { getTursoClient } from '@/pages/api/components/dbAuth';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    if (req.method !== 'POST') {
+  if (req.method !== 'POST') {
     return res.status(405).json({ message: 'Method Not Allowed' });
   }
 
@@ -14,7 +14,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   //TODO validate input data
 
   try {
-    const turso = getTursoClient()
+    const turso = getTursoClient();
 
     const userResult = await turso.execute({
       sql: 'SELECT id FROM users WHERE email = ?',
@@ -27,12 +27,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const userId = userResult.rows[0].id;
 
-    await turso.execute({
-      sql: 'INSERT INTO applications (type, userId, committeeId, role, notes) VALUES (?, ?, ?, ?, ?)',
+    const applicationResult = await turso.execute({
+      sql: 'INSERT INTO applications (type, userId, committeeId, role, notes) VALUES (?, ?, ?, ?, ?) RETURNING id',
       args: [type, userId, committee, role, notes],
     });
-    
-    res.status(200).json({ message: 'Signup successful' });
+
+    const applicationId = applicationResult.rows[0].id;
+
+    res.status(200).json({ message: 'Signup successful', applicationId });
   } catch (err: any) {
     res.status(500).json({ message: err.message || 'Something went wrong' });
   }
