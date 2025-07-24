@@ -56,7 +56,7 @@ export default function DelegateApply({ onSuccess }: { onSuccess?: () => void })
 
             // Send all three requests in parallel
             const responses = await Promise.all(applications.map(app =>
-                fetch('/api/setApplication', {
+                fetch('/api/modify/setApplication', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({

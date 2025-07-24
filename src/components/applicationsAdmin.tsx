@@ -30,6 +30,7 @@ type UserApplications = {
   delegation: string,
   notes: string,
   pending: boolean,
+  paymentStatus: string,
   applications: Application[]
 }
 
@@ -59,6 +60,7 @@ export default function ApplicationsAdmin() {
             delegation: app.delegation,
             notes: app.userNotes,
             pending: false,
+            paymentStatus: app.paymentStatus,
             applications: [],
           }
         }
@@ -219,7 +221,6 @@ export default function ApplicationsAdmin() {
     }
   
   const handleTabChange = (value: string) => {
-    console.log("Active tab:", value);
     if (value === "new") {
       const applicantsDiv = document.getElementById("applicants-list");
       if (applicantsDiv) {
@@ -240,6 +241,18 @@ export default function ApplicationsAdmin() {
           }
         });
       }
+    } else if (value === "new-paid") {
+      const applicantsDiv = document.getElementById("applicants-list");
+      if (applicantsDiv) {
+        Array.from(applicantsDiv.children).forEach(applicant => {
+          if (applicant) {
+            const isPending = applicant.getAttribute("data-pending") === "true";
+            const isPaid = applicant.getAttribute("data-paid") === "true";
+            applicant.classList.toggle("hidden", !(isPending && isPaid));
+          }
+
+        });
+      }
     }
   };
 
@@ -255,13 +268,14 @@ export default function ApplicationsAdmin() {
               <TabsList>
                 <TabsTrigger value="all">All</TabsTrigger>
                 <TabsTrigger value="new">New</TabsTrigger>
+                <TabsTrigger value="new-paid">New & Paid</TabsTrigger>
               </TabsList>
             <Accordion type="multiple" id="applicants-list">
             {Object.keys(users).length > 0 ? (
               Object.values(users).map((user) => (
-                <div key={user.userId} className={`border rounded-lg p-4 mb-4 ${user.pending ? "bg-yellow-50" : "bg-green-50"} shadow-sm`} data-pending={user.pending}>
+                <div key={user.userId} className={`border rounded-lg p-4 mb-4 ${user.pending ? "bg-yellow-50" : "bg-green-50"} shadow-sm`} data-pending={user.pending} data-paid={user.paymentStatus === "Completed"}>
                   <AccordionItem value={user.userId}>
-                   <AccordionTrigger><h2 className="font-semibold text-xl">{user.name}</h2></AccordionTrigger>
+                   <AccordionTrigger><div style={{ display: "flex", alignItems: "center" }}><h2 className="font-semibold text-xl">{user.name}</h2><svg xmlns="http://www.w3.org/2000/svg" style={{ width: "1.5em", height: "1.5em", marginLeft: "0.5em" }} viewBox="0 0 640 640"><path fill={user.paymentStatus === "Completed" ? "var(--color-green-600)" : "var(--color-red-600)"} d="M512 176C520.8 176 528 183.2 528 192L528 224L112 224L112 192C112 183.2 119.2 176 128 176L512 176zM528 288L528 448C528 456.8 520.8 464 512 464L128 464C119.2 464 112 456.8 112 448L112 288L528 288zM128 128C92.7 128 64 156.7 64 192L64 448C64 483.3 92.7 512 128 512L512 512C547.3 512 576 483.3 576 448L576 192C576 156.7 547.3 128 512 128L128 128zM144 408C144 421.3 154.7 432 168 432L216 432C229.3 432 240 421.3 240 408C240 394.7 229.3 384 216 384L168 384C154.7 384 144 394.7 144 408zM288 408C288 421.3 298.7 432 312 432L376 432C389.3 432 400 421.3 400 408C400 394.7 389.3 384 376 384L312 384C298.7 384 288 394.7 288 408z"/></svg></div></AccordionTrigger>
                    <AccordionContent>
                     <div className="flex items-start justify-between">
                       <div>
@@ -269,11 +283,15 @@ export default function ApplicationsAdmin() {
                         <p><strong>Nationality:</strong> {user.nationality}</p>
                         <p><strong>Delegation:</strong> {user.delegation}</p>
                         <p><strong>Notes:</strong> {user.notes}</p>
+                        <p><strong>Payment Status:</strong> <span className={
+                            user.paymentStatus === "Completed" ? "text-green-600" : "text-red-600"
+                          }>{user.paymentStatus}</span></p>
                       </div>
                           <button
                             type="button"
                             className="ml-4 mt-1 text-red-600 hover:text-red-800 p-2 rounded-full border border-red-200 hover:bg-red-50 transition"
                             title="Reject all applications for this user"
+                            onClick={() => acceptApplication("0", user.email)}
                           >
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -399,6 +417,7 @@ export default function ApplicationsAdmin() {
               <TabsList>
                 <TabsTrigger value="all">All</TabsTrigger>
                 <TabsTrigger value="new">New</TabsTrigger>
+                <TabsTrigger value="new-paid">New & Paid</TabsTrigger>
               </TabsList>
             </Tabs>
           </Card>

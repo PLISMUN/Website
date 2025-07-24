@@ -20,11 +20,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           c.name as committeeName,
           p.*,
           p.notes as userNotes,
-          u.email as userEmail
+          u.email as userEmail,
+          pay.status as paymentStatus
         FROM applications a
         JOIN committees c ON a.committeeId = c.id
         JOIN people p ON a.userId = p.id
         JOIN users u ON a.userId = u.id
+        JOIN payments pay ON a.userId = pay.id
       `
     });
 
