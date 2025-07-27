@@ -34,20 +34,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     });
 
     if (!paymentsResult.rows.length) {
-        const codeRand = Math.floor(10000 + Math.random() * 90000);
-        const code = userId?.toString() + codeRand.toString();
-
         await turso.execute({
-            sql: 'INSERT INTO payments (id, value, code) VALUES (?, ?, ?)',
-            args: [userId, 60, code],
-    });
+            sql: 'INSERT INTO payments (id, value) VALUES (?, ?)',
+            args: [userId, 60],
+        });
     }
     
     const paymentInfo = paymentsResult.rows.map((row: any) => ({
         value: row.value?.toString() || '',
         status: row.status?.toString() || '',
         state: row.status?.toString() || '',
-        code: row.code?.toString() || '',
     }));
     res.status(200).json(paymentInfo);
   } catch (err: any) {

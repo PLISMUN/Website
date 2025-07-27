@@ -111,7 +111,6 @@ export default function UsersAdmin({ onSuccess }: { onSuccess?: () => void }) {
                                     <th className="px-2 py-1 border">Notes</th>
                                     <th className="px-2 py-1 border">Payment Value</th>
                                     <th className="px-2 py-1 border">Payment Status</th>
-                                    <th className="px-2 py-1 border">Payment Code</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -188,11 +187,6 @@ export default function UsersAdmin({ onSuccess }: { onSuccess?: () => void }) {
                                             {isEditing ? (
                                                 <Input value={row.status} onChange={e => handleEditChange(user.id, 'status', e.target.value)} />
                                             ) : row.status}
-                                        </td>
-                                        <td className="px-2 py-1 border">
-                                            {isEditing ? (
-                                                <Input value={row.code} onChange={e => handleEditChange(user.id, 'code', e.target.value)} />
-                                            ) : row.code}
                                         </td>
                                         <td className="px-2 py-1 border">
                                             {isEditing ? (

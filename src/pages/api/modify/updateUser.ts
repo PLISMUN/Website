@@ -15,7 +15,6 @@ import { getTursoClient } from '@/pages/api/components/dbAuth'
     notes,
     value,
     status,
-    code,
  * @param {NextApiResponse} res - The response object.
     [{
     id: 2,
@@ -31,7 +30,6 @@ import { getTursoClient } from '@/pages/api/components/dbAuth'
     notes: 'I am MUN itself',
     value: 30,
     status: 'pending',
-    code: '261549'
   },...]
  * @returns {Promise<void>}
  */
@@ -53,7 +51,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     notes,
     value,
     status,
-    code,
   } = req.body
 
   if (!id || typeof id !== 'number') {
@@ -97,19 +94,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const paymentsUpdateResult = await turso.execute({
       sql: `
       UPDATE payments
-      SET value = ?, status = ?, code = ?
+      SET value = ?, status = ?
       WHERE id = ?
       `,
-      args: [value, status, code, id],
+      args: [value, status, id],
     })
 
     if (paymentsUpdateResult.rowsAffected === 0) {
       await turso.execute({
       sql: `
-        INSERT INTO payments (id, value, status, code)
-        VALUES (?, ?, ?, ?)
+        INSERT INTO payments (id, value, status)
+        VALUES (?, ?, ?)
       `,
-      args: [id, value, status, code],
+      args: [id, value, status],
       })
     }
 

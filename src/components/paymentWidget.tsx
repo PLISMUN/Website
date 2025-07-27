@@ -42,7 +42,7 @@ return (
                     <Card className="p-8 sm:p-12">
                         <div className="@md:grid-cols-2 grid gap-3 *:space-y-3 justify-end text-right sm:justify-center sm:text-center">
                             <QRCodeCanvas
-                                value={`SPD*1.0*ACC:CZ4208000000005284999073*AM:1500.00*CC:CZK*RN:TOMÁŠ STOKLÁSEK*X-VS:${paymentInfo?.[0]?.code || ''}*`}
+                                value={`SPD*1.0*ACC:CZ4208000000005284999073*AM:1500.00*CC:CZK*RN:TOMÁŠ STOKLÁSEK*X-VS:250219*`}
                                 style={{ height: "13rem", width: "auto" }}
                                 className="ml-auto"
                             />
@@ -51,7 +51,6 @@ return (
                                     Name: Park Lane International School, a.s.<br />
                                     Bank: Česká Spořitelna<br />
                                     Acc#: 5284999073/0800<br />
-                                    Variable: {paymentInfo?.[0]?.code}
                                 </p>
                                 {paymentInfo?.[0]?.state && (
                                     <div

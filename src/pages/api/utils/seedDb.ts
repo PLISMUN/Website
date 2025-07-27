@@ -81,7 +81,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         id INTEGER PRIMARY KEY,
         value int NOT NULL,
         status TEXT NOT NULL DEFAULT 'pending',
-        code TEXT NOT NULL UNIQUE,
         FOREIGN KEY (id) REFERENCES users(id)
       )
     `);
