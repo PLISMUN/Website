@@ -40,58 +40,24 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(405).json({ message: 'Method Not Allowed' })
   }
 
-  const {
-    id,
-    email,
-    name,
-    isAdmin,
-    isGoogleUser,
-    birth,
-    nationality,
-    delegation,
-    diet,
-    notes,
-    valueCzk,
-    valueEur,
-    status,
-  } = req.body
+  const { email, valueCzk = process.env.NEXT_PUBLIC_PRICE_CZK, valueEur = process.env.NEXT_PUBLIC_PRICE_EUR, status = 'Pending' } = req.body
 
-  if (!id || typeof id !== 'number') {
-    return res.status(400).json({ message: 'Invalid user ID' })
+  if (!email || typeof email !== 'string') {
+    return res.status(400).json({ message: 'Invalid email' })
   }
+
 
   try {
     const turso = getTursoClient()
 
-    // Update users table
-    await turso.execute({
-      sql: `
-        UPDATE users
-        SET email = ?, isAdmin = ?, isGoogleUser = ?
-        WHERE id = ?
-      `,
-      args: [email, !!isAdmin, !!isGoogleUser, id],
+    const userResult = await turso.execute({
+      sql: 'SELECT id FROM users WHERE email = ?',
+      args: [email],
     })
-
-    // Upsert people table: update if exists, insert if not
-    const peopleUpdateResult = await turso.execute({
-      sql: `
-      UPDATE people
-      SET name = ?, birth = ?, nationality = ?, delegation = ?, diet = ?, notes = ?
-      WHERE id = ?
-      `,
-      args: [name, birth, nationality, delegation, diet, notes, id],
-    })
-
-    if (peopleUpdateResult.rowsAffected === 0) {
-      await turso.execute({
-      sql: `
-        INSERT INTO people (id, name, birth, nationality, delegation, diet, notes)
-        VALUES (?, ?, ?, ?, ?, ?, ?)
-      `,
-      args: [id, name, birth, nationality, delegation, diet, notes],
-      })
+    if (userResult.rows.length === 0) {
+      return res.status(404).json({ message: 'User not found' })
     }
+    const id = userResult.rows[0].id
 
     // Update payments table; insert if not exists
     const paymentsUpdateResult = await turso.execute({
@@ -113,19 +79,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       })
     }
 
-    const peopleResult = await turso.execute({
-      sql: `
-        SELECT 
-          u.*, 
-          p.*,
-          pay.*
-        FROM users u
-        LEFT JOIN people p ON u.id = p.id
-        LEFT JOIN payments pay ON u.id = pay.id
-      `,
-    });
-
-    res.status(200).json({ people: peopleResult.rows })
+    res.status(200).json({ message: 'Payment information updated successfully' })
   } catch (err: any) {
     res.status(500).json({ message: err.message || 'Something went wrong' })
   }

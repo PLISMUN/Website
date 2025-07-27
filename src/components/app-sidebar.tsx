@@ -72,7 +72,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   }
 
   React.useEffect(() => {
-    console.log("Session status:", status)
     if (status === "loading") {
       const timer = setTimeout(() => {
         // This will trigger the effect to rerun by updating state

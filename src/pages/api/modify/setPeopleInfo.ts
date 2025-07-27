@@ -1,6 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getTursoClient } from '@/pages/api/components/dbAuth';
-import { getServerSession } from 'next-auth';
 
 /**
  * Updates the user's personal information.
@@ -19,10 +18,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   if (!process.env.TURSO_DATABASE_URL || !process.env.TURSO_AUTH_TOKEN) {
     return res.status(500).json({ message: 'Server error: Missing env variables' });
-  }
-  const session = await getServerSession(req, res, NextAuth);
-  if (!session) {
-    return res.status(401).json({ message: 'Unauthorized' });
   }
   
   const { email, name, birth, nationality, delegation, diet, notes } = req.body;

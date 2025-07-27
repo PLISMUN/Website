@@ -34,7 +34,6 @@ export default function paymentWidget({ onSuccess }: { onSuccess?: () => void })
         fetchPayment()
     }, [session])
     
-//TODO add env variables which change payment info
 return (
         <section className="bg-muted">
             <div className="mx-auto max-w-4xl px-4 py-4 lg:px-0 min-h-screen">
@@ -51,6 +50,7 @@ return (
                                     Name: Park Lane International School, a.s.<br />
                                     Bank: Česká Spořitelna<br />
                                     Acc#: 5284999073/0800<br />
+                                    Ammount: {paymentInfo?.[0]?.valueCzk ? paymentInfo[0].valueCzk : process.env.NEXT_PUBLIC_PRICE_CZK} CZK<br />
                                 </p>
                                 {paymentInfo?.[0]?.state && (
                                     <div

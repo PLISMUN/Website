@@ -11,8 +11,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   const { email } = req.body;
-  console.log(req.body)
-  console.log('Email:', email);
 
     try {
     const turso = getTursoClient()
@@ -34,14 +32,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     });
 
     if (!paymentsResult.rows.length) {
-        await turso.execute({
-            sql: 'INSERT INTO payments (id, value) VALUES (?, ?)',
-            args: [userId, 60],
+        const newPayment = await turso.execute({
+            sql: 'INSERT INTO payments (id, valueCzk, valueEur) VALUES (?, ?, ?) RETURNING *',
+            args: [userId, process.env.NEXT_PUBLIC_PRICE_CZK || 0, process.env.NEXT_PUBLIC_PRICE_EUR || 0],
         });
     }
     
     const paymentInfo = paymentsResult.rows.map((row: any) => ({
-        value: row.value?.toString() || '',
+        valueCzk: row.valueCzk?.toString() || '',
+        valueEur: row.valueEur?.toString() || '',
         status: row.status?.toString() || '',
         state: row.status?.toString() || '',
     }));

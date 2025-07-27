@@ -1,4 +1,3 @@
-"use client"
 import { Card } from "@/components/ui/card"
 import { useEffect, useState } from "react"
 import {
@@ -180,10 +179,17 @@ export default function ApplicationsAdmin() {
         }
         const applicationsObj = await res_getuserapps.json()
         const applications = applicationsObj.applications;
+        let applicationType = '';
+        let applicationRole = '';
+
         if (Array.isArray(applications)) {
           applications.forEach((application: any) => {
-            acceptedMap[application.id] = application.id === applicationId
-          })
+            acceptedMap[application.id] = application.id === applicationId;
+            if (application.id === applicationId) {
+              applicationType = application.type;
+              applicationRole = application.role;
+            }
+          });
         }
         const res_updateapps = await fetch('/api/modify/acceptApplication', {
           method: 'POST',
@@ -191,8 +197,39 @@ export default function ApplicationsAdmin() {
           body: JSON.stringify(acceptedMap),
         })
         if (!res_updateapps.ok) {
-          const error = await res_updateapps.text()
-          throw new Error(`Failed to update applications: ${error}`)
+          const error = await res_updateapps.text();
+          throw new Error(`Failed to update applications: ${error}`);
+        }
+
+        // Send payment request based on application type and role
+        if (applicationType === 'chair' || applicationRole === 'chair') {
+          const res_setpayment = await fetch('/api/modify/setPayment', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              email: email,
+              valueCzk: process.env.NEXT_PUBLIC_PRICE_CZK_CHAIR,
+              valueEur: process.env.NEXT_PUBLIC_PRICE_EUR_CHAIR,
+            }),
+          });
+            if (!res_setpayment.ok) {
+            const error = await res_setpayment.text();
+            throw new Error(`Failed to set payment: ${error}`);
+          }
+        } else if (applicationType === 'delegate') {
+           const res_setpayment = await fetch('/api/modify/setPayment', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              email: email,
+              valueCzk: process.env.NEXT_PUBLIC_PRICE_CZK,
+              valueEur: process.env.NEXT_PUBLIC_PRICE_EUR,
+            }),
+          });
+          if (!res_setpayment.ok) {
+            const error = await res_setpayment.text();
+            throw new Error(`Failed to set payment: ${error}`);
+          }
         }
 
         // Update local state instead of refetching everything

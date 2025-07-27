@@ -21,7 +21,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
   
   const { email, type, committee, role, notes } = req.body;
-  console.log(req.body)
 
   try {
     const turso = getTursoClient();
