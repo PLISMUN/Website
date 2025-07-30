@@ -102,7 +102,7 @@ if (typeof delegation !== 'string' || delegation.length > 100) {
 }
 
 const validDiets = [
-  "None", "Vegetarian", "Vegan", "Other"
+  "Omnivore", "Vegetarian", "Vegan", "Gluten Free", "Lactose Free", "Hallal", "Other"
 ];
 if (typeof diet !== 'string' || !validDiets.includes(diet)) {
     return res.status(400).json({ message: 'Invalid diet option' });

@@ -390,6 +390,10 @@ export default function DelegateInfoQuestion({ onSuccess }: { onSuccess?: () => 
                                             <SelectItem value="None">None</SelectItem>
                                             <SelectItem value="Vegetarian">Vegetarian</SelectItem>
                                             <SelectItem value="Vegan">Vegan</SelectItem>
+                                            <SelectItem value="Gluten Free">Gluten Free</SelectItem>
+                                            <SelectItem value="Lactose Free">Lactose Free</SelectItem>
+                                            <SelectItem value="Halal">Halal</SelectItem>
+                                            <SelectItem value="Other">Other</SelectItem>
                                         </SelectContent>
                                     </Select>
                                 </div>
@@ -399,7 +403,7 @@ export default function DelegateInfoQuestion({ onSuccess }: { onSuccess?: () => 
                                 </div>
                             </div>
                             <div>
-                                <Label htmlFor="notes">MUN achievements, conferences attended & notes</Label>
+                                <Label htmlFor="notes">MUN achievements, conferences attended, allergies & notes</Label>
                                 <Textarea
                                     id="notes"
                                     rows={3}
