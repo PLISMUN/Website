@@ -17,7 +17,7 @@ export default function DelegateInfoQuestion({ onSuccess }: { onSuccess?: () => 
 
     const [form, setForm] = useState({
         name: '',
-        email: session?.user?.email, 
+        email: '', 
         nationality: '',
         delegation: '',
         diet: '',
@@ -72,6 +72,7 @@ export default function DelegateInfoQuestion({ onSuccess }: { onSuccess?: () => 
                         setForm((prev) => ({
                             ...prev,
                             name: data[0]?.name || session?.user?.name || '',
+                            email: session?.user?.email || '',
                             birth: data[0]?.birth || '',
                             nationality: data[0]?.nationality || '',
                             delegation: data[0]?.delegation || '',
@@ -83,6 +84,7 @@ export default function DelegateInfoQuestion({ onSuccess }: { onSuccess?: () => 
                     console.error('Error fetching user info:', err)
                 }
             }
+
         const fetchDelegations = async () => {
             try {
                 const res = await fetch('/api/retrieve/getDelegations', { method: 'POST' })
@@ -94,10 +96,9 @@ export default function DelegateInfoQuestion({ onSuccess }: { onSuccess?: () => 
                 setError('Failed to fetch delegations: ' + err)
             }
         }
-        setForm(prev => ({ ...prev, name: session?.user?.name || '' }))
         fetchDelegations()
         getInfo(session?.user?.email || "")
-    }, [])
+    }, [session])
 
     return (
         <section className="bg-muted">
@@ -387,7 +388,7 @@ export default function DelegateInfoQuestion({ onSuccess }: { onSuccess?: () => 
                                             <SelectValue placeholder="Select your diet" />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            <SelectItem value="None">None</SelectItem>
+                                            <SelectItem value="Omnivore">Omnivore</SelectItem>
                                             <SelectItem value="Vegetarian">Vegetarian</SelectItem>
                                             <SelectItem value="Vegan">Vegan</SelectItem>
                                             <SelectItem value="Gluten Free">Gluten Free</SelectItem>

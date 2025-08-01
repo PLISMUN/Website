@@ -21,7 +21,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     });
 
     if (!userResult.rows.length) {
-      return res.status(404).json({ message: 'User not found' });
+      return res.status(500).json({ message: 'User not found' });
     }
 
     const userId = userResult.rows[0].id;
