@@ -43,7 +43,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     delegate: [
       {
         name: "Apply",
-        url: "/user/apply",
+        url: "/user/dashboard",
         icon: IconConfetti,
       },
       {
