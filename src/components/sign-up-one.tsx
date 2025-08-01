@@ -34,7 +34,7 @@ export default function LoginPage() {
     setSuccess(false);
 
     try {
-      const res = await fetch('/api/signup', {
+      const res = await fetch('/api/modify/signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
