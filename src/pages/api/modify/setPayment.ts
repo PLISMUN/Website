@@ -1,5 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import { getTursoClient } from '@/pages/api/components/dbAuth'
+import sendEmail from '@/pages/api/internal/sendEmail';
+
 /**
  * Updates the user's completeinformation.
  * @param {NextApiRequest} req - The request object.
@@ -77,8 +79,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       `,
       args: [id, valueCzk, valueEur, status],
       })
+    
     }
-
+    await sendEmail(email, 'Payment Information Updated', `Your payment information has been updated. Your new payment details are as follows:<br />Amount (CZK): ${valueCzk} <br />Amount (EUR): ${valueEur}<br />Status: ${status}`);
     res.status(200).json({ message: 'Payment information updated successfully' })
   } catch (err: any) {
     res.status(500).json({ message: err.message || 'Something went wrong' })

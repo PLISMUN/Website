@@ -29,7 +29,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }));
     res.status(200).json(personInfo);
   } catch (err: any) {
-    console.error('Error fetching delegations:', err);
+    console.error('Error getting admin:', err);
     res.status(500).json({ message: err.message || 'Something went wrong' });
   }
 }
