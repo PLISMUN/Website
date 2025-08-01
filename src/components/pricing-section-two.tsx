@@ -17,8 +17,8 @@ export default function Pricing() {
                             <div>
                                 <CardHeader className="p-8">
                                     <CardTitle className="font-medium">Chair</CardTitle>
-                                    <span className="mb-0.5 mt-2 block text-2xl font-semibold">750 CZK</span>
-                                    <CardDescription className="text-sm">€32</CardDescription>
+                                    <span className="mb-0.5 mt-2 block text-2xl font-semibold">{process.env.NEXT_PUBLIC_PRICE_CZK_CHAIR || "There was an error getting prices. Please check back later."} CZK</span>
+                                    <CardDescription className="text-sm">€{process.env.NEXT_PUBLIC_PRICE_EUR_CHAIR || ""}</CardDescription>
                                 </CardHeader>
                                 <div className="border-y px-8 py-4">
                                     <Button
@@ -34,8 +34,8 @@ export default function Pricing() {
                                 <div className="@3xl:py-3 @3xl:px-0 relative px-1">
                                     <CardHeader className="p-8">
                                         <CardTitle className="font-medium">Delegate</CardTitle>
-                                        <span className="mb-0.5 mt-2 block text-2xl font-semibold">1,350 CZK</span>
-                                        <CardDescription className="text-sm">€55</CardDescription>
+                                        <span className="mb-0.5 mt-2 block text-2xl font-semibold">{process.env.NEXT_PUBLIC_PRICE_CZK || "There was an error getting prices. Please check back later."} CZK</span>
+                                        <CardDescription className="text-sm">€{process.env.NEXT_PUBLIC_PRICE_EUR || ""}</CardDescription>
                                     </CardHeader>
                                     <div className="@3xl:mx-0 -mx-1 border-y px-8 py-4">
                                         <Button
@@ -50,8 +50,8 @@ export default function Pricing() {
                             <div>
                                 <CardHeader className="p-8">
                                     <CardTitle className="font-medium">Supervisor</CardTitle>
-                                    <span className="mb-0.5 mt-2 block text-2xl font-semibold">700 CZK</span>
-                                    <CardDescription className="text-sm">€30</CardDescription>
+                                    <span className="mb-0.5 mt-2 block text-2xl font-semibold">{process.env.NEXT_PUBLIC_PRICE_CZK_SUPERVISOR || "There was an error getting prices. Please check back later."} CZK</span>
+                                    <CardDescription className="text-sm">€{process.env.NEXT_PUBLIC_PRICE_EUR_SUPERVISOR || ""}</CardDescription>
                                 </CardHeader>
                                 <div className="border-y px-8 py-4">
                                     <Button

@@ -1,9 +1,8 @@
-// pages/api/signup.ts
 import { NextApiRequest, NextApiResponse } from 'next';
 import bcrypt from 'bcryptjs';
 import { getTursoClient } from '@/pages/api/components/dbAuth';
+import sendEmail from '@/pages/api/internal/sendEmail';
 
-//TODO validate input data
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') {
     return res.status(405).json({ message: 'Method Not Allowed' });
@@ -44,7 +43,8 @@ const isGoogleUserBool = Boolean(isGoogleUser)
       sql: 'INSERT INTO users (email, password, isGoogleUser) VALUES (?, ?, ?)',
       args: [email, hashedPassword, isGoogleUserBool],
     });
-    
+
+    await sendEmail(email, 'Welcome to PLISMUN!', `Thank you for signing up! Your account has been created successfully.`);
     res.status(200).json({ message: 'Signup successful' });
   } catch (err: any) {
     res.status(500).json({ message: err.message || 'Something went wrong' });

@@ -38,7 +38,7 @@ export default function DelegateInfoQuestion({ onSuccess }: { onSuccess?: () => 
         setError(null)
         setSuccess(false)
         try {
-            const res = await fetch('/api/setPeopleInfo', {
+            const res = await fetch('/api/modify/setPeopleInfo', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(form),
@@ -62,7 +62,7 @@ export default function DelegateInfoQuestion({ onSuccess }: { onSuccess?: () => 
     useEffect(() => {
             const getInfo = async (email: string) => {
                 try {
-                    const res = await fetch('/api/getPeopleInfo', {
+                    const res = await fetch('/api/retrieve/getPeopleInfo', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ email }),
@@ -85,7 +85,7 @@ export default function DelegateInfoQuestion({ onSuccess }: { onSuccess?: () => 
             }
         const fetchDelegations = async () => {
             try {
-                const res = await fetch('/api/getDelegations', { method: 'POST' })
+                const res = await fetch('/api/retrieve/getDelegations', { method: 'POST' })
                 if (res.ok) {
                     const data = await res.json()
                     setDelegations(data)
@@ -390,6 +390,10 @@ export default function DelegateInfoQuestion({ onSuccess }: { onSuccess?: () => 
                                             <SelectItem value="None">None</SelectItem>
                                             <SelectItem value="Vegetarian">Vegetarian</SelectItem>
                                             <SelectItem value="Vegan">Vegan</SelectItem>
+                                            <SelectItem value="Gluten Free">Gluten Free</SelectItem>
+                                            <SelectItem value="Lactose Free">Lactose Free</SelectItem>
+                                            <SelectItem value="Halal">Halal</SelectItem>
+                                            <SelectItem value="Other">Other</SelectItem>
                                         </SelectContent>
                                     </Select>
                                 </div>
@@ -399,7 +403,7 @@ export default function DelegateInfoQuestion({ onSuccess }: { onSuccess?: () => 
                                 </div>
                             </div>
                             <div>
-                                <Label htmlFor="notes">MUN achievements, conferences attended & notes</Label>
+                                <Label htmlFor="notes">MUN achievements, conferences attended, allergies & notes</Label>
                                 <Textarea
                                     id="notes"
                                     rows={3}

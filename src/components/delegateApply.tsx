@@ -56,7 +56,7 @@ export default function DelegateApply({ onSuccess }: { onSuccess?: () => void })
 
             // Send all three requests in parallel
             const responses = await Promise.all(applications.map(app =>
-                fetch('/api/setApplication', {
+                fetch('/api/modify/setApplication', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -89,7 +89,7 @@ export default function DelegateApply({ onSuccess }: { onSuccess?: () => void })
     useEffect(() => {
         const fetchCommittees = async () => {
             try {
-                const res = await fetch('/api/getCommittees', { method: 'POST' })
+                const res = await fetch('/api/retrieve/getCommittees', { method: 'POST' })
                 if (res.ok) {
                     const data = await res.json()
                     setCommittees(data)
@@ -108,7 +108,7 @@ export default function DelegateApply({ onSuccess }: { onSuccess?: () => void })
                 <form onSubmit={handleSubmit} className="@container lg:col-span-3">
                     <Card className="p-8 sm:p-12">
                         <h3 className="text-xl font-semibold">The time has come: it's time to apply!</h3>
-                        <p className="text-sm">You can leave rows empty if you have a smaller number of choices, or you can fill out this form again if you have more than 3! We hope that your chosen committee & topic don't disappoint you!</p>
+                        <p className="text-sm">Your application won't be considered and your roles won't be assigned until your payment is made. We hope that your chosen committee & topic don't disappoint you!</p>
                         <div className="**:[&>label]:block mt-1 space-y-6">
                             <ChoiceSection
                                 choiceNumber={1}
@@ -152,7 +152,7 @@ export default function DelegateApply({ onSuccess }: { onSuccess?: () => void })
         committeeValue,
         roleValue,
         notesValue,
-        required = false,
+        required = true,
         committees,
         handleChange,
     }: {
@@ -218,7 +218,7 @@ export default function DelegateApply({ onSuccess }: { onSuccess?: () => void })
                         </Select>
                     </div>
                     <div className="col-span-2">
-                        <Label htmlFor={`notes${choiceNumber}`}>Why would you like this role? Any other things to note?</Label>
+                        <Label htmlFor={`notes${choiceNumber}`}>Why would you like this role? How preferred is this role for you? Any other things to note?</Label>
                         <Textarea
                             required={required}
                             id={`notes${choiceNumber}`}

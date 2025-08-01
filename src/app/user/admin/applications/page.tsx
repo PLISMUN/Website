@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/sidebar"
 import { stages } from "@/config/stages"
 import React from "react"
-import UsersAdmin from "@/components/usersAdmin"
+import ApplicationsAdmin from "@/components/applicationsAdmin"
 import { useSession } from "next-auth/react"
 
 export default function Page() {
@@ -15,7 +15,7 @@ export default function Page() {
   const [isAdmin, setIsAdmin] = React.useState<boolean | null>(null)
 
   React.useEffect(() => {
-    document.title = "PLISMUN | Users Management";
+    document.title = "PLISMUN | Applications";
     async function checkAdmin() {
       if (!session?.user?.email) return setIsAdmin(false)
       try {
@@ -52,11 +52,11 @@ export default function Page() {
     >
       <AppSidebar variant="inset" />
       <SidebarInset>
-        <SiteHeader title="Users Management" />
+        <SiteHeader title="Applications" />
         <div className="flex flex-1 flex-col">
           <div className="@container/main flex flex-1 flex-col gap-2">
             <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6 min-h-screen">
-              <UsersAdmin />
+              <ApplicationsAdmin />
             </div>
           </div>
         </div>

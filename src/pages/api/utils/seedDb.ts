@@ -79,9 +79,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     await turso.execute(`
       CREATE TABLE IF NOT EXISTS payments (
         id INTEGER PRIMARY KEY,
-        value int NOT NULL,
+        valueCzk int NOT NULL,
+        valueEur int NOT NULL,
         status TEXT NOT NULL DEFAULT 'pending',
-        code TEXT NOT NULL UNIQUE,
         FOREIGN KEY (id) REFERENCES users(id)
       )
     `);

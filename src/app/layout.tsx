@@ -1,7 +1,13 @@
 "use client"
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import '@/styles/main.css';
 import { SessionProvider } from "next-auth/react"
+import { unstable_ViewTransition as ViewTransition } from 'react'
+import { usePathname } from "next/navigation"
+
+import Header from "@/components/header"
+import FooterSection from "@/components/footer-one"
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -18,14 +24,21 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const pathname = usePathname();
+  const hideHeaderFooter = pathname?.startsWith("/user");
+
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <SessionProvider>
-          {children}
+          {!hideHeaderFooter && <Header />}
+          <ViewTransition>
+            {children}
+          </ViewTransition>
         </SessionProvider>
+        {!hideHeaderFooter && <FooterSection />}
       </body>
     </html>
   );

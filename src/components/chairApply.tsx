@@ -48,7 +48,7 @@ export default function ChairApply({ onSuccess }: { onSuccess?: () => void }) {
 
             // Send all three requests in parallel
             const responses = await Promise.all(applications.map(app =>
-                fetch('/api/setApplication', {
+                fetch('/api/modify/setApplication', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -81,7 +81,7 @@ export default function ChairApply({ onSuccess }: { onSuccess?: () => void }) {
     useEffect(() => {
         const fetchCommittees = async () => {
             try {
-                const res = await fetch('/api/getCommittees', { method: 'POST' })
+                const res = await fetch('/api/retrieve/getCommittees', { method: 'POST' })
                 if (res.ok) {
                     const data = await res.json()
                     setCommittees(data)

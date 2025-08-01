@@ -10,26 +10,28 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(500).json({ message: 'Server error: Missing env variables' });
   }
 
-  const { email } = req.body;
-
-    try {
+  try {
     const turso = getTursoClient()
 
-    const userResult = await turso.execute({
-      sql: 'SELECT isAdmin FROM users WHERE email = ?',
-      args: [email],
+    const applicationsResult = await turso.execute({
+      sql: `
+        SELECT 
+          a.*, 
+          c.name as committeeName,
+          p.*,
+          p.notes as userNotes,
+          u.email as userEmail,
+          pay.status as paymentStatus
+        FROM applications a
+        JOIN committees c ON a.committeeId = c.id
+        JOIN people p ON a.userId = p.id
+        JOIN users u ON a.userId = u.id
+        JOIN payments pay ON a.userId = pay.id
+      `
     });
 
-    if (!userResult.rows.length) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-    
-    const personInfo = userResult.rows.map((row: any) => ({
-        isAdmin: row.isAdmin?.toString() || '',
-    }));
-    res.status(200).json(personInfo);
+    res.status(200).json({ applications: applicationsResult.rows });
   } catch (err: any) {
-    console.error('Error fetching delegations:', err);
     res.status(500).json({ message: err.message || 'Something went wrong' });
   }
 }

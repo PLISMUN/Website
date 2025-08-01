@@ -23,7 +23,7 @@ export default function UsersAdmin({ onSuccess }: { onSuccess?: () => void }) {
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                const res = await fetch('/api/getUsers', { 
+                const res = await fetch('/api/retrieve/getUsers', { 
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                 })
@@ -66,7 +66,7 @@ export default function UsersAdmin({ onSuccess }: { onSuccess?: () => void }) {
     const handleEditSave = async (id: number) => {
         setLoading(true)
         try {
-            const res = await fetch('/api/updateUser', {
+            const res = await fetch('/api/modify/updateUser', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(editRows[id]),
@@ -109,9 +109,9 @@ export default function UsersAdmin({ onSuccess }: { onSuccess?: () => void }) {
                                     <th className="px-2 py-1 border">Delegation</th>
                                     <th className="px-2 py-1 border">Diet</th>
                                     <th className="px-2 py-1 border">Notes</th>
-                                    <th className="px-2 py-1 border">Payment Value</th>
+                                    <th className="px-2 py-1 border">Payment Value CZK</th>
+                                    <th className="px-2 py-1 border">Payment Value EUR</th>
                                     <th className="px-2 py-1 border">Payment Status</th>
-                                    <th className="px-2 py-1 border">Payment Code</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -181,18 +181,21 @@ export default function UsersAdmin({ onSuccess }: { onSuccess?: () => void }) {
                                         </td>
                                         <td className="px-2 py-1 border">
                                             {isEditing ? (
-                                                <Input value={row.value} onChange={e => handleEditChange(user.id, 'value', e.target.value)} />
-                                            ) : row.value}
+                                                <Input value={row.valueCzk} onChange={e => handleEditChange(user.id, 'valueCzk', e.target.value)} />
+                                            ) : row.valueCzk}
                                         </td>
                                         <td className="px-2 py-1 border">
                                             {isEditing ? (
-                                                <Input value={row.status} onChange={e => handleEditChange(user.id, 'status', e.target.value)} />
+                                                <Input value={row.valueEur} onChange={e => handleEditChange(user.id, 'valueEur', e.target.value)} />
+                                            ) : row.valueEur}
+                                        </td>
+                                        <td className="px-2 py-1 border">
+                                            {isEditing ? (
+                                                <select value={row.status ? "Completed" : "Pending"} onChange={e => handleEditChange(user.id, 'status', e.target.value)}>
+                                                    <option value="Completed">Completed</option>
+                                                    <option value="Pending">Pending</option>
+                                                </select>
                                             ) : row.status}
-                                        </td>
-                                        <td className="px-2 py-1 border">
-                                            {isEditing ? (
-                                                <Input value={row.code} onChange={e => handleEditChange(user.id, 'code', e.target.value)} />
-                                            ) : row.code}
                                         </td>
                                         <td className="px-2 py-1 border">
                                             {isEditing ? (

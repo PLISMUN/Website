@@ -1,6 +1,16 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getTursoClient } from '@/pages/api/components/dbAuth';
 
+/**
+ * Updates the user's personal information.
+ * @param {NextApiRequest[string]} req.body.email User's email
+ * @param {NextApiRequest[string]} req.body.name User's name
+ * @param {NextApiRequest[string]} req.body.birth User's birth date in YYYY-MM
+ * @param {NextApiRequest[string]} req.body.nationality User's nationality
+ * @param {NextApiRequest[string]} req.body.delegation User's delegation
+ * @param {NextApiRequest[string]} req.body.diet User's dietary preferences
+ * @param {NextApiRequest[string]} req.body.notes Additional notes for the user
+ */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method !== 'POST') {
     return res.status(405).json({ message: 'Method Not Allowed' });
@@ -92,7 +102,7 @@ if (typeof delegation !== 'string' || delegation.length > 100) {
 }
 
 const validDiets = [
-  "None", "Vegetarian", "Vegan", "Other"
+  "Omnivore", "Vegetarian", "Vegan", "Gluten Free", "Lactose Free", "Hallal", "Other"
 ];
 if (typeof diet !== 'string' || !validDiets.includes(diet)) {
     return res.status(400).json({ message: 'Invalid diet option' });

@@ -3,10 +3,11 @@ import CredentialsProvider from "next-auth/providers/credentials"
 import { getTursoClient } from "@/pages/api/components/dbAuth"
 import bcrypt from "bcryptjs"
 import GoogleProvider from "next-auth/providers/google";
+import type { NextAuthOptions } from "next-auth"
 
-export default NextAuth({
+export const authOptions: NextAuthOptions = {
   providers: [
-    GoogleProvider({ //TODO publish google oauth on prod
+    GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!
     }),
@@ -72,4 +73,6 @@ export default NextAuth({
       }
     }
   }
-})
+}
+
+export default NextAuth(authOptions)

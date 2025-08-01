@@ -72,7 +72,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   }
 
   React.useEffect(() => {
-    console.log("Session status:", status)
     if (status === "loading") {
       const timer = setTimeout(() => {
         // This will trigger the effect to rerun by updating state
@@ -89,7 +88,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     async function checkAdmin() {
       if (!session?.user?.email) return
       try {
-        const res = await fetch("/api/getAdmin", {
+        const res = await fetch("/api/retrieve/getAdmin", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email: session.user.email }),
