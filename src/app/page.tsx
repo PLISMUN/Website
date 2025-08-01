@@ -20,7 +20,8 @@ Home.mainPage = true
 
 export const metadata = {
   title: "PLISMUN | Home",
-  description: "Welcome to PLISMUN, an internationally renowned MUN Conference hosted by Park Lane International School."
+  description: "Welcome to PLISMUN, an internationally renowned MUN Conference hosted by Park Lane International School.",
+  
 }
 
 export default Home
