@@ -20,7 +20,7 @@ export const authOptions: NextAuthOptions = {
       },
       async authorize(
         credentials: Record<"email" | "password", string> | undefined,
-        req: any // NextAuth's RequestInternal type, can be 'any' for compatibility
+        req: any
       ) {
         if (!credentials?.email || !credentials?.password) throw new Error("Email and password are required");
 
@@ -31,7 +31,6 @@ export const authOptions: NextAuthOptions = {
         )
         if (!result.rows || result.rows.length === 0) throw new Error("No user found with this email");
 
-        // Defensive: ensure user fields are strings
         const user = result.rows[0]
         const id = user.id?.toString?.() ?? ""
         const email = user.email?.toString?.() ?? ""
