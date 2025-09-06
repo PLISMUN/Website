@@ -27,6 +27,13 @@ export default function LoginPage() {
         }
     }, [status, router])
 
+    const passwordToggle = () => {
+        const passwordInput = document.getElementById("password") as HTMLInputElement;
+        if (passwordInput) {
+            passwordInput.type = passwordInput.type === "password" ? "text" : "password";
+        }
+    };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -126,16 +133,25 @@ export default function LoginPage() {
                                 className="block text-sm">
                                 Password
                             </Label>
-                            <Input
-                                type="password"
-                                required
-                                name="password"
-                                id="password"
-                                placeholder="Your password"
-                                className="ring-foreground/15 border-transparent ring-1"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                            />
+                            <div className="relative">
+                                <Input
+                                    type="password"
+                                    required
+                                    name="password"
+                                    id="password"
+                                    placeholder="Your password"
+                                    className="ring-foreground/15 border-transparent ring-1 pr-10"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                />
+                                <button
+                                    type="button"
+                                    onClick={passwordToggle}
+                                    className="absolute inset-y-0 right-0 flex items-center pr-3 text-sm text-muted-foreground hover:text-foreground"
+                                >
+                                    Show
+                                </button>
+                            </div>
                         </div>
 
                         <div className="flex items-center space-x-2">
