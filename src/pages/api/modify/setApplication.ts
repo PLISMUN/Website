@@ -1,5 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getTursoClient } from '@/pages/api/components/dbAuth';
+import authAdmin from '@/pages/api/internal/authAdmin';
+import preFlightChecks from '@/pages/api/internal/preFlightChecks';
 
 /**
  * Creates a new application for the user.
@@ -12,13 +14,8 @@ import { getTursoClient } from '@/pages/api/components/dbAuth';
  * @returns {NextApiResponse} res.status(200).json({ message: 'Signup successful', applicationId: <int> })
  */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ message: 'Method Not Allowed' });
-  }
-
-  if (!process.env.TURSO_DATABASE_URL || !process.env.TURSO_AUTH_TOKEN) {
-    return res.status(500).json({ message: 'Server error: Missing env variables' });
-  }
+  await preFlightChecks(req, res);
+  await authAdmin(req, res);
   
   const { email, type, committee, role, notes } = req.body;
 

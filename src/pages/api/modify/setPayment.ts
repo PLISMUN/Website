@@ -1,6 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import { getTursoClient } from '@/pages/api/components/dbAuth'
 import sendEmail from '@/pages/api/internal/sendEmail';
+import authAdmin from '@/pages/api/internal/authAdmin';
+import preFlightChecks from '@/pages/api/internal/preFlightChecks';
 
 /**
  * Updates the user's completeinformation.
@@ -38,9 +40,8 @@ import sendEmail from '@/pages/api/internal/sendEmail';
  * @returns {Promise<void>}
  */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ message: 'Method Not Allowed' })
-  }
+  await preFlightChecks(req, res);
+  await authAdmin(req, res);
 
   const { email, valueCzk = process.env.NEXT_PUBLIC_PRICE_CZK, valueEur = process.env.NEXT_PUBLIC_PRICE_EUR, status = 'Pending' } = req.body
 

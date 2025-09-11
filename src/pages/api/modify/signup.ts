@@ -2,20 +2,15 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import bcrypt from 'bcryptjs';
 import { getTursoClient } from '@/pages/api/components/dbAuth';
 import sendEmail from '@/pages/api/internal/sendEmail';
+import preFlightChecks from '@/pages/api/internal/preFlightChecks';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ message: 'Method Not Allowed' });
-  }
+  await preFlightChecks(req, res);
 
   const { email, password, isGoogleUser } = req.body;
 
   if (!email || !password) {
     return res.status(400).json({ message: 'Email and password are required' });
-  }
-
-  if (!process.env.TURSO_DATABASE_URL || !process.env.TURSO_AUTH_TOKEN) {
-    return res.status(500).json({ message: 'Server error: Missing env variables' });
   }
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

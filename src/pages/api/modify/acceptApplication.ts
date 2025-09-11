@@ -1,6 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getTursoClient } from '@/pages/api/components/dbAuth';
 import sendEmail from '@/pages/api/internal/sendEmail';
+import authAdmin from '@/pages/api/internal/authAdmin';
+import preFlightChecks from '@/pages/api/internal/preFlightChecks';
 /**
  * Accepts application with provided application ID, rejecting all other applications of the user
  * 
@@ -8,13 +10,9 @@ import sendEmail from '@/pages/api/internal/sendEmail';
  * @param {NextApiRequest[string]} req.body.status Object mapping application IDs to their acceptance status (true for accept, false for reject)
  */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-if (req.method !== 'POST') {
-    return res.status(405).json({ message: 'Method Not Allowed' });
-  }
+  await preFlightChecks(req, res);
+  await authAdmin(req, res);
 
-  if (!process.env.TURSO_DATABASE_URL || !process.env.TURSO_AUTH_TOKEN) {
-    return res.status(500).json({ message: 'Server error: Missing env variables' });
-  }
   try {
     const turso = getTursoClient()
 

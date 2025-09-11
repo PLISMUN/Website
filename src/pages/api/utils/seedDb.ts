@@ -1,10 +1,11 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getTursoClient } from '@/pages/api/components/dbAuth';
+import authAdmin from '@/pages/api/internal/authAdmin';
+import preFlightChecks from '@/pages/api/internal/preFlightChecks';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (!process.env.TURSO_DATABASE_URL || !process.env.TURSO_AUTH_TOKEN) {
-    return res.status(500).json({ message: 'Server error: Missing env variables' });
-  }
+  await preFlightChecks(req, res);
+  await authAdmin(req, res);
 
     try {
     const turso = getTursoClient()
