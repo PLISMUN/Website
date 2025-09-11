@@ -118,6 +118,7 @@ export default function ApplicationsAdmin() {
 
     const setApplication = async (event: React.FormEvent, user: UserApplications) => {
       event.preventDefault();
+      if (form.role === "Chair") {form.type = "chair"}
       const res_setapp = await fetch('/api/modify/setApplication', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -373,7 +374,8 @@ export default function ApplicationsAdmin() {
                                     const committee = committees.find(c => c.id.toString() === form.committee)
                                     if (!committee?.roles) return null
                                     try {
-                                        const rolesArr = JSON.parse(committee.roles)
+                                        var rolesArr = JSON.parse(committee.roles)
+                                        rolesArr.unshift({ role: "Chair" })
                                         return Array.isArray(rolesArr)
                                             ? rolesArr.map((roleObj: any, index: number) => (
                                                 <SelectItem key={index} value={roleObj.role || roleObj}>
