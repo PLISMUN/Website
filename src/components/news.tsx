@@ -54,6 +54,7 @@ export default function ContentSection() {
                     </div>
                     <div className="border-foreground/5 space-y-6 [--color-border:color-mix(in_oklab,var(--color-foreground)10%,transparent)] sm:space-y-0 sm:divide-y">
                         {/* I know react is screaming about this but its fine as long as the use effect above loads the decleration file. The decleration file isnt stored locally.*/}
+                        {/* @ts-ignore */}
                         <behold-widget feed-id="bde9UTCU8DFuCu0tWkgM"></behold-widget>
                     </div>
                 </div>
