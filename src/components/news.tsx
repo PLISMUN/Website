@@ -1,9 +1,19 @@
 'use client'
-import React from "react"
-
+import React, { useEffect } from "react"
 
 export default function ContentSection() {
-    return (
+
+    useEffect(() => {
+        if (!document.querySelector('script[src="https://w.behold.so/widget.js"]')) {
+            const script = document.createElement("script");
+            script.type = "module";
+            script.src = "https://w.behold.so/widget.js";
+            document.head.appendChild(script);
+        }
+    }, []);
+
+
+    /*return (
         <section>
             <div className="bg-muted/50 py-24">
                 <div className="mx-auto w-full max-w-5xl px-6">
@@ -28,6 +38,24 @@ export default function ContentSection() {
                                 <p className="text-muted-foreground mt-3 text-lg">Dear Guests,<br />Our Organisation Team is working extremely hard behind the scenes to bring your favourite conference to you. Stay tuned for updates!</p>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    ) */
+    return (
+        <section>
+            <div className="bg-muted/50 py-24">
+                <div className="mx-auto w-full max-w-5xl px-6">
+                    <div>
+                        <span className="text-primary">Latest News</span>
+                        <h2 className="text-foreground mt-4 text-4xl font-semibold">Check our instagram for the latest news!</h2>
+                        <p className="text-muted-foreground mb-12 mt-4 text-lg">The secretariat is working day and night to bring your favourite conference back.</p>
+                    </div>
+                    <div className="border-foreground/5 space-y-6 [--color-border:color-mix(in_oklab,var(--color-foreground)10%,transparent)] sm:space-y-0 sm:divide-y">
+                        {/* I know react is screaming about this but its fine as long as the use effect above loads the decleration file. The decleration file isnt stored locally.*/}
+                        {/* @ts-ignore */}
+                        <behold-widget feed-id="bde9UTCU8DFuCu0tWkgM"></behold-widget>
                     </div>
                 </div>
             </div>
