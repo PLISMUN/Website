@@ -1,19 +1,18 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 
 const members = [
-    { src: '', name: 'Igor Zajac', role: 'Secretary General' },
-    { src: '', name: 'David Bouck', role: 'Deputy Secrutary General, Admissions, Finance' },
-    { src: '', name: 'Vic Maceckova', role: 'Chief of Staff' },
-    { src: '', name: 'Tomáš Stoklásek ', role: 'Head of IT & Website' },
-    { src: '', name: 'Aoife McCormick ', role: 'Head of Research' },
-    { src: '', name: 'Klara Elisa Müller', role: 'Head of Admins' },
-    { src: '', name: 'Amira Tabasaranskaya', role: 'Head of Social Media/Press' },
-    { src: '', name: 'Elodie Wray', role: 'Head of Catering' },
-    { src: '', name: 'Lilly Ann Hohmann', role: 'Head of Merchandise & Design' },
-    { src: '', name: 'Thomas Michael Hill', role: 'Head of Social Event' },
-    { src: '', name: 'Mariya Krykhtina', role: 'Head of Photography' },
-    { src: '', name: 'Nina Marianna Gawlasova', role: 'Head of Finance' },
-    { src: '', name: 'Henry Bowdler', role: 'Head of Social Event' },
+    { src: '/people/igor.jpeg', name: 'Igor Zajac', role: 'Secretary General' },
+    { src: '/people/david.jpeg', name: 'David Bouck', role: 'Deputy Secrutary General, Admissions, Finance' },
+    { src: '/people/vic.jpeg', name: 'Vic Maceckova', role: 'Chief of Staff' },
+    { src: '/people/tomas.jpeg', name: 'Tomáš Stoklásek ', role: 'Head of IT & Website' },
+    { src: '/people/aoife.jpg', name: 'Aoife McCormick ', role: 'Head of Research' },
+    { src: '/people/klara.jpeg', name: 'Klara Elisa Müller', role: 'Head of Admins' },
+    { src: '/people/amira.jpeg', name: 'Amira Tabasaranskaya', role: 'Head of Social Media/Press' },
+    { src: '/people/elodie.jpeg', name: 'Elodie Wray', role: 'Head of Catering' },
+    { src: '/people/lilly.jpeg', name: 'Lilly Ann Hohmann', role: 'Head of Merchandise & Design' },
+    { src: '/people/henrytom.jpeg', name: 'Thomas Michael Hill', role: 'Head of Social Event' },
+    { src: '/people/nina.jpeg', name: 'Nina Marianna Gawlasova', role: 'Head of Finance' },
+    { src: '/people/henrytom.jpeg', name: 'Henry Bowdler', role: 'Head of Social Event' },
 ]
 
 export default function TeamSection() {
