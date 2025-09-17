@@ -22,10 +22,8 @@ export default function ChairApply({ onSuccess }: { onSuccess?: () => void }) {
 
     const [form, setForm] = useState({
         email: '',
-        type: 'chair',
-        committee: '',
-        role: 'chair',
-        notes: '',
+        type: 'supervisor',
+        delegation: '',
     })
     const [loading, setLoading] = useState(false)
     const [success, setSuccess] = useState(false)
@@ -47,9 +45,7 @@ export default function ChairApply({ onSuccess }: { onSuccess?: () => void }) {
                     body: JSON.stringify({
                         email: form.email,
                         type: form.type,
-                        committee: form.committee,
-                        role: form.role,
-                        notes: form.notes,
+                        committee: form.delegation,
                     }),
             })
 
@@ -62,29 +58,27 @@ export default function ChairApply({ onSuccess }: { onSuccess?: () => void }) {
                 const data = await res.json()
                 setError(data?.message || 'Submission failed')
             }
+
+
+                      const res_setpayment = await fetch('/api/modify/setPayment', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              email: form.email,
+              valueCzk: process.env.NEXT_PUBLIC_PRICE_CZK_SUPERVISOR,
+              valueEur: process.env.NEXT_PUBLIC_PRICE_EUR_SUPERVISOR,
+            }),
+          });
+            if (!res_setpayment.ok) {
+            const error = await res_setpayment.text();
+            throw new Error(`Failed to set payment: ${error}`);
+          }
+
         } catch (err: any) {
             setError(err.message || 'Submission failed')
         }
         setLoading(false)
     }
-
-    const [committees, setCommittees] = useState<{ id: number, name: string }[]>([])
-
-    useEffect(() => {
-        const fetchCommittees = async () => {
-            try {
-                const res = await fetch('/api/retrieve/getCommittees', { method: 'POST' })
-                if (res.ok) {
-                    const data = await res.json()
-                    setCommittees(data)
-                }
-            } catch (err) {
-                console.error('Error fetching committees:', err)
-            }
-        }
-
-        fetchCommittees()
-    }, [])
 
     return (
         <section className="bg-muted">
@@ -92,30 +86,16 @@ export default function ChairApply({ onSuccess }: { onSuccess?: () => void }) {
                 <form onSubmit={handleSubmit} className="@container lg:col-span-3">
                     <Card className="p-8 sm:p-12">
                         <h3 className="text-xl font-semibold">The time has come: it's time to apply!</h3>
-                        <p className="text-sm">We hope that your chosen committee & topic don't disappoint you! As a chair applicant, we ask you to withold on paying until you're accepted. Your due ammount will be adjusted automatically. You can also apply to be a delegate in case your chair aspirations fail!</p>
+                        <p className="text-sm">Please contact us at <a href="mailto:plismun@parklane-is.com">plismun@parklane-is.com</a>.</p>
                         <div className="**:[&>label]:block mt-1 space-y-6">
                             <div className="@md:grid-cols-2 grid gap-3 *:space-y-3">
-                                <div>
-                                    <Label htmlFor="delegation">Committee</Label>
-                                    <Select required value={form.committee} onValueChange={val => handleChange('committee', val)}>
-                                        <SelectTrigger>
-                                            <SelectValue placeholder="Select a committee" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            {committees.map(d => (
-                                                <SelectItem key={d.id} value={d.id.toString()}>{d.name}</SelectItem>
-                                            ))}
-                                        </SelectContent>
-                                    </Select>
-                                </div>
                                 <div className="col-span-2">
-                                    <Label htmlFor="notes">Why would you like to chair? Any other things to note? </Label>
-                                    <Textarea
+                                    <Label htmlFor="notes">What delegation do you represent?</Label>
+                                    <Input
                                         required
-                                        id="notes"
-                                        rows={1}
-                                        value={form.notes}
-                                        onChange={e => handleChange('notes', e.target.value)}
+                                        id="delegation"
+                                        value={form.delegation}
+                                        onChange={e => handleChange('delegation', e.target.value)}
                                     />
                                 </div>
                             </div>

@@ -2,9 +2,9 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 
 const members = [
     { src: '/people/igor.jpeg', name: 'Igor Zajac', role: 'Secretary General' },
-    { src: '/people/david.jpeg', name: 'David Bouck', role: 'Deputy Secrutary General, Admissions, Finance' },
+    { src: '/people/david.jpeg', name: 'David Bouck', role: 'Deputy Secretary General, Head Admissions' },
     { src: '/people/vic.jpeg', name: 'Vic Maceckova', role: 'Chief of Staff' },
-    { src: '/people/tomas.jpeg', name: 'Tomáš Stoklásek ', role: 'Head of IT & Website' },
+    { src: '/people/tomas.jpeg', name: 'Tomáš Stoklásek ', role: 'Head of IT, Website & Logistics' },
     { src: '/people/aoife.jpg', name: 'Aoife McCormick ', role: 'Head of Research' },
     { src: '/people/klara.jpeg', name: 'Klara Elisa Müller', role: 'Head of Admins' },
     { src: '/people/amira.jpeg', name: 'Amira Tabasaranskaya', role: 'Head of Social Media/Press' },

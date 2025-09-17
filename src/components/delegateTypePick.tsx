@@ -7,10 +7,10 @@ import { Label } from '@/components/ui/label'
 import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import { useEffect } from 'react'
-import { IconPodium, IconLaurelWreath } from "@tabler/icons-react"
+import { IconPodium, IconLaurelWreath, IconUserShield, IconUser } from "@tabler/icons-react"
 import { stages } from "@/config/stages"
 
-export default function DelegateTypePick({ onPickType }: { onPickType: (type: 'delegate' | 'chair') => void }) {
+export default function DelegateTypePick({ onPickType }: { onPickType: (type: 'delegate' | 'chair' | "supervisor" ) => void }) {
 
     const { data: session } = useSession()
 
@@ -65,6 +65,27 @@ export default function DelegateTypePick({ onPickType }: { onPickType: (type: 'd
                                         }}
                                     />
                                     <span className="text-sm">Chair</span>
+                                </Button>
+                                <span className="mx-6 h-12 border-l border-gray-300" aria-hidden="true"></span>
+                                <Button
+                                    variant="secondary"
+                                    className="flex flex-col items-center justify-center cursor-pointer"
+                                    style={{ background: "none", boxShadow: "none" }}
+                                    aria-label="Apply as Supervisor"
+                                    onClick={() => {
+                                        onPickType('supervisor')
+                                    }}
+                                    disabled={!stages.supervisorApplication}
+                                >
+                                    <IconUserShield
+                                        className=""
+                                        stroke={1}
+                                        style={{
+                                            width: 'clamp(24px, 5vw, 60px)',
+                                            height: 'clamp(24px, 5vw, 60px)',
+                                        }}
+                                    />
+                                    <span className="text-sm">Supervisor</span>
                                 </Button>
                             </div>
                         </Card>

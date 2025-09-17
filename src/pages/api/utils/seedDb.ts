@@ -83,6 +83,22 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       )
     `);
 
+    await turso.execute(`
+      CREATE TABLE IF NOT EXISTS supervisors (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        userId INTEGER NOT NULL,
+        delegation TEXT NOT NULL,
+        status TEXT NOT NULL DEFAULT 'pending',
+        FOREIGN KEY (userId) REFERENCES users(id)
+      )
+    `);
+
+    // Set AUTOINCREMENT starting value for supervisors.id to 90
+    await turso.execute(`
+      INSERT OR REPLACE INTO sqlite_sequence (name, seq)
+      VALUES ('supervisors', 9990)
+    `);
+
     res.status(200).json({ message: 'Database seeded successfully' });
   } catch (err: any) {
     console.error('Error seeding:', err);

@@ -23,7 +23,7 @@ export default function FAQs() {
         {
             id: 'item-4',
             question: 'Whatʹs the best way to get to the Úvoz Campus?',
-            answer: 'The full address is: Úvoz 227, 118 00 Malá Strana, Czechia\n\nThere are a few different ways to travel to our campus.\n• By tram downhill: Travel on the 22 or 23 tram to Pohořelec and walk down the hill.\n• By tram uphill: Take the trams 12,15,20,22 to Malostranské náměstí and walk up the hill.\n• By bus through the garden: Alternatively, you can take 194 bus from Malostranská to Nemocnice pod Petřínem and walk up the hill from the rear enterance of the Úvoz campus.\n\nPlease note that this is the standard operation, may be changed. Check DPP (the cityʹs public transport provider) for more details on your route.',
+            answer: 'The full address is: Úvoz 227, 118 00 Malá Strana, Czechia\n\nThere are a few different ways to travel to our campus.\n• By tram downhill: Travel on the 22 or 23 tram to Pohořelec and walk down the hill.\n• By tram uphill: Take the trams 12,15,20,22 to Malostranské náměstí and walk up the hill.\n• By bus through the garden: Alternatively, you can take 194 bus from Malostranská to Nemocnice pod Petřínem and walk up the hill from the rear enterance of the Úvoz campus.\n\nPlease note that this is the standard operation, and may be changed. Check DPP (the cityʹs public transport provider) for more details on your route.',
         },
         {
             id: 'item-5',
