@@ -35,8 +35,31 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       args: [userId],
     });
 
-    res.status(200).json({ applications: applicationsResult.rows });
+        const applicationsSupervisorResult = await turso.execute({
+      sql: `
+        SELECT 
+          id, 
+          userId,
+          delegation AS committeeName,
+          'supervisor' AS type,
+          status,
+          NULL AS committeeId,
+          'Supervisor' AS role,
+          'Please contact us at plismun@parklane-is.com. This application is only for reference purposes and will remain pending.' AS notes
+        FROM supervisors
+        WHERE userId = ?
+      `,
+      args: [userId],
+    });
+
+    const combinedApplications = [
+      ...applicationsResult.rows,
+      ...applicationsSupervisorResult.rows,
+    ];
+
+    res.status(200).json({ applications: combinedApplications });
   } catch (err: any) {
+    console.error('Error retrieving applications:', err);
     res.status(500).json({ message: err.message || 'Something went wrong' });
   }
 }

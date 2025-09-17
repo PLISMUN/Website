@@ -33,14 +33,22 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const userId = userResult.rows[0].id;
 
+    if (type !== 'supervisor') {
     const applicationResult = await turso.execute({
       sql: 'INSERT INTO applications (type, userId, committeeId, role, notes) VALUES (?, ?, ?, ?, ?) RETURNING id',
       args: [type, userId, committee, role, notes],
     });
-
+    
     const applicationId = applicationResult.rows[0].id;
 
     res.status(200).json({ message: 'Signup successful', applicationId });
+    } else {
+      const applicationResult = await turso.execute({
+        sql: 'INSERT INTO supervisors (userId, delegation) VALUES (?, ?) RETURNING id',
+        args: [userId, committee],
+      });
+      res.status(200).json({ message: 'Signup successful'});
+    }
   } catch (err: any) {
     res.status(500).json({ message: err.message || 'Something went wrong' });
   }
