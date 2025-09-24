@@ -44,8 +44,8 @@ return (
                     <Card className="p-8 sm:p-12">
                     <Alert variant="destructive">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" style={{width: "1rem", height: "1rem"}}><path fill="#e7000b" d="M320 112C434.9 112 528 205.1 528 320C528 434.9 434.9 528 320 528C205.1 528 112 434.9 112 320C112 205.1 205.1 112 320 112zM320 576C461.4 576 576 461.4 576 320C576 178.6 461.4 64 320 64C178.6 64 64 178.6 64 320C64 461.4 178.6 576 320 576zM320 200C306.7 200 296 210.7 296 224L296 336C296 349.3 306.7 360 320 360C333.3 360 344 349.3 344 336L344 224C344 210.7 333.3 200 320 200zM346.7 416C347.3 406.1 342.4 396.7 333.9 391.5C325.4 386.4 314.7 386.4 306.2 391.5C297.7 396.7 292.8 406.1 293.4 416C292.8 425.9 297.7 435.3 306.2 440.5C314.7 445.6 325.4 445.6 333.9 440.5C342.4 435.3 347.3 425.9 346.7 416z"/></svg>
-                        <AlertTitle>For all applicants:</AlertTitle>
-                        <AlertDescription><p>Please do not pay until your application is processed.</p></AlertDescription>
+                        <AlertTitle>For chair applicants:</AlertTitle>
+                        <AlertDescription><p>Please do not pay until your chair application is processed.</p></AlertDescription>
                     </Alert>
                     <Tabs defaultValue="czk">
                       <TabsList>
