@@ -218,12 +218,12 @@ export default function DelegateApply({ onSuccess }: { onSuccess?: () => void })
                         </Select>
                     </div>
                     <div className="col-span-2">
-                        <Label htmlFor={`notes${choiceNumber}`}>Why would you like this role? How preferred is this role for you? Any other things to note?</Label>
+                        <Label htmlFor={`notes${choiceNumber}`}>Why would you like this role? Any other things to note?</Label>
                         <Textarea
                             required={required}
                             id={`notes${choiceNumber}`}
                             rows={1}
-                            value={notesValue}
+                            value={`Choice ${choiceNumber}: ${notesValue}`}
                             onChange={e => handleChange(`notes${choiceNumber}`, e.target.value)}
                         />
                     </div>
