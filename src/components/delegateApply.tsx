@@ -222,10 +222,16 @@ export default function DelegateApply({ onSuccess }: { onSuccess?: () => void })
                         <Textarea
                             required={required}
                             id={`notes${choiceNumber}`}
-                            rows={1}
+                            rows={3}
+                            minLength={250}
                             value={notesValue}
                             onChange={e => handleChange(`notes${choiceNumber}`, e.target.value)}
                         />
+                        <div className="text-xs text-muted-foreground mt-1">
+                            {notesValue.length < 250 && (
+                                <span>{250 - notesValue.length} more characters required</span>
+                            )}
+                        </div>
                     </div>
                 </div>
             </>
