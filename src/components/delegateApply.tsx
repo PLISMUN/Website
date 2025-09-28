@@ -49,9 +49,9 @@ export default function DelegateApply({ onSuccess }: { onSuccess?: () => void })
         try {
             // Prepare the three application payloads
             const applications = [
-                { ...form, committee: form.committee1, role: form.role1, notes: form.notes1 },
-                { ...form, committee: form.committee2, role: form.role2, notes: form.notes2 },
-                { ...form, committee: form.committee3, role: form.role3, notes: form.notes3 },
+                { ...form, committee: form.committee1, role: form.role1, notes: `Choice 1: ${form.notes1}` },
+                { ...form, committee: form.committee2, role: form.role2, notes: `Choice 2: ${form.notes2}` },
+                { ...form, committee: form.committee3, role: form.role3, notes: `Choice 3: ${form.notes3}` },
             ]
 
             // Send all three requests in parallel
@@ -223,7 +223,7 @@ export default function DelegateApply({ onSuccess }: { onSuccess?: () => void })
                             required={required}
                             id={`notes${choiceNumber}`}
                             rows={1}
-                            value={`Choice ${choiceNumber}: ${notesValue}`}
+                            value={notesValue}
                             onChange={e => handleChange(`notes${choiceNumber}`, e.target.value)}
                         />
                     </div>
