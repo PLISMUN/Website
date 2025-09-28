@@ -37,7 +37,7 @@ export default function CalendarBirthday({ onChange, selected }: CalendarBirthda
             className="w-48 justify-between font-normal"
             >
             {date ? (
-              date.toLocaleDateString()
+              date.toLocaleDateString('en-GB')
             ) : (
               <span className="text-muted-foreground">Select a date</span>
             )}
@@ -51,7 +51,10 @@ export default function CalendarBirthday({ onChange, selected }: CalendarBirthda
             captionLayout="dropdown"
             onSelect={(date) => {
               setDate(date)
-              onChange(date ? date.toISOString().split('T')[0] : '')
+              onChange(date
+                  ? `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`
+                  : ''
+                )
               setOpen(false)
             }}
           />
