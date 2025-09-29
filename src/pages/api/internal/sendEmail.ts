@@ -16,8 +16,11 @@ export default async function handler(email: string, title: string, body: string
         throw new Error('Email, title, and body are required');
     }
 
+    const randomness = Math.random().toString(36).substring(2, 5)
+
     const html_message = `
   <body style="margin:0; padding:0; background-color: #f1f5f9; font-family: ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';">
+  <span style="opacity: 0"> ${randomness} </span>
     <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f1f5f9; min-height:100vh;">
       <tr>
         <td align="center">
@@ -52,6 +55,7 @@ export default async function handler(email: string, title: string, body: string
         </td>
       </tr>
     </table>
+    <span style="opacity: 0"> ${randomness} </span>
   </body>
     `;
 

@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { getTursoClient } from '@/pages/api/components/dbAuth';
 import authAdmin from '@/pages/api/internal/authAdmin';
 import preFlightChecks from '@/pages/api/internal/preFlightChecks';
+import sendEmail from '@/pages/api/internal/sendEmail';
 
 /**
  * Creates a new application for the user.
@@ -40,6 +41,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     });
     
     const applicationId = applicationResult.rows[0].id;
+
+    if (type !== 'chair') {
+      await sendEmail(email, 'Application registered', `Hello! Your application as ${role} has been registered.<br /><br />Please keep in mind your application will be reviewed only <u>after</u> payment is processed.`);
+    } else {
+      await sendEmail(email, 'Chair Application registered', `Hello! Your chair application has been registered.`);
+    }
 
     res.status(200).json({ message: 'Signup successful', applicationId });
     } else {
