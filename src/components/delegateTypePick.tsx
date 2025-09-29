@@ -17,7 +17,7 @@ export default function DelegateTypePick({ onPickType }: { onPickType: (type: 'd
     return (
         <section className="bg-muted">
             <div className="mx-auto max-w-4xl px-4 py-4 lg:px-0">
-                <div style={{ width: '60vw', height: '85vh' }} className="mx-auto flex items-center justify-center">
+                <div style={{ width: '60vw', height: '85vh' }} className="mx-auto flex items-center justify-center min-w-90">
                     <div className="@container lg:col-span-3 w-full">
                         <Card className="p-8 sm:p-12">
                             <h3 className="text-xl font-semibold">Now it's time to pick what to apply for!</h3>
