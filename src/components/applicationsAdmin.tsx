@@ -30,6 +30,7 @@ type UserApplications = {
   notes: string,
   pending: boolean,
   paymentStatus: string,
+  role: string,
   applications: Application[]
 }
 
@@ -59,6 +60,7 @@ export default function ApplicationsAdmin() {
             delegation: app.delegation,
             notes: app.userNotes,
             pending: false,
+            role: app.role,
             paymentStatus: app.paymentStatus,
             applications: [],
           }
@@ -73,6 +75,9 @@ export default function ApplicationsAdmin() {
         })
         if (app.status === "pending") {
           usersDict[app.userId].pending = true
+        }
+        if (app.role === "chair" || app.type === "chair") {
+          usersDict[app.userId].role = "chair"
         }
       }
       setUsers(usersDict)
@@ -291,6 +296,17 @@ export default function ApplicationsAdmin() {
 
         });
       }
+    } else if (value === "chairs") {
+      const applicantsDiv = document.getElementById("applicants-list");
+      if (applicantsDiv) {
+        Array.from(applicantsDiv.children).forEach(applicant => {
+          if (applicant) {
+            const isChair = applicant.getAttribute("data-role") === "chair";
+            applicant.classList.toggle("hidden", !isChair);
+          }
+
+        });
+      }
     }
   };
 
@@ -307,11 +323,12 @@ export default function ApplicationsAdmin() {
                 <TabsTrigger value="all">All</TabsTrigger>
                 <TabsTrigger value="new">New</TabsTrigger>
                 <TabsTrigger value="new-paid">New & Paid</TabsTrigger>
+                <TabsTrigger value="chairs">Chairs</TabsTrigger>
               </TabsList>
             <Accordion type="multiple" id="applicants-list">
             {Object.keys(users).length > 0 ? (
               Object.values(users).map((user) => (
-                <div key={user.userId} className={`border rounded-lg p-4 mb-4 ${user.pending ? "bg-yellow-50" : "bg-green-50"} shadow-sm`} data-pending={user.pending} data-paid={user.paymentStatus === "Completed"}>
+                <div key={user.userId} className={`border rounded-lg p-4 mb-4 ${user.pending ? "bg-yellow-50" : "bg-green-50"} shadow-sm`} data-pending={user.pending} data-paid={user.paymentStatus === "Completed"} data-role={user.role}>
                   <AccordionItem value={user.userId}>
                    <AccordionTrigger><div style={{ display: "flex", alignItems: "center" }}><h2 className="font-semibold text-xl">{user.name}</h2><svg xmlns="http://www.w3.org/2000/svg" style={{ width: "1.5em", height: "1.5em", marginLeft: "0.5em" }} viewBox="0 0 640 640"><path fill={user.paymentStatus === "Completed" ? "var(--color-green-600)" : "var(--color-red-600)"} d="M512 176C520.8 176 528 183.2 528 192L528 224L112 224L112 192C112 183.2 119.2 176 128 176L512 176zM528 288L528 448C528 456.8 520.8 464 512 464L128 464C119.2 464 112 456.8 112 448L112 288L528 288zM128 128C92.7 128 64 156.7 64 192L64 448C64 483.3 92.7 512 128 512L512 512C547.3 512 576 483.3 576 448L576 192C576 156.7 547.3 128 512 128L128 128zM144 408C144 421.3 154.7 432 168 432L216 432C229.3 432 240 421.3 240 408C240 394.7 229.3 384 216 384L168 384C154.7 384 144 394.7 144 408zM288 408C288 421.3 298.7 432 312 432L376 432C389.3 432 400 421.3 400 408C400 394.7 389.3 384 376 384L312 384C298.7 384 288 394.7 288 408z"/></svg></div></AccordionTrigger>
                    <AccordionContent>
@@ -493,6 +510,7 @@ export default function ApplicationsAdmin() {
                 <TabsTrigger value="all">All</TabsTrigger>
                 <TabsTrigger value="new">New</TabsTrigger>
                 <TabsTrigger value="new-paid">New & Paid</TabsTrigger>
+                <TabsTrigger value="chairs">Chairs</TabsTrigger>
               </TabsList>
             </Tabs>
           </Card>
