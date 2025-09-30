@@ -4,41 +4,7 @@ import sendEmail from '@/pages/api/internal/sendEmail';
 import authAdmin from '@/pages/api/internal/authAdmin';
 import preFlightChecks from '@/pages/api/internal/preFlightChecks';
 
-/**
- * Updates the user's completeinformation.
- * @param {NextApiRequest} req - The request object.
- *   id,
-    email,
-    name,
-    isAdmin,
-    isGoogleUser,
-    birth,
-    nationality,
-    delegation,
-    diet,
-    notes,
-    valueCzk,
-    valueEur,
-    status,
- * @param {NextApiResponse} res - The response object.
-    [{
-    id: 2,
-    email: 'plismun@parklane-is.com',
-    password: 'ya29.a0AW4XtxhYnWRHlBESc2PvI2MomAtWdg95oOyWdNO0YdDlsrbEFUQqN_830IFy4qz9JT2CcBXAnB0Ds9URaQNY2erg_m2XmQSf9YHtMBN9E9gXUSOkvyhR4QjOLok21O0844R6QhWIrQ8mO1WNaNERxGpXzxD0HXhb69xRFGS4SgaCgYKAboSARQSFQHGX2MihqMp6wFfBwyiwBVtAIye_Q0177',
-    isGoogleUser: 1,
-    isAdmin: 0,
-    name: 'Plis The Mun',
-    birth: '2004-05-31',
-    nationality: 'Czech Republic',
-    delegation: 'Prague International School',
-    diet: 'Vegetarian',
-    notes: 'I am MUN itself',
-    valueCzk: 1200,
-    valueEur: 50,
-    status: 'pending',
-  },...]
- * @returns {Promise<void>}
- */
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await preFlightChecks(req, res);
   await authAdmin(req, res);
