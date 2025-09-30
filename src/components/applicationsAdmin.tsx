@@ -322,8 +322,44 @@ export default function ApplicationsAdmin() {
                         <p><strong>Delegation:</strong> {user.delegation}</p>
                         <p><strong>Notes:</strong> {user.notes}</p>
                         <p><strong>Payment Status:</strong> <span className={
-                            user.paymentStatus === "Completed" ? "text-green-600" : "text-red-600"
+                          user.paymentStatus === "Completed" ? "text-green-600" : "text-red-600"
                           }>{user.paymentStatus}</span></p>
+                        {user.paymentStatus !== "Completed" && (
+                          <button
+                          type="button"
+                          className="mt-2 text-blue-600 hover:text-blue-800 p-2 rounded-full border border-blue-200 hover:bg-blue-50 transition"
+                          onClick={async () => {
+                            try {
+                            const res = await fetch('/api/modify/acceptPayment', {
+                              method: 'POST',
+                              headers: { 'Content-Type': 'application/json' },
+                              body: JSON.stringify({ email: user.email }),
+                            });
+                            if (!res.ok) {
+                              const error = await res.text();
+                              throw new Error(`Failed to confirm payment: ${error}`);
+                            }
+                            setUsers(prevUsers => {
+                              const updatedUsers = { ...prevUsers };
+                              const userKey = Object.keys(updatedUsers).find(
+                              key => updatedUsers[key].email === user.email
+                              );
+                              if (userKey) {
+                              updatedUsers[userKey] = {
+                                ...updatedUsers[userKey],
+                                paymentStatus: "Completed",
+                              };
+                              }
+                              return updatedUsers;
+                            });
+                            } catch (err) {
+                            console.error('Error confirming payment:', err);
+                            }
+                          }}
+                          >
+                          Confirm Payment
+                          </button>
+                        )}
                       </div>
                           <button
                             type="button"
