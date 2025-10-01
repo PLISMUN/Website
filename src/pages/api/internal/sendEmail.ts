@@ -20,7 +20,6 @@ export default async function handler(email: string, title: string, body: string
 
     const html_message = `
   <body style="margin:0; padding:0; background-color: #f1f5f9; font-family: ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';">
-  <span style="opacity: 0"> ${randomness} </span>
     <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f1f5f9; min-height:100vh;">
       <tr>
         <td align="center">
@@ -35,6 +34,7 @@ export default async function handler(email: string, title: string, body: string
                       <p style="font-family:inherit; margin:0 0 32px 0;">${body}</p>
 
                       <!-- Footer -->
+                      <span style="opacity: 0; display: none; font-size: 0px"> ${randomness} </span>
                       <div style="max-width:768px; margin:0 auto; padding:0 24px;">
                         <a href="https://www.plismun.com/" style="display:block; width:auto; margin:0 auto 12px auto;" aria-label="go home">
                           <img src="https://www.plismun.com/logo.png" alt="Logo" style="height:40px; width:auto;">
@@ -44,6 +44,7 @@ export default async function handler(email: string, title: string, body: string
                           Made by Tomáš Stoklásek
                         </div>
                       </div>
+                      <span style="opacity: 0; display: none; font-size: 0px"> ${randomness} </span>
                       <!-- End Footer -->
 
                     </td>
@@ -55,7 +56,6 @@ export default async function handler(email: string, title: string, body: string
         </td>
       </tr>
     </table>
-    <span style="opacity: 0"> ${randomness} </span>
   </body>
     `;
 
