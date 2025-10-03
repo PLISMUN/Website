@@ -45,7 +45,7 @@ export const authOptions: NextAuthOptions = {
         const valid = await bcrypt.compare(credentials.password, hash)
         if (!valid) throw new Error("Invalid password");
 
-        return { id, email }
+        return { id, email, name: `${email.split("@")[0]}.${id}` }
       }
     })
   ],
