@@ -105,8 +105,8 @@ if (typeof diet !== 'string' || !validDiets.includes(diet)) {
     return res.status(400).json({ message: 'Invalid diet option' });
 }
 
-if (typeof notes !== 'string' || notes.length > 500) {
-    return res.status(400).json({ message: 'Notes must be 500 characters or fewer' });
+if (typeof notes !== 'string' || notes.length > 2500) {
+    return res.status(400).json({ message: 'Notes must be 2500 characters or fewer' });
 }
 
   try {
