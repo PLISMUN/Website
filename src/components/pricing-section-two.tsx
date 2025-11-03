@@ -58,7 +58,7 @@ export default function Pricing() {
                                         asChild
                                         className="w-full"
                                         variant="neutral"
-                                        disabled={!stages.chairApplication}>
+                                        disabled={!stages.supervisorApplication}>
                                         <Link href="/user/signup">Get Started</Link>
                                     </Button>
                                 </div>
