@@ -334,6 +334,7 @@ export default function ApplicationsAdmin() {
                    <AccordionContent>
                     <div className="flex items-start justify-between">
                       <div>
+                        <p><strong>Email:</strong> {user.email}</p>
                         <p><strong>Birth:</strong> {user.birth}</p>
                         <p><strong>Nationality:</strong> {user.nationality}</p>
                         <p><strong>Delegation:</strong> {user.delegation}</p>
