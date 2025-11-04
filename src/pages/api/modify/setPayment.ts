@@ -9,7 +9,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   await preFlightChecks(req, res);
   await authAdmin(req, res);
 
-  const { email, valueCzk = process.env.NEXT_PUBLIC_PRICE_CZK, valueEur = process.env.NEXT_PUBLIC_PRICE_EUR, status = 'Pending' } = req.body
+  const { email, valueCzk = process.env.NEXT_PUBLIC_PRICE_CZK, valueEur = process.env.NEXT_PUBLIC_PRICE_EUR } = req.body
 
   if (!email || typeof email !== 'string') {
     return res.status(400).json({ message: 'Invalid email' })
@@ -32,19 +32,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const paymentsUpdateResult = await turso.execute({
       sql: `
       UPDATE payments
-      SET valueCzk = ?, valueEur = ?, status = ?
+      SET valueCzk = ?, valueEur = ?
       WHERE id = ?
       `,
-      args: [valueCzk, valueEur, status, id],
+      args: [valueCzk, valueEur, id],
     })
 
     if (paymentsUpdateResult.rowsAffected === 0) {
       await turso.execute({
       sql: `
-        INSERT INTO payments (id, valueCzk, valueEur, status)
+        INSERT INTO payments (id, valueCzk, valueEur)
         VALUES (?, ?, ?, ?)
       `,
-      args: [id, valueCzk, valueEur, status],
+      args: [id, valueCzk, valueEur],
       })
     
     }
