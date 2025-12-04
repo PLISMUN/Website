@@ -3,7 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import '@/styles/main.css';
 import { SessionProvider } from "next-auth/react"
-// import { ViewTransition } from 'react'
+// import { ViewTransition } from 'react' // Uncomment when View Transitions are supported in main release of react
 import { usePathname } from "next/navigation"
 
 import Header from "@/components/header"
