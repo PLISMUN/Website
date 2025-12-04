@@ -3,7 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import '@/styles/main.css';
 import { SessionProvider } from "next-auth/react"
-import { unstable_ViewTransition as ViewTransition } from 'react'
+// import { ViewTransition } from 'react'
 import { usePathname } from "next/navigation"
 
 import Header from "@/components/header"
@@ -34,9 +34,9 @@ export default function RootLayout({
       >
         <SessionProvider>
           {!hideHeaderFooter && <Header />}
-          <ViewTransition>
+          {/*<ViewTransition>*/}
             {children}
-          </ViewTransition>
+          {/*</ViewTransition>*/}
         </SessionProvider>
         {!hideHeaderFooter && <FooterSection />}
       </body>
