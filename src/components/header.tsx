@@ -11,7 +11,6 @@ import { stages } from "@/config/stages"
 const menuItems = [
     { name: 'About', href: '/about' },
     { name: 'This Year', href: '/this-year' },
-    { name: 'Partners', href: '/partners' },
     { name: 'FAQ', href: '/faq' },
 ]
 

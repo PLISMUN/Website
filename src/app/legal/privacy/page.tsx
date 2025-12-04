@@ -1,7 +1,7 @@
 import React from "react"
 import { Separator } from "@/components/ui/separator"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { MailIcon, ShieldAlert } from "lucide-react"
+import { Mail, ShieldAlert } from "lucide-react"
 
 export const metadata = {
   title: "PLISMUN | Privacy Policy",
@@ -27,7 +27,7 @@ function PrivacyPage() {
                                     PLISMUN ("we" or "us") is the data controller of your personal information. We are committed to handling personal data in accordance with GDPR and Czech law.
                                     </p>
                                     <p className="mt-4 flex items-center gap-2">
-                                    <MailIcon className="w-5 h-5 text-primary" />
+                                    <Mail className="w-5 h-5 text-primary" />
                                     <a href="mailto:plismun@parklane-is.com" className="text-primary underline">plismun@parklane-is.com</a>
                                     </p>
                                 </section>

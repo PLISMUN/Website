@@ -5,7 +5,7 @@ declare global {
   var __globalTurso__: Client | undefined
 }
 
-// This function creates a Turso client and caches it globally to avoid creating multiple instances, straining DB bandiwdth limits
+// This function creates a Turso client and caches it globally to avoid creating multiple instances straining DB bandiwdth limits
 export function getTursoClient(): Client {
   if (!global.__globalTurso__) {
     if (!process.env.TURSO_DATABASE_URL || !process.env.TURSO_AUTH_TOKEN) {
