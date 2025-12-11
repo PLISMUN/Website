@@ -35,8 +35,6 @@ export default function paymentWidget({ onSuccess }: { onSuccess?: () => void })
         }
         fetchPayment()
     }, [session])
-    
-    console.log(session?.user?.name)
 return (
         <section className="bg-muted">
             <div className="mx-auto max-w-4xl px-4 py-4 lg:px-0 min-h-screen">
