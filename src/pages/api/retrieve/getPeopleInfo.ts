@@ -8,9 +8,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   await authAdmin(req, res);
 
   const { email } = req.body;
-  console.log(req.body);
-  console.log(email);
-
     try {
     const turso = getTursoClient()
 

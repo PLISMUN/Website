@@ -14,7 +14,6 @@ export default function StatsSection() {
       let ratingTot = 0;
       let conferenceTot = 0;
       let attendeesTot = 0;
-      console.log(resultRating);
         for (let i = 0; i < resultRating.length; i++) {
             let conference = resultRating[i];
             if (conference["total_rating"] > 1) {

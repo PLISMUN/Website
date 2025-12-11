@@ -81,10 +81,8 @@ export default async function handler(email: string, title: string, body: string
       // verify connection configuration
       transporter.verify(function (error: any, success: any) {
           if (error) {
-              console.log(error);
               reject(error);
           } else {
-              console.log("Server is ready to take our messages");
               resolve(success);
           }
       });
@@ -104,7 +102,6 @@ export default async function handler(email: string, title: string, body: string
             console.error(err);
             reject(err);
         } else {
-            console.log(info);
             resolve(info);
         }
     });
