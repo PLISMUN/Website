@@ -47,7 +47,7 @@ export default function Features() {
                             </Card>
                             <div className="sm:max-w-sm">
                                 <h3 className="text-foreground text-xl font-semibold">Zonebar</h3>
-                                <p className="text-muted-foreground my-4 text-lg">This year, the social event will be held aat a venue in the heart of Prague: Zonebar. Located at Křemencova 178/10, 110 00 Nové Město, Zonebar is located right next to the Národní Třída metro, behind the corner to Myslíkova tram stop.</p>
+                                <p className="text-muted-foreground my-4 text-lg">This year, the social event will be held at a venue in the heart of Prague: Zonebar. Located at Křemencova 178/10, 110 00 Nové Město, Zonebar is located right next to the Národní Třída metro, behind the corner to Myslíkova tram stop.</p>
                             </div>
                         </div>
                         <div className="space-y-4">
