@@ -40,8 +40,8 @@ export default async function handler(email: string, title: string, body: string
                           <img src="https://www.plismun.com/logo.png" alt="Logo" style="height:40px; width:auto;">
                         </a>
                         <div style="color:#6b7280; text-align:center; font-size:14px;">
-                          © 2025 Park Lane International School, All rights reserved<br>
-                          Made by Tomáš Stoklásek
+                          © 2026 Tomáš Stoklásek for the use by Park Lane International School<br>
+                          Made by Tomáš Stoklásek, Maintained by Tomáš Stoklásek
                         </div>
                       </div>
                       <span style="opacity: 0; display: none; font-size: 0px"> ${randomness} </span>

@@ -18,8 +18,23 @@ export default function Schedule() {
                             />
 
                             <div className="bg-background rounded-(--radius) relative m-4 overflow-hidden border border-transparent shadow-xl shadow-black/15 ring-1 ring-black/10 sm:m-8 md:m-12">
-                                <Image
+                                {/*<Image
                                     src="/logo.png"
+                                    alt="app screen"
+                                    width="2880"
+                                    height="1842"
+                                    className="object-top-left size-full object-cover"
+                                />
+                                */}
+                                <Image
+                                    src="/PLISMUN_SCHEDULE.png"
+                                    alt="app screen"
+                                    width="2880"
+                                    height="1842"
+                                    className="object-top-left size-full object-cover"
+                                />
+                                <Image
+                                    src="/PLISMUN_GROUPS.png"
                                     alt="app screen"
                                     width="2880"
                                     height="1842"

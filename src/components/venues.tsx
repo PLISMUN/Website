@@ -20,21 +20,34 @@ export default function Features() {
                             </Card>
                             <div className="sm:max-w-sm">
                                 <h3 className="text-foreground text-xl font-semibold">Úvoz Campus</h3>
-                                <p className="text-muted-foreground my-4 text-lg">The debating portion of PLISMUN will occur at Parklane&apos;s Úvoz Campus, a historical building with incredible views overlooking prague situated right next to the Prague Castle and Raoul Wallenberg Promenade. We recommend getting off at the Pohořelec tram station and walking down hill.</p>
+                                <p className="text-muted-foreground my-4 text-lg">The debating portion of PLISMUN will occur at Parklane&apos;s Úvoz Campus, a historical building with incredible views overlooking Prague situated right next to the Prague Castle and Raoul Wallenberg Promenade. Located at Úvoz 227, 118 00 Malá Strana, we recommend getting off at the Pohořelec tram station and walking down hill.</p>
                             </div>
                         </div>
                         <div className="space-y-4">
-                            <Card
+                            {/*<Card
                                 className="aspect-video overflow-hidden p-6">
                                 <img
                                     src="/logo.png"
-                                    alt="Úvoz Campus"
+                                    alt="Social Event"
                                     className="h-full w-full object-cover object-center scale-120 rounded-lg transition-transform duration-300"
                                 />
                             </Card>
                             <div className="sm:max-w-sm">
                                 <h3 className="text-foreground text-xl font-semibold">Social Event</h3>
                                 <p className="text-muted-foreground my-4 text-lg">Our mysterious social event venue is yet to be announced!.</p>
+                            </div>
+                            */}
+                            <Card
+                                className="aspect-video overflow-hidden p-6">
+                                <img
+                                    src="/zonebar.jpg"
+                                    alt="Zonebar"
+                                    className="h-full w-full object-cover object-center scale-120 rounded-lg transition-transform duration-300"
+                                />
+                            </Card>
+                            <div className="sm:max-w-sm">
+                                <h3 className="text-foreground text-xl font-semibold">Zonebar</h3>
+                                <p className="text-muted-foreground my-4 text-lg">This year, the social event will be held at a venue in the heart of Prague: Zonebar. Located at Křemencova 178/10, 110 00 Nové Město, Zonebar is located right next to the Národní Třída metro, behind the corner to Myslíkova tram stop.</p>
                             </div>
                         </div>
                         <div className="space-y-4">
@@ -47,7 +60,7 @@ export default function Features() {
                             </Card>
                             <div className="sm:max-w-sm">
                                 <h3 className="text-foreground text-xl font-semibold">Nová Radnice</h3>
-                                <p className="text-muted-foreground my-4 text-lg">The GA will happen at the New Prague City Hall; the very same one where Prague law makers decide on the future of this city. It is situated in Prague Center, more specifically old town. We recommend getting of at staromestka metro station.</p>
+                                <p className="text-muted-foreground my-4 text-lg">The GA will happen at the New Prague City Hall; the very same one where Prague law makers decide on the future of this city. It is situated in Prague Center, more specifically old town. Located at Mariánské nám. 2, 110 00 Josefov, we recommend getting off at staromestka metro station.</p>
                             </div>
                         </div>
                     </div>
