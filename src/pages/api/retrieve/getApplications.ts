@@ -45,7 +45,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           status,
           NULL AS committeeId,
           'Supervisor' AS role,
-          'Please contact us at plismun@parklane-is.com. This application is only for reference purposes and will remain pending.' AS notes
+          'Please contact us at plismun@parklane-is.com. This application is only for reference purposes only.' AS notes
         FROM supervisors
         WHERE userId = ?
       `,
