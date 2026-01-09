@@ -20,7 +20,7 @@ export default function Features() {
                             </Card>
                             <div className="sm:max-w-sm">
                                 <h3 className="text-foreground text-xl font-semibold">Úvoz Campus</h3>
-                                <p className="text-muted-foreground my-4 text-lg">The debating portion of PLISMUN will occur at Parklane&apos;s Úvoz Campus, a historical building with incredible views overlooking prague situated right next to the Prague Castle and Raoul Wallenberg Promenade. Located at Úvoz 227, 118 00 Malá Strana, we recommend getting off at the Pohořelec tram station and walking down hill.</p>
+                                <p className="text-muted-foreground my-4 text-lg">The debating portion of PLISMUN will occur at Parklane&apos;s Úvoz Campus, a historical building with incredible views overlooking Prague situated right next to the Prague Castle and Raoul Wallenberg Promenade. Located at Úvoz 227, 118 00 Malá Strana, we recommend getting off at the Pohořelec tram station and walking down hill.</p>
                             </div>
                         </div>
                         <div className="space-y-4">
