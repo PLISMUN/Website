@@ -60,7 +60,7 @@ export default function Features() {
                             </Card>
                             <div className="sm:max-w-sm">
                                 <h3 className="text-foreground text-xl font-semibold">Nová Radnice</h3>
-                                <p className="text-muted-foreground my-4 text-lg">The GA will happen at the New Prague City Hall; the very same one where Prague law makers decide on the future of this city. It is situated in Prague Center, more specifically old town. Located at Mariánské nám. 2, 110 00 Josefov, we recommend getting of at staromestka metro station.</p>
+                                <p className="text-muted-foreground my-4 text-lg">The GA will happen at the New Prague City Hall; the very same one where Prague law makers decide on the future of this city. It is situated in Prague Center, more specifically old town. Located at Mariánské nám. 2, 110 00 Josefov, we recommend getting off at staromestka metro station.</p>
                             </div>
                         </div>
                     </div>
