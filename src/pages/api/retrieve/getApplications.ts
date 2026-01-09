@@ -35,10 +35,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       args: [userId],
     });
 
-        const applicationsSupervisorResult = await turso.execute({
+    const applicationsSupervisorResult = await turso.execute({
       sql: `
-        SELECT 
-          id, 
+        SELECT
+          id,
           userId,
           delegation AS committeeName,
           'supervisor' AS type,

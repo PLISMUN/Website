@@ -27,17 +27,24 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       `
     });
 
-      const applicationsSupervisorResult = await turso.execute({
+    const applicationsSupervisorResult = await turso.execute({
       sql: `
-        SELECT 
-          a.id, 
+        SELECT
+          a.id,
           a.userId,
           a.delegation AS committeeName,
           'supervisor' AS type,
           a.status,
           NULL AS committeeId,
           'supervisor' AS role,
-          'This application is only for reference purposes and will remain pending. Do not accept this application.' AS notes
+          NULL AS notes,
+          u.email AS userEmail,
+          p.name AS name,
+          p.birth AS birth,
+          p.nationality AS nationality,
+          a.delegation AS delegation,
+          p.notes AS userNotes,
+          pay.status AS paymentStatus
         FROM supervisors a
         JOIN people p ON a.userId = p.id
         JOIN users u ON a.userId = u.id

@@ -17,40 +17,76 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const turso = getTursoClient()
 
     for (const [id, status] of Object.entries(req.body)) {
-        if (status === true) {
-            const applicationDetails = await turso.execute({
-            sql: `
-              SELECT applications.userId, applications.role, applications.committeeId, users.email, committees.name AS committeeName
-              FROM applications 
-              JOIN users ON applications.userId = users.id 
-              JOIN committees ON applications.committeeId = committees.id
-              WHERE applications.id = ?
-            `,
+      if (status === true) {
+        const applicationDetails = await turso.execute({
+          sql: `
+            SELECT applications.userId, applications.role, users.email, committees.name AS committeeName
+            FROM applications
+            JOIN users ON applications.userId = users.id
+            JOIN committees ON applications.committeeId = committees.id
+            WHERE applications.id = ?
+          `,
+          args: [id],
+        });
+
+        if (applicationDetails.rows.length > 0) {
+          const { email, committeeName, role } = applicationDetails.rows[0];
+          if (typeof email !== 'string' || !email) {
+            return res.status(400).json({ message: 'Invalid email address' });
+          }
+
+          await sendEmail(
+            email,
+            'Application Accepted',
+            `Congratulations! Your application (id ${id}) for the ${committeeName} committee as ${role} has been accepted.`
+          );
+
+          await turso.execute({
+            sql: 'UPDATE applications SET status = "accepted" WHERE id = ?',
             args: [id],
-            });
-
-            if (applicationDetails.rows.length === 0) {
-                return res.status(404).json({ message: 'Application User not found' });
-            }
-
-            const { userId, email, committeeName, role } = applicationDetails.rows[0];
-            if (typeof email === 'string' && email) {
-                await sendEmail(email, 'Application Accepted', `Congratulations! Your application (id ${id}) for the ${committeeName} committee as ${role} has been accepted.`);
-            } else {
-                return res.status(400).json({ message: 'Invalid email address' });
-            }
-
-            await turso.execute({
-                sql: 'UPDATE applications SET status = "accepted" WHERE id = ?',
-                args: [id],
-            });
-
-        } else if (status === false) {
-            await turso.execute({
-                sql: 'UPDATE applications SET status = "rejected" WHERE id = ?',
-                args: [id],
-            });
+          });
+          continue;
         }
+
+        const supervisorDetails = await turso.execute({
+          sql: `
+            SELECT supervisors.userId, users.email, supervisors.delegation AS delegation
+            FROM supervisors
+            JOIN users ON supervisors.userId = users.id
+            WHERE supervisors.id = ?
+          `,
+          args: [id],
+        });
+
+        if (supervisorDetails.rows.length === 0) {
+          return res.status(404).json({ message: 'Application not found' });
+        }
+
+        const { email, delegation } = supervisorDetails.rows[0];
+        if (typeof email !== 'string' || !email) {
+          return res.status(400).json({ message: 'Invalid email address' });
+        }
+
+        await sendEmail(
+          email,
+          'Supervisor Application Accepted',
+          `Congratulations! Your supervisor application (id ${id}) for delegation ${delegation} has been accepted.`
+        );
+
+        await turso.execute({
+          sql: 'UPDATE supervisors SET status = "accepted" WHERE id = ?',
+          args: [id],
+        });
+      } else if (status === false) {
+        await turso.execute({
+          sql: 'UPDATE applications SET status = "rejected" WHERE id = ?',
+          args: [id],
+        });
+        await turso.execute({
+          sql: 'UPDATE supervisors SET status = "rejected" WHERE id = ?',
+          args: [id],
+        });
+      }
     }
     
     res.status(200).json({ message: 'Applications status update successful' });
