@@ -25,7 +25,7 @@ export default function HeroSection() {
                                     <h2 className="max-w-md text-balance text-lg font-normal text-muted-foreground md:text-xl">
                                         January 29th - February 1st, 2026
                                     </h2>
-                                    <p className="text-muted-foreground mt-4 mb-8 max-w-2xl text-balance text-xl">The internationally renowned conference organized by Parklane International School is returning for its seventh year.</p>
+                                    <p className="text-muted-foreground mt-4 mb-8 max-w-2xl text-balance text-xl">The internationally renowned conference organized by Park Lane International School is returning for its seventh year.</p>
 
                                     <div className="flex items-center gap-3">
                                         <Button
@@ -59,20 +59,31 @@ export default function HeroSection() {
                                 <div className="mt-10">
                                     <p className="text-muted-foreground">Partnered with :</p>
                                     <div className="mt-6 grid max-w-sm grid-cols-3 gap-3">
-                                        <div className="flex">
                                             <img
                                                 className="h-9 w-fit"
                                                 src="https://upload.wikimedia.org/wikipedia/commons/6/6e/Logo_Praha.svg"
                                                 alt="Prague Logo"
                                             />
-                                        </div>
-                                        <div className="flex">
                                             <img
                                                 className="h-5 w-fit"
                                                 src="https://www.parklane-is.cz/wp-content/uploads/2025/03/parklane-logo.svg"
-                                                alt="Parklane International School Logo"
+                                                alt="Park Lane International School Logo"
                                             />
-                                        </div>
+                                            <img
+                                                className="h-15 w-fit"
+                                                src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Prague_CoA_CZ.svg/960px-Prague_CoA_CZ.svg.png"
+                                                alt="Prague Coat of Arms"
+                                            />
+                                            <img
+                                                className="h-10 w-fit"
+                                                src="https://s3-media0.fl.yelpcdn.com/bphoto/v0fmH95u3uADxi21OTjnoQ/o.jpg"
+                                                alt="The Charnwood Company"
+                                            />
+                                            <img
+                                                className="h-10 w-fit"
+                                                src="https://www.vecernipraha.com/sites/default/files/2020-02/DUPLEX-logo_0.jpg"
+                                                alt="Duplex"
+                                            />
                                     </div>
                                 </div>
                             </div>
