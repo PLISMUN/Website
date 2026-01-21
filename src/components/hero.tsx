@@ -58,32 +58,37 @@ export default function HeroSection() {
 
                                 <div className="mt-10">
                                     <p className="text-muted-foreground">Partnered with :</p>
-                                    <div className="mt-6 grid max-w-sm grid-cols-3 gap-3">
-                                            <img
-                                                className="h-9 w-fit"
-                                                src="https://upload.wikimedia.org/wikipedia/commons/6/6e/Logo_Praha.svg"
-                                                alt="Prague Logo"
-                                            />
-                                            <img
-                                                className="h-5 w-fit"
-                                                src="https://www.parklane-is.cz/wp-content/uploads/2025/03/parklane-logo.svg"
-                                                alt="Park Lane International School Logo"
-                                            />
-                                            <img
-                                                className="h-15 w-fit"
-                                                src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Prague_CoA_CZ.svg/960px-Prague_CoA_CZ.svg.png"
-                                                alt="Prague Coat of Arms"
-                                            />
-                                            <img
-                                                className="h-10 w-fit"
-                                                src="https://s3-media0.fl.yelpcdn.com/bphoto/v0fmH95u3uADxi21OTjnoQ/o.jpg"
-                                                alt="The Charnwood Company"
-                                            />
-                                            <img
-                                                className="h-10 w-fit"
-                                                src="https://www.vecernipraha.com/sites/default/files/2020-02/DUPLEX-logo_0.jpg"
-                                                alt="Duplex"
-                                            />
+                                    <div className="mt-6 grid w-fit max-w-sm grid-cols-3 gap-3 place-items-center">
+                                        <img
+                                            className="h-9"
+                                            src="https://i.redd.it/gzn9i302mxe71.jpg"
+                                            alt="Prague Logo"
+                                        />
+                                        <img
+                                            className="h-5"
+                                            src="https://www.parklane-is.cz/wp-content/uploads/2025/03/parklane-logo.svg"
+                                            alt="Park Lane International School Logo"
+                                        />
+                                        <img
+                                            className="h-15"
+                                            src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Prague_CoA_CZ.svg/960px-Prague_CoA_CZ.svg.png"
+                                            alt="Prague Coat of Arms"
+                                        />
+                                        <img
+                                            className="h-10"
+                                            src="https://s3-media0.fl.yelpcdn.com/bphoto/v0fmH95u3uADxi21OTjnoQ/o.jpg"
+                                            alt="The Charnwood Company"
+                                        />
+                                        <img
+                                            className="h-10"
+                                            src="https://www.vecernipraha.com/sites/default/files/2020-02/DUPLEX-logo_0.jpg"
+                                            alt="Duplex"
+                                        />
+                                        <img
+                                            className="h-10"
+                                            src="https://www.avisonyoung.cz/o/ay-theme/resources/images/AVYLogo.svg?v=2020"
+                                            alt="Avison Young"
+                                        />
                                     </div>
                                 </div>
                             </div>
