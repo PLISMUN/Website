@@ -25,7 +25,7 @@ export default function HeroSection() {
                                     <h2 className="max-w-md text-balance text-lg font-normal text-muted-foreground md:text-xl">
                                         January 29th - February 1st, 2026
                                     </h2>
-                                    <p className="text-muted-foreground mt-4 mb-8 max-w-2xl text-balance text-xl">The internationally renowned conference organized by Park Lane International School is returning for its seventh year.</p>
+                                    <p className="text-muted-foreground mt-4 mb-8 max-w-2xl text-balance text-xl">The internationally renowned conference organized by Park Lane International School is returning for its ninth year.</p>
 
                                     <div className="flex items-center gap-3">
                                         <Button

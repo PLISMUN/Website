@@ -38,7 +38,8 @@ For UI I have used:
 
 We use [TursoDB](https://turso.tech/) as our database. It is a LibSQL-esque database hosted in the cloud. We connect through their custom adapter/package.  
 
-<img width="325" height="325" alt="image" src="https://github.com/user-attachments/assets/774d702d-ceef-4674-b40b-55d57ee9c6ce" />  
+<img width="459" height="468" alt="db-diagram" src="https://github.com/user-attachments/assets/d6ab862b-0a8f-4770-a244-429342218c8e" />
+
 
 Here are some useful examples for each table:  
 
@@ -62,6 +63,15 @@ SELECT * FROM applications LIMIT 1;  -- Do not interfere. Automatically managed
         "committeeId": 1,
         "role": "Laos",
         "notes": "waf",
+        "status": "rejected"
+    }
+    ]
+SELECT * FROM supervisors LIMIT 1;  -- Do not interfere. Automatically managed
+    [
+    {
+        "id": 9991,
+        "userId": 1,
+        "delegation": "prague international school",
         "status": "rejected"
     }
     ]
@@ -115,21 +125,22 @@ SELECT * FROM committees LIMIT 1;
 ## Environment Variables
 
 ```env
-TURSO_DATABASE_URL="..."
-TURSO_AUTH_TOKEN="..."
-
-AUTH_SECRET="..."
-GOOGLE_CLIENT_ID="..."
-GOOGLE_CLIENT_SECRET="..."
+TURSO_DATABASE_URL=
+TURSO_AUTH_TOKEN=
+AUTH_SECRET=
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
 
 EMAIL="plismun@parklane-is.com"
-EMAIL_PASSWORD="..."
+EMAIL_PASSWORD=
 SMTP_HOST="smtp.gmail.com"
 SMTP_PORT=465
 
-NEXT_PUBLIC_STAGE_ACCOUNT_CREATION="true" # Allow account creation
-NEXT_PUBLIC_STAGE_CHAIR="true" # Allow chair applications
-NEXT_PUBLIC_STAGE_DELEGATE="true" # Allow delegate applications
+NEXT_PUBLIC_STAGE_ACCOUNT_CREATION="true"
+NEXT_PUBLIC_STAGE_PAYMENTS_ACCEPTED="true"
+NEXT_PUBLIC_STAGE_CHAIR="true"
+NEXT_PUBLIC_STAGE_DELEGATE="true"
+NEXT_PUBLIC_STAGE_SUPERVISOR="true"
 
 NEXT_PUBLIC_PRICE_CZK=1350
 NEXT_PUBLIC_PRICE_EUR=55
@@ -140,8 +151,8 @@ NEXT_PUBLIC_PRICE_EUR_CHAIR=32
 NEXT_PUBLIC_PRICE_CZK_SUPERVISOR=700
 NEXT_PUBLIC_PRICE_EUR_SUPERVISOR=30
 
-NEXTAUTH_URL="http://localhost:3000"
-INTERNAL_API_PASSWORD="..."
+NEXTAUTH_URL=
+INTERNAL_API_PASSWORD=
 ```
 
 ## Your job
@@ -149,24 +160,29 @@ INTERNAL_API_PASSWORD="..."
 It looks like you're the next one to inherit this project. Good luck!  
 I've tried to make the website take as much as possible from the database, so seed that first (send a request to `api/utils/seedDb` with the `INTERNAL_API_PASSWORD` as a URL param with the key `password`).  
 
-You can start the local development server with first installing all required dependencies with `npm i`, and then running `npm run dev`. It should be straightforward from there.  
+You can start the local development server with first installing all required dependencies with `npm i`, populating the .env, getting a DB ready, and then running `npm run dev`. It should be straightforward from there.  
 
 Things to do every year:
 
 - Update the content (committees, prices, etc.) in the database & env vars  
-- Update partners (homepage and `/partners`) in the code
+- Update partners (hero) in the code
 - Update secretariat members & their pictures (`/about` and in the `public/people` dir)  
 - Update Social Event and schedule (`/this-year`)
+- Get the databases ready (clear out and then seed)
+- Update who is maintaing the site. Please don't delete credits of previous contributors. This is a multi-mun-generational project :).
 
 Things to implement:  
 
 - [ ] Properly handle cacheing
 - [ ] Reset password by email
+- [ ] Put new conference id in env
+- [ ] Imrpove stats geting speeds
+- [ ] Change paths to use routing files, dynamic routes, and route groups (project structure next.js app router)
+- [ ] Add a url param to bypass application stages for testing
+- [ ] Better instagram feed integration
   
 ## Project Structure
 
 - `/app` - is the client side of the website. The files position in `/app` represents the URL path. For example, `/app/about/page.tsx` is the `/about` page.
 - `/components` - Hosts most react components used in the website. Both reusable and page-specific components.
-- `/pages/api` - API routes. These are server-side only. The file position in `/pages/api` represents the URL path. For example, `/pages/api/committees.ts` is the `/api/committees` endpoint.  
-
-
+- `/pages/api` - API routes. These are serer-side only. The file position in `/pages/api` represents the URL path. For example, `/pages/api/committees.ts` is the `/api/committees` endpoint.  
