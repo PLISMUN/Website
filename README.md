@@ -38,7 +38,8 @@ For UI I have used:
 
 We use [TursoDB](https://turso.tech/) as our database. It is a LibSQL-esque database hosted in the cloud. We connect through their custom adapter/package.  
 
-<img width="325" height="325" alt="image" src="https://github.com/user-attachments/assets/774d702d-ceef-4674-b40b-55d57ee9c6ce" />  
+<img width="459" height="468" alt="db-diagram" src="https://github.com/user-attachments/assets/d6ab862b-0a8f-4770-a244-429342218c8e" />
+
 
 Here are some useful examples for each table:  
 
