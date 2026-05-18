@@ -176,7 +176,7 @@ Things to implement:
 - [ ] Properly handle cacheing
 - [ ] Reset password by email
 - [ ] Put new conference id in env
-- [ ] Imrpove stats geting speeds
+- [ ] Imrpove stats, committe list geting speeds
 - [ ] Change paths to use routing files, dynamic routes, and route groups (project structure next.js app router)
 - [ ] Add a url param to bypass application stages for testing
 - [ ] Better instagram feed integration

@@ -40,27 +40,27 @@ export default function Features() {
                             <Card
                                 className="aspect-video overflow-hidden p-6">
                                 <img
-                                    src="/zonebar.jpg"
+                                    src="/logo.png"
                                     alt="Zonebar"
                                     className="h-full w-full object-cover object-center scale-120 rounded-lg transition-transform duration-300"
                                 />
                             </Card>
                             <div className="sm:max-w-sm">
-                                <h3 className="text-foreground text-xl font-semibold">Zonebar</h3>
-                                <p className="text-muted-foreground my-4 text-lg">This year, the social event will be held at a venue in the heart of Prague: Zonebar. Located at Křemencova 178/10, 110 00 Nové Město, Zonebar is located right next to the Národní Třída metro, behind the corner to Myslíkova tram stop.</p>
+                                <h3 className="text-foreground text-xl font-semibold">To be revealed &#60;3</h3>
+                                <p className="text-muted-foreground my-4 text-lg">You&#39;ll see soon, don&#39;t worry!</p>
                             </div>
                         </div>
                         <div className="space-y-4">
                             <Card className="aspect-video overflow-hidden px-6 flex items-center justify-center">
                                 <img
-                                    src="/CityHall.jpg"
+                                    src="/logo.png"
                                     alt="Úvoz Campus"
                                     className="h-full w-full object-cover object-center scale-120 rounded-lg transition-transform duration-300"
                                 />
                             </Card>
                             <div className="sm:max-w-sm">
-                                <h3 className="text-foreground text-xl font-semibold">Nová Radnice</h3>
-                                <p className="text-muted-foreground my-4 text-lg">The GA will happen at the New Prague City Hall; the very same one where Prague law makers decide on the future of this city. It is situated in Prague Center, more specifically old town. Located at Mariánské nám. 2, 110 00 Josefov, we recommend getting off at staromestka metro station.</p>
+                                <h3 className="text-foreground text-xl font-semibold">To be revealed &#60;3</h3>
+                                <p className="text-muted-foreground my-4 text-lg">You&#39;ll see soon, don&#39;t worry!</p>
                             </div>
                         </div>
                     </div>

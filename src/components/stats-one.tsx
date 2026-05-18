@@ -9,9 +9,9 @@ export default function StatsSection() {
   useEffect(() => {
     // Function to fetch data
     const fetchData = async () => {
-      const responsePrevConf = await fetch('https://mymun.com/api/conferences/8737/previous-conferences');
+      const responsePrevConf = await fetch('https://mymun.com/api/conferences/11787/previous-conferences');
       const resultPrevConf = await responsePrevConf.json();
-      const responseNew = await fetch('https://mymun.com/api/conferences/8737');
+      const responseNew = await fetch('https://mymun.com/api/conferences/11787');
       const resultNew = await responseNew.json();
       // metrics dont include 2018 nor the latest conference
       let ratingTot = 0.25; //give ourselves a slight advantage :3
