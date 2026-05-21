@@ -32,7 +32,7 @@ export default function FooterSection() {
                 </div>
                 <div className="my-8 flex flex-wrap justify-center gap-6 text-sm">
                     <Link
-                        href="https://mymun.com/conferences/plismun-2026"
+                        href="https://mymun.com/conferences/plismun-2027"
                         target="_blank"
                         rel="noopener noreferrer"
                         aria-label="Mymun"
