@@ -23,7 +23,7 @@ export default function HeroSection() {
                                 <div>
                                     <h1 className="max-w-md text-balance text-5xl font-medium md:text-6xl">PLISMUN&apos;27</h1>
                                     <h2 className="max-w-md text-balance text-lg font-normal text-muted-foreground md:text-xl">
-                                        January 28th - January 31st, 2026
+                                        January 28th - January 31st, 2027
                                     </h2>
                                     <p className="text-muted-foreground mt-4 mb-8 max-w-2xl text-balance text-xl">The internationally renowned conference organized by Park Lane International School is returning for its tenth year.</p>
 

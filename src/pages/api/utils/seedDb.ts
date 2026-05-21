@@ -53,8 +53,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         shorthand TEXT NOT NULL UNIQUE,
         description TEXT NOT NULL,
         difficulty TEXT NOT NULL,
-        roles TEXT NOT NULL,
-        topics TEXT NOT NULL,
+        roles JSON NOT NULL,
+        topics JSON NOT NULL,
         icon TEXT NOT NULL
       )
     `);

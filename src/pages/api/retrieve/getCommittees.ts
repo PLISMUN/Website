@@ -22,7 +22,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       topics: row.topics,
       icon: row.icon || '',
     }));
-    res.setHeader('Cache-Control', 'public, max-age=43200');
+    // Cache for 12 hours in the browser, and 24 hours on the CDN
+    res.setHeader('Cache-Control', 'public, s-maxage=86400, stale-while-revalidate=43200');
     res.status(200).json(committees);
   } catch (err: any) {
     console.error('Error fetching committees:', err);
