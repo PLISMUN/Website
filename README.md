@@ -176,11 +176,12 @@ Things to implement:
 - [ ] Properly handle cacheing
 - [ ] Reset password by email
 - [ ] Put new conference id in env
-- [ ] Imrpove stats geting speeds
+- [X] Pre-compute stats and make static on runtime
+- [ ] Pre-compute committees and make static on runtime
 - [X] Change paths to use routing files, dynamic routes, and route groups (project structure next.js app router)
 - [ ] Add a url param to bypass application stages for testing
 - [ ] Better instagram feed integration
-- [ ] Improve a skeleton UI for loading states
+- [ ] Create a skeleton UI for loading states
   
 ## Project Structure
 
