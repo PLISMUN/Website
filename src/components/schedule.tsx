@@ -27,14 +27,7 @@ export default function Schedule() {
                                 />
                                 */}
                                 <Image
-                                    src="/PLISMUN_SCHEDULE.png"
-                                    alt="app screen"
-                                    width="2880"
-                                    height="1842"
-                                    className="object-top-left size-full object-cover"
-                                />
-                                <Image
-                                    src="/PLISMUN_GROUPS.png"
+                                    src="/logo.png"
                                     alt="app screen"
                                     width="2880"
                                     height="1842"
