@@ -1,38 +1,30 @@
-"use client"
 import { Card } from '@/components/ui/card'
-import { useEffect, useState } from 'react';
 
-export default function StatsSection() {
-  const [rating, setRating] = useState("");
-  const [attendees, setAttendees] = useState("");
+export const dynamic = 'force-static';
 
-  useEffect(() => {
-    // Function to fetch data
-    const fetchData = async () => {
-      const responsePrevConf = await fetch('https://mymun.com/api/conferences/11787/previous-conferences');
-      const resultPrevConf = await responsePrevConf.json();
-      const responseNew = await fetch('https://mymun.com/api/conferences/11787');
-      const resultNew = await responseNew.json();
-      // metrics dont include 2018 nor the latest conference
-      let ratingTot = 0.25; //give ourselves a slight advantage :3
-      let conferenceTot = 0;
-      let attendeesTot = 100 + resultNew["expected_delegates"]; // 2018 wasnt on mymun
-        for (let i = 0; i < resultPrevConf.length; i++) {
-            let conference = resultPrevConf[i];
-            if (conference["total_rating"] > 1) {
-                conferenceTot++;
-                ratingTot += conference["total_rating"];
-            }
-            let responseConference = await fetch(`https://mymun.com/api/conferences/${conference["id"]}`);
-            let resultConference = await responseConference.json();
-            attendeesTot += resultConference["expected_delegates"] || 100;
+export default async function StatsSection() {
+  const responsePrevConf = await fetch('https://mymun.com/api/conferences/11787/previous-conferences', { cache: 'force-cache' });
+  const resultPrevConf = await responsePrevConf.json();
+  const responseNew = await fetch('https://mymun.com/api/conferences/11787', { cache: 'force-cache' });
+  const resultNew = await responseNew.json();
+  
+  // metrics dont include 2018 nor the latest conference
+  let ratingTot = 0.25; //give ourselves a slight advantage :3
+  let conferenceTot = 0;
+  let attendeesTot = 100 + resultNew["expected_delegates"]; // 2018 wasnt on mymun
+    for (let i = 0; i < resultPrevConf.length; i++) {
+        let conference = resultPrevConf[i];
+        if (conference["total_rating"] > 1) {
+            conferenceTot++;
+            ratingTot += conference["total_rating"];
         }
-      setRating(String((ratingTot / conferenceTot).toFixed(2)));
-      setAttendees(String(attendeesTot));
-    };
-
-    fetchData();
-  }, []); 
+        let responseConference = await fetch(`https://mymun.com/api/conferences/${conference["id"]}`, { cache: 'force-cache' });
+        let resultConference = await responseConference.json();
+        attendeesTot += resultConference["expected_delegates"] || 100;
+    }
+  
+  const rating = String((ratingTot / conferenceTot).toFixed(2));
+  const attendees = String(attendeesTot);
 
     return (
         <section className="bg-muted py-12 md:py-20">
