@@ -178,7 +178,6 @@ export default function Committees() {
 }
 
 const IntegrationCard = ({ title, description, children, onClick }: { title: string; description: string; children: React.ReactNode; link?: string; onClick?: () => void }) => {
-    // Split description by \n
     const lines = description.split('\n');
     return (
         <Card
