@@ -26,55 +26,54 @@ const members = [
 
 export default function TeamSection() {
     return (
-        <section>
-            <div className="bg-muted/50 py-24">
-                <div className="@container mx-auto w-full max-w-5xl px-6">
-                    <div className="mb-12">
-                        <h2 className="text-foreground text-4xl font-semibold">Meet Our Team</h2>
-                        <p className="text-muted-foreground my-4 text-balance text-lg">The secretariat that has worked all this time to make everything come together.</p>
-                    </div>
-
-                    <div className="@sm:grid-cols-2 @xl:grid-cols-3 grid gap-6 md:gap-y-10">
-                        {members.map((member, index) => (
-                            <div
-                                key={index}
-                                className="grid grid-cols-[auto_1fr] items-center gap-3">
-                                    <HoverCard>
-                                        <HoverCardTrigger>
-                                            <div className='grid grid-cols-[auto_1fr] items-center gap-3 cursor-pointer'>
-                                            <Avatar className="rounded-(--radius) ring-foreground/10 size-10 border border-transparent shadow ring-1">
-                                                <AvatarImage
-                                                    src={member.src}
-                                                    alt={member.name}
-                                                />
-                                                <AvatarFallback className="rounded-(--radius)">{member.name.charAt(0)}</AvatarFallback>
-                                            </Avatar>
-
-                                            <div>
-                                                <span className="text-foreground font-medium">{member.name}</span>
-                                                <div className="text-muted-foreground text-sm">{member.role}</div>
-                                            </div>
-                                            </div>
-                                        </HoverCardTrigger>
-                                        <HoverCardContent className="w-100 min-h-50">
-                                            <div>
-                                                <Avatar className="rounded-(--radius) ring-foreground/10 size-40 border border-transparent shadow ring-1 float-left mr-4 mb-2">
-                                                <AvatarImage src={member.src} />
-                                                <AvatarFallback className="rounded-(--radius)">{member.name.charAt(0)}</AvatarFallback>
-                                                </Avatar>
-                                                <h4 className="text-sm font-semibold">{member.name}</h4>
-                                                <div className="text-muted-foreground text-xs">{member.role}</div>
-                                                <p className="text-sm mt-1">
-                                                {member.description}
-                                                </p>
-                                            </div>
-                                        </HoverCardContent>
-                                    </HoverCard>
-                            </div>
-                        ))}
-                    </div>
+      <section className="bg-muted/40 py-28">
+        <div className="mx-auto w-full max-w-7xl px-6">
+          <div className="mb-14 text-center">
+            <h2 className="text-4xl font-semibold tracking-tight text-slate-950 md:text-5xl">
+              Meet Our Team
+            </h2>
+  
+            <p className="mx-auto mt-4 max-w-2xl text-lg text-slate-600">
+              The secretariat working behind the scenes to make PLISMUN&apos;27
+              possible.
+            </p>
+          </div>
+  
+          <div className="grid gap-8 md:grid-cols-2 xl:grid-cols-3">
+            {members.map((member, index) => (
+              <div
+                key={index}
+                className="group relative h-[430px] overflow-hidden rounded-[2rem] border border-slate-200 bg-white shadow-sm transition duration-500 hover:-translate-y-2 hover:shadow-2xl"
+              >
+                <div className="absolute inset-0 transition duration-500 group-hover:opacity-0">
+                  <div className="h-[320px] overflow-hidden bg-slate-100">
+                    <img
+                      src={member.src}
+                      alt={member.name}
+                      className="h-full w-full object-cover transition duration-700 group-hover:scale-105"
+                    />
+                  </div>
+  
+                  <div className="p-6">
+                    <h3 className="text-xl font-semibold text-slate-950">
+                      {member.name}
+                    </h3>
+  
+                    <p className="mt-1 text-sm font-medium text-sky-700">
+                      {member.role}
+                    </p>
+                  </div>
                 </div>
-            </div>
-        </section>
-    )
-}
+  
+                <div className="absolute inset-0 flex translate-y-4 flex-col justify-center bg-white p-7 opacity-0 transition duration-500 group-hover:translate-y-0 group-hover:opacity-100">
+                  <p className="max-h-[330px] overflow-y-auto text-sm leading-6 text-slate-600">
+                    {member.description}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  }

@@ -1,139 +1,147 @@
-'use client'
-import Link from 'next/link'
-import Image from 'next/image'
-import { Menu, X } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import React from 'react'
-import { cn } from '@/lib/utils'
-import { useSession } from 'next-auth/react'
-import { stages } from "@/config/stages"
+"use client";
 
-const menuItems = [
-    { name: 'About', href: '/about' },
-    { name: 'This Year', href: '/this-year' },
-    { name: 'FAQ', href: '/faq' },
-]
+import React, { useEffect, useState } from "react";
+import Link from "next/link";
+import { Menu, X } from "lucide-react";
+import { cn } from "@/lib/utils";
 
-export const HeroHeader = () => {
-    const [menuState, setMenuState] = React.useState(false)
-    const [isScrolled, setIsScrolled] = React.useState(false)
+export function HeroHeader() {
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
-    const { data: session } = useSession()
+  useEffect(() => {
+    const onScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
 
-    React.useEffect(() => {
-        const handleScroll = () => {
-            setIsScrolled(window.scrollY > 50)
-        }
-        window.addEventListener('scroll', handleScroll)
-        return () => window.removeEventListener('scroll', handleScroll)
-    }, [])
-    return (
-        <header>
-            <nav
-                data-state={menuState && 'active'}
-                className={cn('fixed z-20 w-full transition-all duration-300', isScrolled && 'bg-background/75 border-b border-black/5 backdrop-blur-lg')}>
-                <div className="mx-auto max-w-5xl px-6">
-                    <div className="relative flex flex-wrap items-center justify-between gap-6 py-3 lg:gap-0">
-                        <div className="flex w-full justify-between gap-6 lg:w-auto">
-                            <Link
-                                href="/"
-                                aria-label="home"
-                                className="flex items-center space-x-2">
-                                <Image src="/logo.png" alt="Logo" width={50} height={50} className="logo__image" />
-                            </Link>
+    onScroll();
+    window.addEventListener("scroll", onScroll);
 
-                            <button
-                                onClick={() => setMenuState(!menuState)}
-                                aria-label={menuState == true ? 'Close Menu' : 'Open Menu'}
-                                className="relative z-20 -m-2.5 -mr-4 block cursor-pointer p-2.5 lg:hidden">
-                                <Menu className="in-data-[state=active]:rotate-180 in-data-[state=active]:scale-0 in-data-[state=active]:opacity-0 m-auto size-6 duration-200" />
-                                <X className="in-data-[state=active]:rotate-0 in-data-[state=active]:scale-100 in-data-[state=active]:opacity-100 absolute inset-0 m-auto size-6 -rotate-180 scale-0 opacity-0 duration-200" />
-                            </button>
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
-                            <div className="m-auto hidden size-fit lg:block">
-                                <ul className="flex gap-1">
-                                    {menuItems.map((item, index) => (
-                                        <li key={index}>
-                                            <Button
-                                                asChild
-                                                variant="ghost"
-                                                size="sm">
-                                                <Link
-                                                    href={item.href}
-                                                    className="text-base">
-                                                    <span>{item.name}</span>
-                                                </Link>
-                                            </Button>
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
-                        </div>
+  const links = [
+    { label: "About", href: "/about" },
+    { label: "This Year", href: "/this-year" },
+    { label: "FAQ", href: "/faq" },
+  ];
 
-                        <div className="bg-background in-data-[state=active]:block lg:in-data-[state=active]:flex mb-6 hidden w-full flex-wrap items-center justify-end space-y-8 rounded-3xl border p-6 shadow-2xl shadow-zinc-300/20 md:flex-nowrap lg:m-0 lg:flex lg:w-fit lg:gap-6 lg:space-y-0 lg:border-transparent lg:bg-transparent lg:p-0 lg:shadow-none dark:shadow-none dark:lg:bg-transparent">
-                            <div className="lg:hidden">
-                                <ul className="space-y-6 text-base">
-                                    {menuItems.map((item, index) => (
-                                        <li key={index}>
-                                            <Link
-                                                href={item.href}
-                                                className="text-muted-foreground hover:text-accent-foreground block duration-150">
-                                                <span>{item.name}</span>
-                                            </Link>
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
-                            <div className="flex w-full flex-col space-y-3 sm:flex-row sm:gap-3 sm:space-y-0 md:w-fit">
-                                {!session && (
-                                    <>
-                                        <Button
-                                            asChild
-                                            variant="ghost"
-                                            size="sm"
-                                            className={cn(isScrolled && 'lg:hidden')}
-                                            disabled={!stages.accountCreation}>
-                                            <Link href="/user/login">
-                                                <span>Login</span>
-                                            </Link>
-                                        </Button>
-                                        <Button
-                                            asChild
-                                            size="sm"
-                                            className={cn(isScrolled && 'lg:hidden')}
-                                            disabled={!stages.accountCreation}>
-                                            <Link href="/user/signup">
-                                                <span>Sign Up</span>
-                                            </Link>
-                                        </Button>
-                                        <Button
-                                            asChild
-                                            size="sm"
-                                            className={cn(isScrolled ? 'lg:inline-flex' : 'hidden')}
-                                            disabled={!stages.accountCreation}>
-                                            <Link href="/user/signup">
-                                                <span>Get Started</span>
-                                            </Link>
-                                        </Button>
-                                    </>
-                                )}
-                                {session && (
-                                    <Button
-                                        asChild
-                                        size="sm"
-                                        disabled={!stages.accountCreation}>
-                                        <Link href="/user/dashboard">
-                                            <span>Dashboard</span>
-                                        </Link>
-                                    </Button>
-                                )}
-                            </div>
-                        </div>
-                    </div>
+  return (
+    <header
+      className={cn(
+        "fixed left-0 top-0 z-50 w-full transition-all duration-500 ease-out",
+        isScrolled ? "px-4 pt-3" : "px-0 pt-0"
+      )}
+    >
+      <nav
+        className={cn(
+          "mx-auto max-w-6xl overflow-hidden transition-all duration-500 ease-out",
+          isScrolled
+            ? "rounded-full border border-slate-200/80 bg-white/80 shadow-xl shadow-slate-900/10 backdrop-blur-xl"
+            : "rounded-none border border-transparent bg-transparent shadow-none"
+        )}
+      >
+        <div
+          className={cn(
+            "flex items-center justify-between px-6 transition-all duration-500 ease-out",
+            isScrolled ? "py-2.5" : "py-4"
+          )}
+        >
+          <div className="flex items-center gap-8">
+            <Link href="/" className="flex items-center">
+              <img
+                src="/logo.png"
+                alt="PLISMUN logo"
+                className="h-10 w-auto transition duration-300 hover:scale-105"
+              />
+            </Link>
+
+            <div className="hidden items-center gap-7 md:flex">
+              {links.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className="group relative text-sm font-medium text-slate-700 transition duration-300 hover:text-slate-950"
+                >
+                  <span>{link.label}</span>
+                  <span className="absolute -bottom-1 left-0 h-px w-0 bg-sky-700 transition-all duration-300 group-hover:w-full" />
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          <div className="hidden items-center gap-4 md:flex">
+            <Link
+              href="/user/login"
+              className="text-sm font-medium text-slate-700 transition duration-300 hover:text-slate-950"
+            >
+              Login
+            </Link>
+
+            <Link
+              href="/user/signup"
+              className="rounded-lg bg-slate-950 px-4 py-2 text-sm font-medium text-white shadow-sm transition duration-300 hover:-translate-y-0.5 hover:bg-slate-800 hover:shadow-md"
+            >
+              Sign Up
+            </Link>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => setMenuOpen(!menuOpen)}
+            className="inline-flex rounded-full border border-slate-200 bg-white p-2 text-slate-700 shadow-sm transition duration-300 hover:scale-105 md:hidden"
+            aria-label="Toggle menu"
+          >
+            {menuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+          </button>
+        </div>
+
+        <div
+          className={cn(
+            "grid transition-all duration-500 ease-out md:hidden",
+            menuOpen
+              ? "grid-rows-[1fr] opacity-100"
+              : "grid-rows-[0fr] opacity-0"
+          )}
+        >
+          <div className="overflow-hidden">
+            <div className="border-t border-slate-200 px-6 py-4">
+              <div className="flex flex-col gap-4">
+                {links.map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    onClick={() => setMenuOpen(false)}
+                    className="text-sm font-medium text-slate-700 transition hover:text-slate-950"
+                  >
+                    {link.label}
+                  </Link>
+                ))}
+
+                <div className="flex gap-3 pt-2">
+                  <Link
+                    href="/user/login"
+                    onClick={() => setMenuOpen(false)}
+                    className="rounded-full border border-slate-200 px-4 py-2 text-sm font-medium text-slate-700"
+                  >
+                    Login
+                  </Link>
+
+                  <Link
+                    href="/user/signup"
+                    onClick={() => setMenuOpen(false)}
+                    className="rounded-full bg-slate-950 px-4 py-2 text-sm font-medium text-white"
+                  >
+                    Sign Up
+                  </Link>
                 </div>
-            </nav>
-        </header>
-    )
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+  );
 }
 
-export default HeroHeader
+export default HeroHeader;
