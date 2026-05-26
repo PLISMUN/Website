@@ -2,43 +2,66 @@
 
 import { useEffect, useState } from "react";
 
-const EVENT_DATE = new Date("2027-01-28T09:00:00");
+const EVENT_DATE = new Date("2027-01-28T09:00:00+01:00").getTime();
 
 function getTimeLeft() {
-  const diff = EVENT_DATE.getTime() - Date.now();
+  const diff = Math.max(0, EVENT_DATE - Date.now());
 
   return {
-    days: Math.max(0, Math.floor(diff / 86400000)),
-    hours: Math.max(0, Math.floor((diff / 3600000) % 24)),
-    minutes: Math.max(0, Math.floor((diff / 60000) % 60)),
-    seconds: Math.max(0, Math.floor((diff / 1000) % 60)),
+    days: Math.floor(diff / 86400000),
+    hours: Math.floor((diff / 3600000) % 24),
+    minutes: Math.floor((diff / 60000) % 60),
+    seconds: Math.floor((diff / 1000) % 60),
   };
 }
 
+const initialTimeLeft = {
+  days: 0,
+  hours: 0,
+  minutes: 0,
+  seconds: 0,
+};
+
 export default function Countdown() {
-  const [timeLeft, setTimeLeft] = useState({
-    days: 0,
-    hours: 0,
-    minutes: 0,
-    seconds: 0,
-  });
+  const [timeLeft, setTimeLeft] = useState(initialTimeLeft);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setTimeLeft(getTimeLeft());
+    setMounted(true);
 
-    const timer = setInterval(() => {
+    const updateCountdown = () => {
+      const diff = EVENT_DATE - Date.now();
+
       setTimeLeft(getTimeLeft());
+
+      return diff <= 0;
+    };
+
+    const isFinished = updateCountdown();
+
+    if (isFinished) {
+      return;
+    }
+
+    const timer = window.setInterval(() => {
+      const isFinished = updateCountdown();
+
+      if (isFinished) {
+        window.clearInterval(timer);
+      }
     }, 1000);
 
-    return () => clearInterval(timer);
+    return () => window.clearInterval(timer);
   }, []);
 
+  const shownTimeLeft = mounted ? timeLeft : initialTimeLeft;
+
   const units = [
-    ["Days", timeLeft.days],
-    ["Hours", timeLeft.hours],
-    ["Minutes", timeLeft.minutes],
-    ["Seconds", timeLeft.seconds],
-  ];
+    ["Days", shownTimeLeft.days],
+    ["Hours", shownTimeLeft.hours],
+    ["Minutes", shownTimeLeft.minutes],
+    ["Seconds", shownTimeLeft.seconds],
+  ] as const;
 
   return (
     <section className="mx-auto my-20 max-w-5xl px-6">

@@ -18,11 +18,14 @@ export default function HeroSection() {
       <HeroHeader />
 
       <main className="overflow-hidden">
-        <section className="relative bg-[linear-gradient(180deg,#ffffff_0%,#f8fbfd_45%,#eef7fb_100%)]">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_28%,rgba(14,165,233,0.09),transparent_28%),radial-gradient(circle_at_78%_42%,rgba(15,23,42,0.05),transparent_30%)]" />
-          <div className="absolute inset-0 bg-[linear-gradient(115deg,transparent_0%,transparent_46%,rgba(14,165,233,0.065)_46%,rgba(14,165,233,0.065)_54%,transparent_54%)]" />
+        <section className="relative overflow-hidden bg-[linear-gradient(180deg,#ffffff_0%,#f8fbfd_35%,#eef7fb_72%,#ffffff_100%)]">
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_28%,rgba(14,165,233,0.09),transparent_28%),radial-gradient(circle_at_78%_42%,rgba(15,23,42,0.05),transparent_30%)]" />
 
-          <div className="relative mx-auto max-w-6xl px-6 py-24 md:py-32">
+          <div className="pointer-events-none absolute -top-24 left-[48%] h-[135%] w-32 -translate-x-1/2 rotate-[24deg] bg-sky-100/55 md:w-44" />
+
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-56 bg-gradient-to-b from-transparent via-white/70 to-white" />
+
+          <div className="relative z-10 mx-auto max-w-6xl px-6 py-24 md:py-32">
             <div className="grid items-center gap-16 md:grid-cols-[0.9fr_1.1fr]">
               <div className="relative z-10">
                 <h1 className="max-w-xl text-balance text-5xl font-semibold tracking-tight text-slate-950 md:text-7xl">
