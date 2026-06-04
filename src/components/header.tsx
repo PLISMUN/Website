@@ -9,7 +9,7 @@ import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { stages } from "@/config/stages";
 
-export function HeroHeader() {
+export function Header() {
   const { data: session } = useSession();
 
   const [isScrolled, setIsScrolled] = useState(false);
@@ -114,7 +114,7 @@ const disabledButtonClass =
                     }
                   }}
                 >
-                  Login
+                  Log in
                 </Link>
   
                 <Link
@@ -132,7 +132,7 @@ const disabledButtonClass =
                     }
                   }}
                 >
-                  Sign Up
+                  Get Started
                 </Link>
               </>
             )}
