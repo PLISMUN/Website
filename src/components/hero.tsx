@@ -57,7 +57,7 @@ export default function HeroSection() {
                     className="h-11 rounded-full px-6"
                     disabled={!stages.accountCreation}
                   >
-                    <Link href="/user/signup">
+                    <Link href={stages.accountCreation ? "/user/signup" : "#"}>
                       <span className="text-nowrap">Get Started</span>
                       <ChevronRight className="ml-1 h-4 w-4 opacity-60" />
                     </Link>
@@ -71,7 +71,7 @@ export default function HeroSection() {
                       className="h-11 rounded-full bg-white/80 px-6"
                       disabled={!stages.accountCreation}
                     >
-                      <Link href="/user/login">
+                      <Link href={stages.accountCreation ? "/user/login" : "#"}>
                         <span className="text-nowrap">Log in</span>
                       </Link>
                     </Button>
