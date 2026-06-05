@@ -7,6 +7,15 @@ const EVENT_DATE = new Date("2027-01-28T09:00:00+01:00").getTime();
 function getTimeLeft() {
   const diff = Math.max(0, EVENT_DATE - Date.now());
 
+  if (diff <= 0) {
+    return {
+      days: 0,
+      hours: 0,
+      minutes: 0,
+      seconds: 0,
+    };
+  }
+
   return {
     days: Math.floor(diff / 86400000),
     hours: Math.floor((diff / 3600000) % 24),
@@ -29,26 +38,10 @@ export default function Countdown() {
   useEffect(() => {
     setMounted(true);
 
-    const updateCountdown = () => {
-      const diff = EVENT_DATE - Date.now();
-
-      setTimeLeft(getTimeLeft());
-
-      return diff <= 0;
-    };
-
-    const isFinished = updateCountdown();
-
-    if (isFinished) {
-      return;
-    }
+    setTimeLeft(getTimeLeft());
 
     const timer = window.setInterval(() => {
-      const isFinished = updateCountdown();
-
-      if (isFinished) {
-        window.clearInterval(timer);
-      }
+      setTimeLeft(getTimeLeft());
     }, 1000);
 
     return () => window.clearInterval(timer);
