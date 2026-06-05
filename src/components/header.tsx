@@ -9,7 +9,7 @@ import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { stages } from "@/config/stages";
 
-export function HeroHeader() {
+export function Header() {
   const { data: session } = useSession();
 
   const [isScrolled, setIsScrolled] = useState(false);
@@ -89,7 +89,7 @@ export function HeroHeader() {
           <div className="hidden items-center gap-4 md:flex">
             {session ? (
               <Link
-                href="/dashboard"
+                href="/user/dashboard"
                 className="rounded-lg bg-slate-950 px-4 py-2 text-sm font-medium text-white shadow-sm transition duration-300 hover:-translate-y-0.5 hover:bg-slate-800 hover:shadow-md"
               >
                 Dashboard
@@ -163,7 +163,7 @@ export function HeroHeader() {
               <div className="flex gap-3 pt-2">
                 {session ? (
                   <Link
-                    href="/dashboard"
+                    href="/user/dashboard"
                     onClick={() => setMenuOpen(false)}
                     className="rounded-full bg-slate-950 px-4 py-2 text-sm font-medium text-white"
                   >
@@ -213,4 +213,4 @@ export function HeroHeader() {
   );
 }
 
-export default HeroHeader;
+export default Header;

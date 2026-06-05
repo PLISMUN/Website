@@ -8,15 +8,12 @@ import { CalendarDays, ChevronRight, MapPin } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { stages } from "@/config/stages";
-import { HeroHeader } from "./header";
 
 export default function HeroSection() {
   const { data: session } = useSession();
 
   return (
     <>
-      <HeroHeader />
-
       <main className="overflow-hidden">
         <section className="relative overflow-hidden bg-[linear-gradient(180deg,#ffffff_0%,#f8fbfd_35%,#eef7fb_72%,#ffffff_100%)]">
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_28%,rgba(14,165,233,0.09),transparent_28%),radial-gradient(circle_at_78%_42%,rgba(15,23,42,0.05),transparent_30%)]" />
