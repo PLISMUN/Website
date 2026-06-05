@@ -8,6 +8,7 @@ import { Menu, X } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { stages } from "@/config/stages";
+import { Button } from "@/components/ui/button";
 
 export function Header() {
   const { data: session } = useSession();
@@ -86,40 +87,47 @@ export function Header() {
             </div>
           </div>
 
-          <div className="hidden items-center gap-4 md:flex">
+          <div className="hidden items-center gap-3 md:flex">
             {session ? (
-              <Link
-                href="/user/dashboard"
-                className="rounded-lg bg-slate-950 px-4 py-2 text-sm font-medium text-white shadow-sm transition duration-300 hover:-translate-y-0.5 hover:bg-slate-800 hover:shadow-md"
-              >
-                Dashboard
-              </Link>
+              <Button asChild className="rounded-full">
+                <Link href="/user/dashboard">Dashboard</Link>
+              </Button>
             ) : (
               <>
-                <Link
-                  href="/user/login"
-                  className="text-sm font-medium text-slate-700 transition duration-300 hover:text-slate-950"
+                <Button 
+                  asChild 
+                  variant="outline" 
+                  className="rounded-full bg-white/80"
+                  disabled={!stages.accountCreation}
                 >
-                  Login
-                </Link>
+                  <Link 
+                    href={"/user/login"}
+                    onClick={(e) => {
+                      if (!stages.accountCreation) {
+                        e.preventDefault();
+                      }
+                    }}
+                  >
+                    Login
+                  </Link>
+                </Button>
 
-                <Link
-                  href={stages.accountCreation ? "/user/signup" : "#"}
-                  className={cn(
-                    "rounded-lg px-4 py-2 text-sm font-medium shadow-sm transition duration-300",
-                    stages.accountCreation
-                      ? "bg-slate-950 text-white hover:-translate-y-0.5 hover:bg-slate-800 hover:shadow-md"
-                      : "cursor-not-allowed bg-slate-300 text-slate-500"
-                  )}
-                  aria-disabled={!stages.accountCreation}
-                  onClick={(e) => {
-                    if (!stages.accountCreation) {
-                      e.preventDefault();
-                    }
-                  }}
+                <Button
+                  asChild
+                  className="rounded-full"
+                  disabled={!stages.accountCreation}
                 >
-                  Sign Up
-                </Link>
+                  <Link
+                    href={stages.accountCreation ? "/user/signup" : "#"}
+                    onClick={(e) => {
+                      if (!stages.accountCreation) {
+                        e.preventDefault();
+                      }
+                    }}
+                  >
+                    Sign Up
+                  </Link>
+                </Button>
               </>
             )}
           </div>
@@ -162,46 +170,54 @@ export function Header() {
 
               <div className="flex gap-3 pt-2">
                 {session ? (
-                  <Link
-                    href="/user/dashboard"
-                    onClick={() => setMenuOpen(false)}
-                    className="rounded-full bg-slate-950 px-4 py-2 text-sm font-medium text-white"
-                  >
-                    Dashboard
-                  </Link>
+                  <Button asChild className="rounded-full w-full">
+                    <Link
+                      href="/user/dashboard"
+                      onClick={() => setMenuOpen(false)}
+                    >
+                      Dashboard
+                    </Link>
+                  </Button>
                 ) : (
                   <>
-                    <Link
-                      href="/user/login"
-                      onClick={() => setMenuOpen(false)}
-                      className="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700"
+                    <Button 
+                      asChild 
+                      variant="outline" 
+                      className="rounded-full w-full bg-white/80"
+                      disabled={!stages.accountCreation}
                     >
-                      Login
-                    </Link>
+                      <Link
+                        href={"/user/login"}
+                        onClick={(e) => {
+                          if (!stages.accountCreation) {
+                            e.preventDefault();
+                          } else {
+                            setMenuOpen(false);
+                          }
+                        }}
+                      >
+                        Login
+                      </Link>
+                    </Button>
 
-                    <Link
-                      href={
-                        stages.accountCreation
-                          ? "/user/signup"
-                          : "#"
-                      }
-                      onClick={(e) => {
-                        if (!stages.accountCreation) {
-                          e.preventDefault();
-                        } else {
-                          setMenuOpen(false);
-                        }
-                      }}
-                      className={cn(
-                        "rounded-full px-4 py-2 text-sm font-medium",
-                        stages.accountCreation
-                          ? "bg-slate-950 text-white"
-                          : "cursor-not-allowed bg-slate-300 text-slate-500"
-                      )}
-                      aria-disabled={!stages.accountCreation}
+                    <Button
+                      asChild
+                      className="rounded-full w-full"
+                      disabled={!stages.accountCreation}
                     >
-                      Sign Up
-                    </Link>
+                      <Link
+                        href={stages.accountCreation ? "/user/signup" : "#"}
+                        onClick={(e) => {
+                          if (!stages.accountCreation) {
+                            e.preventDefault();
+                          } else {
+                            setMenuOpen(false);
+                          }
+                        }}
+                      >
+                        Sign Up
+                      </Link>
+                    </Button>
                   </>
                 )}
               </div>
