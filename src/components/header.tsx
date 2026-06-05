@@ -68,7 +68,6 @@ export function Header() {
                 width={36}
                 height={36}
                 priority
-                unoptimized
                 className="block h-9 w-9 object-contain"
               />
             </Link>
