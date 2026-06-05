@@ -32,9 +32,6 @@ export function HeroHeader() {
     { label: "FAQ", href: "/faq" },
   ];
 
-const disabledButtonClass =
-"cursor-not-allowed border border-slate-200 bg-slate-100 text-slate-400 shadow-none hover:bg-slate-100";
-
   const solidHeader = isScrolled || menuOpen;
 
   return (
@@ -74,7 +71,7 @@ const disabledButtonClass =
                 className="block h-9 w-9 object-contain"
               />
             </Link>
-  
+
             <div className="hidden items-center gap-7 md:flex">
               {links.map((link) => (
                 <Link
@@ -88,7 +85,7 @@ const disabledButtonClass =
               ))}
             </div>
           </div>
-  
+
           <div className="hidden items-center gap-4 md:flex">
             {session ? (
               <Link
@@ -100,30 +97,19 @@ const disabledButtonClass =
             ) : (
               <>
                 <Link
-                  href={stages.accountCreation ? "/user/login" : "#"}
-                  className={cn(
-                    "rounded-lg px-4 py-2 text-sm font-medium transition duration-300",
-                    stages.accountCreation
-                      ? "text-slate-700 hover:text-slate-950"
-                      : disabledButtonClass
-                  )}
-                  aria-disabled={!stages.accountCreation}
-                  onClick={(e) => {
-                    if (!stages.accountCreation) {
-                      e.preventDefault();
-                    }
-                  }}
+                  href="/user/login"
+                  className="text-sm font-medium text-slate-700 transition duration-300 hover:text-slate-950"
                 >
                   Login
                 </Link>
-  
+
                 <Link
                   href={stages.accountCreation ? "/user/signup" : "#"}
                   className={cn(
                     "rounded-lg px-4 py-2 text-sm font-medium shadow-sm transition duration-300",
                     stages.accountCreation
                       ? "bg-slate-950 text-white hover:-translate-y-0.5 hover:bg-slate-800 hover:shadow-md"
-                      : disabledButtonClass
+                      : "cursor-not-allowed bg-slate-300 text-slate-500"
                   )}
                   aria-disabled={!stages.accountCreation}
                   onClick={(e) => {
@@ -137,7 +123,7 @@ const disabledButtonClass =
               </>
             )}
           </div>
-  
+
           <button
             type="button"
             onClick={() => setMenuOpen((open) => !open)}
@@ -146,10 +132,14 @@ const disabledButtonClass =
             aria-expanded={menuOpen}
             aria-controls="mobile-menu"
           >
-            {menuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+            {menuOpen ? (
+              <X className="h-4 w-4" />
+            ) : (
+              <Menu className="h-4 w-4" />
+            )}
           </button>
         </div>
-  
+
         <div
           id="mobile-menu"
           className={cn(
@@ -169,7 +159,7 @@ const disabledButtonClass =
                   {link.label}
                 </Link>
               ))}
-  
+
               <div className="flex gap-3 pt-2">
                 {session ? (
                   <Link
@@ -182,27 +172,19 @@ const disabledButtonClass =
                 ) : (
                   <>
                     <Link
-                      href={stages.accountCreation ? "/user/login" : "#"}
-                      onClick={(e) => {
-                        if (!stages.accountCreation) {
-                          e.preventDefault();
-                        } else {
-                          setMenuOpen(false);
-                        }
-                      }}
-                      className={cn(
-                        "rounded-full px-4 py-2 text-sm font-medium transition duration-300",
-                        stages.accountCreation
-                          ? "border border-slate-200 bg-white text-slate-700"
-                          : disabledButtonClass
-                      )}
-                      aria-disabled={!stages.accountCreation}
+                      href="/user/login"
+                      onClick={() => setMenuOpen(false)}
+                      className="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700"
                     >
                       Login
                     </Link>
-  
+
                     <Link
-                      href={stages.accountCreation ? "/user/signup" : "#"}
+                      href={
+                        stages.accountCreation
+                          ? "/user/signup"
+                          : "#"
+                      }
                       onClick={(e) => {
                         if (!stages.accountCreation) {
                           e.preventDefault();
@@ -211,14 +193,14 @@ const disabledButtonClass =
                         }
                       }}
                       className={cn(
-                        "rounded-full px-4 py-2 text-sm font-medium transition duration-300",
+                        "rounded-full px-4 py-2 text-sm font-medium",
                         stages.accountCreation
                           ? "bg-slate-950 text-white"
-                          : disabledButtonClass
+                          : "cursor-not-allowed bg-slate-300 text-slate-500"
                       )}
                       aria-disabled={!stages.accountCreation}
                     >
-                      Get Started
+                      Sign Up
                     </Link>
                   </>
                 )}
@@ -228,4 +210,7 @@ const disabledButtonClass =
         </div>
       </nav>
     </header>
-  )};
+  );
+}
+
+export default HeroHeader;
