@@ -168,7 +168,7 @@ export function Header() {
                 </Link>
               ))}
 
-              <div className="flex gap-3 pt-2">
+              <div className="flex flex-col gap-3 pt-2">
                 {session ? (
                   <Button asChild className="rounded-full w-full">
                     <Link
