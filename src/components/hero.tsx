@@ -8,14 +8,14 @@ import { CalendarDays, ChevronRight, MapPin } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { stages } from "@/config/stages";
-import { Header } from "./header";
+import { HeroHeader } from "./header";
 
 export default function HeroSection() {
   const { data: session } = useSession();
 
   return (
     <>
-      <Header />
+      <HeroHeader />
 
       <main className="overflow-hidden">
         <section className="relative overflow-hidden bg-[linear-gradient(180deg,#ffffff_0%,#f8fbfd_35%,#eef7fb_72%,#ffffff_100%)]">

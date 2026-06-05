@@ -6,7 +6,7 @@ import { SessionProvider } from "next-auth/react"
 // import { ViewTransition } from 'react' // Uncomment when View Transitions are supported in main release of react
 import { usePathname } from "next/navigation"
 
-import { Header } from "@/components/header";
+import Header from "@/components/header"
 import FooterSection from "@/components/footer-one"
 
 const geistSans = Geist({
@@ -33,7 +33,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <SessionProvider>
-        {!hideHeaderFooter && <Header />}
+          {!hideHeaderFooter && <Header />}
           {/*<ViewTransition>*/}
             {children}
           {/*</ViewTransition>*/}
