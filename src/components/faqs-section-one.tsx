@@ -18,7 +18,7 @@ export default function FAQs() {
         {
             id: 'item-3',
             question: 'Where can I find this yearʹs committees & topics?',
-            answer: 'Go to the This Year page. If you want to know more about the committees, just click on them!',
+            answer: 'Go to the Details page. If you want to know more about the committees, just click on them!',
         },
         {
             id: 'item-4',
@@ -33,7 +33,7 @@ export default function FAQs() {
         {
             id: 'item-6',
             question: 'What is the price of attending?',
-            answer: 'Scroll down to the pricing section in the This Year page.',
+            answer: 'Scroll down to the pricing section in the Details page.',
         },
         {
             id: 'item-7',

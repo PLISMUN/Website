@@ -125,7 +125,7 @@ export function Header() {
                       }
                     }}
                   >
-                    Sign Up
+                    Get Started
                   </Link>
                 </Button>
               </>
