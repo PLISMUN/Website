@@ -59,11 +59,10 @@ export default function TeamSection() {
                   className={[
                     "absolute inset-0 transition duration-500",
                     isOpen
-                      ? "opacity-0 [@media(hover:hover)]:opacity-100"
-                      : "opacity-100",
-                    "[@media(hover:hover)]:group-hover:opacity-0",
-                    "group-focus-visible:opacity-0",
+                      ? "opacity-0"
+                      : "opacity-100 [@media(hover:hover)]:group-hover:opacity-0 group-focus-visible:opacity-0",
                   ].join(" ")}
+                >
                 >
                   <div className="h-[320px] overflow-hidden bg-slate-100">
                     <img
@@ -93,14 +92,9 @@ export default function TeamSection() {
                     "absolute inset-0 flex flex-col justify-center bg-white p-7 transition duration-500",
                     isOpen
                       ? "translate-y-0 opacity-100"
-                      : "translate-y-4 opacity-0",
-                    "[@media(hover:hover)]:translate-y-4",
-                    "[@media(hover:hover)]:opacity-0",
-                    "[@media(hover:hover)]:group-hover:translate-y-0",
-                    "[@media(hover:hover)]:group-hover:opacity-100",
-                    "group-focus-visible:translate-y-0",
-                    "group-focus-visible:opacity-100",
+                      : "translate-y-4 opacity-0 [@media(hover:hover)]:translate-y-4 [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-hover:translate-y-0 [@media(hover:hover)]:group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100",
                   ].join(" ")}
+                >
                 >
                   <p className="max-h-[330px] overflow-y-auto text-sm leading-6 text-slate-600">
                     {member.description}
