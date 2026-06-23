@@ -106,20 +106,32 @@ export default function HeroSection() {
                 </div>
               </div>
 
-              <div className="relative md:translate-y-8">
-                <div className="absolute -inset-6 rounded-[2rem] bg-sky-100/70 blur-3xl" />
-
-                <div className="relative overflow-hidden rounded-[2rem] border border-white bg-white p-2 shadow-2xl">
-                  <Image
-                    src="/headers/headertest3.png"
-                    alt="Prague skyline"
-                    width={2880}
-                    height={1842}
-                    priority
-                    className="aspect-[4/3] w-full rounded-[1.5rem] object-cover"
-                  />
+                <div className="perspective-near mt-24 translate-x-12 md:absolute md:-right-6 md:bottom-16 md:left-1/2 md:top-40 md:mt-0 md:translate-x-0">
+                    <div className="before:border-foreground/5 before:bg-foreground/5 relative h-full before:absolute before:-inset-x-4 before:bottom-7 before:top-0 before:skew-x-6 before:rounded-[calc(var(--radius)+1rem)] before:border">
+                        {(() => { // Randomly select an image from the array to display on the right side
+                            const images = [
+                                //"/headers/headertest.png",
+                                // "/headers/headertest2.png",
+                                "/headers/headertest3.png",
+                                //"/headers/headertest4.png",
+                                //"/headers/headertest6.png",
+                                //"/headers/newheader.png"
+                            ];
+                            const randomImage = images[Math.floor(Math.random() * images.length)];
+                            return (
+                                <div className="bg-background rounded-(--radius) shadow-foreground/10 ring-foreground/5 relative h-full -translate-y-12 skew-x-6 overflow-hidden border border-transparent shadow-md ring-1">
+                                    <Image
+                                        src={randomImage}
+                                        alt="app screen"
+                                        width="2880"
+                                        height="1842"
+                                        className="object-top-left size-full object-cover"
+                                    />
+                                </div>
+                            );
+                        })()}
+                    </div>
                 </div>
-              </div>
             </div>
           </div>
         </section>

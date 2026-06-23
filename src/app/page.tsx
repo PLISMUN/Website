@@ -1,7 +1,6 @@
 import React from "react"
 import HeroSection from "@/components/hero"
 import News from "@/components/news"
-import FooterSection from "@/components/footer-one"
 import Committees from "@/components/committees"
 import Countdown from "@/components/countdown";
 
