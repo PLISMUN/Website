@@ -63,7 +63,6 @@ export default function TeamSection() {
                       : "opacity-100 [@media(hover:hover)]:group-hover:opacity-0 group-focus-visible:opacity-0",
                   ].join(" ")}
                 >
-                >
                   <div className="h-[320px] overflow-hidden bg-slate-100">
                     <img
                       src={member.src}
@@ -94,7 +93,6 @@ export default function TeamSection() {
                       ? "translate-y-0 opacity-100"
                       : "translate-y-4 opacity-0 [@media(hover:hover)]:translate-y-4 [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-hover:translate-y-0 [@media(hover:hover)]:group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100",
                   ].join(" ")}
-                >
                 >
                   <p className="max-h-[330px] overflow-y-auto text-sm leading-6 text-slate-600">
                     {member.description}
