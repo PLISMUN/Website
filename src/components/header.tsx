@@ -1,139 +1,231 @@
-'use client'
-import Link from 'next/link'
-import Image from 'next/image'
-import { Menu, X } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import React from 'react'
-import { cn } from '@/lib/utils'
-import { useSession } from 'next-auth/react'
-import { stages } from "@/config/stages"
+"use client";
 
-const menuItems = [
-    { name: 'About', href: '/about' },
-    { name: 'This Year', href: '/this-year' },
-    { name: 'FAQ', href: '/faq' },
-]
+import React, { useEffect, useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { useSession } from "next-auth/react";
+import { Menu, X } from "lucide-react";
 
-export const HeroHeader = () => {
-    const [menuState, setMenuState] = React.useState(false)
-    const [isScrolled, setIsScrolled] = React.useState(false)
+import { cn } from "@/lib/utils";
+import { stages } from "@/config/stages";
+import { Button } from "@/components/ui/button";
 
-    const { data: session } = useSession()
+export function Header() {
+  const { data: session } = useSession();
 
-    React.useEffect(() => {
-        const handleScroll = () => {
-            setIsScrolled(window.scrollY > 50)
-        }
-        window.addEventListener('scroll', handleScroll)
-        return () => window.removeEventListener('scroll', handleScroll)
-    }, [])
-    return (
-        <header>
-            <nav
-                data-state={menuState && 'active'}
-                className={cn('fixed z-20 w-full transition-all duration-300', isScrolled && 'bg-background/75 border-b border-black/5 backdrop-blur-lg')}>
-                <div className="mx-auto max-w-5xl px-6">
-                    <div className="relative flex flex-wrap items-center justify-between gap-6 py-3 lg:gap-0">
-                        <div className="flex w-full justify-between gap-6 lg:w-auto">
-                            <Link
-                                href="/"
-                                aria-label="home"
-                                className="flex items-center space-x-2">
-                                <Image src="/logo.png" alt="Logo" width={50} height={50} className="logo__image" />
-                            </Link>
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
-                            <button
-                                onClick={() => setMenuState(!menuState)}
-                                aria-label={menuState == true ? 'Close Menu' : 'Open Menu'}
-                                className="relative z-20 -m-2.5 -mr-4 block cursor-pointer p-2.5 lg:hidden">
-                                <Menu className="in-data-[state=active]:rotate-180 in-data-[state=active]:scale-0 in-data-[state=active]:opacity-0 m-auto size-6 duration-200" />
-                                <X className="in-data-[state=active]:rotate-0 in-data-[state=active]:scale-100 in-data-[state=active]:opacity-100 absolute inset-0 m-auto size-6 -rotate-180 scale-0 opacity-0 duration-200" />
-                            </button>
+  useEffect(() => {
+    const onScroll = () => setIsScrolled(window.scrollY > 20);
 
-                            <div className="m-auto hidden size-fit lg:block">
-                                <ul className="flex gap-1">
-                                    {menuItems.map((item, index) => (
-                                        <li key={index}>
-                                            <Button
-                                                asChild
-                                                variant="ghost"
-                                                size="sm">
-                                                <Link
-                                                    href={item.href}
-                                                    className="text-base">
-                                                    <span>{item.name}</span>
-                                                </Link>
-                                            </Button>
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
-                        </div>
+    onScroll();
+    window.addEventListener("scroll", onScroll, {
+      passive: true,
+    });
 
-                        <div className="bg-background in-data-[state=active]:block lg:in-data-[state=active]:flex mb-6 hidden w-full flex-wrap items-center justify-end space-y-8 rounded-3xl border p-6 shadow-2xl shadow-zinc-300/20 md:flex-nowrap lg:m-0 lg:flex lg:w-fit lg:gap-6 lg:space-y-0 lg:border-transparent lg:bg-transparent lg:p-0 lg:shadow-none dark:shadow-none dark:lg:bg-transparent">
-                            <div className="lg:hidden">
-                                <ul className="space-y-6 text-base">
-                                    {menuItems.map((item, index) => (
-                                        <li key={index}>
-                                            <Link
-                                                href={item.href}
-                                                className="text-muted-foreground hover:text-accent-foreground block duration-150">
-                                                <span>{item.name}</span>
-                                            </Link>
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
-                            <div className="flex w-full flex-col space-y-3 sm:flex-row sm:gap-3 sm:space-y-0 md:w-fit">
-                                {!session && (
-                                    <>
-                                        <Button
-                                            asChild
-                                            variant="ghost"
-                                            size="sm"
-                                            className={cn(isScrolled && 'lg:hidden')}
-                                            disabled={!stages.accountCreation}>
-                                            <Link href="/user/login">
-                                                <span>Login</span>
-                                            </Link>
-                                        </Button>
-                                        <Button
-                                            asChild
-                                            size="sm"
-                                            className={cn(isScrolled && 'lg:hidden')}
-                                            disabled={!stages.accountCreation}>
-                                            <Link href="/user/signup">
-                                                <span>Sign Up</span>
-                                            </Link>
-                                        </Button>
-                                        <Button
-                                            asChild
-                                            size="sm"
-                                            className={cn(isScrolled ? 'lg:inline-flex' : 'hidden')}
-                                            disabled={!stages.accountCreation}>
-                                            <Link href="/user/signup">
-                                                <span>Get Started</span>
-                                            </Link>
-                                        </Button>
-                                    </>
-                                )}
-                                {session && (
-                                    <Button
-                                        asChild
-                                        size="sm"
-                                        disabled={!stages.accountCreation}>
-                                        <Link href="/user/dashboard">
-                                            <span>Dashboard</span>
-                                        </Link>
-                                    </Button>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </nav>
-        </header>
-    )
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  const links = [
+    { label: "About", href: "/about" },
+    { label: "This Year", href: "/this-year" },
+    { label: "FAQ", href: "/faq" },
+  ];
+
+  const solidHeader = isScrolled || menuOpen;
+
+  return (
+    <header
+      className={cn(
+        "fixed left-0 top-0 z-50 w-full transition-all duration-500",
+        solidHeader ? "px-4 pt-3" : "px-0 pt-0"
+      )}
+    >
+      <nav
+        className={cn(
+          "relative mx-auto max-w-6xl transition-all duration-500",
+          solidHeader
+            ? "rounded-[2rem] border border-slate-200/80 bg-white/90 shadow-xl shadow-slate-900/10 backdrop-blur-xl"
+            : "rounded-none border border-transparent bg-transparent shadow-none"
+        )}
+      >
+        <div
+          className={cn(
+            "flex items-center justify-between px-8 transition-all duration-500",
+            solidHeader ? "py-2.5" : "py-3"
+          )}
+        >
+          <div className="flex items-center gap-8">
+            <Link
+              href="/"
+              aria-label="Go to homepage"
+              className="flex h-9 w-9 shrink-0 items-center justify-center"
+            >
+              <Image
+                src="/logo.png"
+                alt="PLISMUN logo"
+                width={36}
+                height={36}
+                priority
+                className="block h-9 w-9 object-contain"
+              />
+            </Link>
+
+            <div className="hidden items-center gap-7 md:flex">
+              {links.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className="group relative text-sm font-medium text-slate-700 transition hover:text-slate-950"
+                >
+                  {link.label}
+                  <span className="absolute -bottom-1 left-0 h-px w-0 bg-sky-700 transition-all duration-300 group-hover:w-full" />
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          <div className="hidden items-center gap-3 md:flex">
+            {session ? (
+              <Button asChild className="rounded-full">
+                <Link href="/user/dashboard">Dashboard</Link>
+              </Button>
+            ) : (
+              <>
+                <Button 
+                  asChild 
+                  variant="outline" 
+                  className="rounded-full bg-white/80"
+                  disabled={!stages.accountCreation}
+                >
+                  <Link 
+                    href={"/user/login"}
+                    onClick={(e) => {
+                      if (!stages.accountCreation) {
+                        e.preventDefault();
+                      }
+                    }}
+                  >
+                    Login
+                  </Link>
+                </Button>
+
+                <Button
+                  asChild
+                  className="rounded-full"
+                  disabled={!stages.accountCreation}
+                >
+                  <Link
+                    href={stages.accountCreation ? "/user/signup" : "#"}
+                    onClick={(e) => {
+                      if (!stages.accountCreation) {
+                        e.preventDefault();
+                      }
+                    }}
+                  >
+                    Sign Up
+                  </Link>
+                </Button>
+              </>
+            )}
+          </div>
+
+          <button
+            type="button"
+            onClick={() => setMenuOpen((open) => !open)}
+            className="inline-flex rounded-full border border-slate-200 bg-white p-2 text-slate-700 shadow-sm transition duration-300 hover:scale-105 md:hidden"
+            aria-label="Toggle menu"
+            aria-expanded={menuOpen}
+            aria-controls="mobile-menu"
+          >
+            {menuOpen ? (
+              <X className="h-4 w-4" />
+            ) : (
+              <Menu className="h-4 w-4" />
+            )}
+          </button>
+        </div>
+
+        <div
+          id="mobile-menu"
+          className={cn(
+            "overflow-hidden transition-all duration-500 ease-out md:hidden",
+            menuOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+          )}
+        >
+          <div className="border-t border-slate-200/80 px-6 pb-6 pt-4">
+            <div className="flex flex-col gap-4">
+              {links.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  onClick={() => setMenuOpen(false)}
+                  className="text-sm font-medium text-slate-700 transition hover:text-slate-950"
+                >
+                  {link.label}
+                </Link>
+              ))}
+
+              <div className="flex flex-col gap-3 pt-2">
+                {session ? (
+                  <Button asChild className="rounded-full w-full">
+                    <Link
+                      href="/user/dashboard"
+                      onClick={() => setMenuOpen(false)}
+                    >
+                      Dashboard
+                    </Link>
+                  </Button>
+                ) : (
+                  <>
+                    <Button 
+                      asChild 
+                      variant="outline" 
+                      className="rounded-full w-full bg-white/80"
+                      disabled={!stages.accountCreation}
+                    >
+                      <Link
+                        href={"/user/login"}
+                        onClick={(e) => {
+                          if (!stages.accountCreation) {
+                            e.preventDefault();
+                          } else {
+                            setMenuOpen(false);
+                          }
+                        }}
+                      >
+                        Login
+                      </Link>
+                    </Button>
+
+                    <Button
+                      asChild
+                      className="rounded-full w-full"
+                      disabled={!stages.accountCreation}
+                    >
+                      <Link
+                        href={stages.accountCreation ? "/user/signup" : "#"}
+                        onClick={(e) => {
+                          if (!stages.accountCreation) {
+                            e.preventDefault();
+                          } else {
+                            setMenuOpen(false);
+                          }
+                        }}
+                      >
+                        Sign Up
+                      </Link>
+                    </Button>
+                  </>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+  );
 }
 
-export default HeroHeader
+export default Header;
