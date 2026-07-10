@@ -11,6 +11,14 @@ import { cn } from "@/lib/utils";
 import { stages } from "@/config/stages";
 import { Button } from "@/components/ui/button";
 
+const links = [
+  { label: "Home", href: "/" },
+  { label: "About", href: "/about" },
+  { label: "Details", href: "/this-year" },
+  { label: "Team", href: "/team" },
+  { label: "FAQ", href: "/faq" },
+];
+
 export function Header() {
   const { data: session } = useSession();
   const pathname = usePathname();
@@ -22,22 +30,99 @@ export function Header() {
     const onScroll = () => setIsScrolled(window.scrollY > 20);
 
     onScroll();
-    window.addEventListener("scroll", onScroll, {
-      passive: true,
-    });
+    window.addEventListener("scroll", onScroll, { passive: true });
 
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const links = [
-    { label: "Home", href: "/" },
-    { label: "About", href: "/about" },
-    { label: "Details", href: "/this-year" },
-    { label: "Team", href: "/team" },
-    { label: "FAQ", href: "/faq" },
-  ];
-
   const solidHeader = isScrolled || menuOpen;
+  const closeMenu = () => setMenuOpen(false);
+
+  const renderLinks = (isMobile: boolean) =>
+    links.map((link) => {
+      const isActive = pathname === link.href;
+      return (
+        <Link
+          key={link.href}
+          href={link.href}
+          onClick={isMobile ? closeMenu : undefined}
+          style={{ fontSize: isMobile ? undefined : "larger" }}
+          className={cn(
+            "font-medium transition",
+            isMobile ? "text-base" : "group relative text-base",
+            isActive
+              ? (isMobile ? "text-sky-700" : "text-slate-950")
+              : "text-slate-700 hover:text-slate-950"
+          )}
+        >
+          {link.label}
+          {!isMobile && (
+            <span
+              className={cn(
+                "absolute -bottom-1 left-0 h-[2px] bg-sky-700 transition-all duration-300",
+                isActive ? "w-full" : "w-0 group-hover:w-full"
+              )}
+            />
+          )}
+        </Link>
+      );
+    });
+
+  const renderAuthButtons = (isMobile: boolean) => {
+    const btnClass = cn("rounded-full font-semibold", isMobile && "w-full");
+    const textSize = isMobile ? { fontSize: "large" } : undefined;
+
+    const handleAuthClick = (e: React.MouseEvent) => {
+      if (!stages.accountCreation) {
+        e.preventDefault();
+      } else if (isMobile) {
+        closeMenu();
+      }
+    };
+
+    if (session) {
+      return (
+        <Button asChild className={btnClass}>
+          <Link
+            href="/user/dashboard"
+            onClick={isMobile ? closeMenu : undefined}
+            style={textSize}
+          >
+            Dashboard
+          </Link>
+        </Button>
+      );
+    }
+
+    return (
+      <>
+        <Button
+          asChild
+          variant="outline"
+          className={cn(btnClass, "bg-white/80")}
+          disabled={!stages.accountCreation}
+        >
+          <Link href={"/user/login"} onClick={handleAuthClick}>
+            Login
+          </Link>
+        </Button>
+
+        <Button
+          asChild
+          className={btnClass}
+          disabled={!stages.accountCreation}
+        >
+          <Link
+            href={stages.accountCreation ? "/user/signup" : "#"}
+            onClick={handleAuthClick}
+            style={textSize}
+          >
+            {isMobile ? "Sign Up" : "Get Started"}
+          </Link>
+        </Button>
+      </>
+    );
+  };
 
   return (
     <header
@@ -70,83 +155,19 @@ export function Header() {
                 src="/logo.png"
                 alt="PLISMUN logo"
                 width={50}
-                height={50  }
+                height={50}
                 priority
                 className="block object-contain"
               />
             </Link>
 
             <div className="hidden items-center gap-7 md:flex">
-              {links.map((link) => {
-                const isActive = pathname === link.href;
-                return (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    style={{ fontSize: "larger" }}
-                    className={cn(
-                      "group relative text-base font-medium transition",
-                      isActive
-                        ? "text-slate-950"
-                        : "text-slate-700 hover:text-slate-950"
-                    )}
-                  >
-                    {link.label}
-                    <span
-                      className={cn(
-                        "absolute -bottom-1 left-0 h-[2px] bg-sky-700 transition-all duration-300",
-                        isActive ? "w-full" : "w-0 group-hover:w-full"
-                      )}
-                    />
-                  </Link>
-                );
-              })}
+              {renderLinks(false)}
             </div>
           </div>
 
           <div className="hidden items-center gap-3 md:flex">
-            {session ? (
-              <Button asChild className="rounded-full font-semibold">
-                <Link href="/user/dashboard">Dashboard</Link>
-              </Button>
-            ) : (
-              <>
-                <Button
-                  asChild
-                  variant="outline"
-                  className="rounded-full bg-white/80 font-semibold"
-                  disabled={!stages.accountCreation}
-                >
-                  <Link
-                    href={"/user/login"}
-                    onClick={(e) => {
-                      if (!stages.accountCreation) {
-                        e.preventDefault();
-                      }
-                    }}
-                  >
-                    Login
-                  </Link>
-                </Button>
-
-                <Button
-                  asChild
-                  className="rounded-full font-semibold"
-                  disabled={!stages.accountCreation}
-                >
-                  <Link
-                    href={stages.accountCreation ? "/user/signup" : "#"}
-                    onClick={(e) => {
-                      if (!stages.accountCreation) {
-                        e.preventDefault();
-                      }
-                    }}
-                  >
-                    Get Started
-                  </Link>
-                </Button>
-              </>
-            )}
+            {renderAuthButtons(false)}
           </div>
 
           <button
@@ -174,77 +195,9 @@ export function Header() {
         >
           <div className="border-t border-slate-200/80 px-6 pb-6 pt-4">
             <div className="flex flex-col gap-4">
-              {links.map((link) => {
-                const isActive = pathname === link.href;
-                return (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    onClick={() => setMenuOpen(false)}
-                    className={cn(
-                      "text-base font-medium transition",
-                      isActive ? "text-sky-700" : "text-slate-700 hover:text-slate-950"
-                    )}
-                  >
-                    {link.label}
-                  </Link>
-                );
-              })}
-
+              {renderLinks(true)}
               <div className="flex flex-col gap-3 pt-2">
-                {session ? (
-                  <Button asChild className="rounded-full w-full font-semibold">
-                    <Link
-                      href="/user/dashboard"
-                      onClick={() => setMenuOpen(false)}
-                      style={{ fontSize: "large" }}
-                    >
-                      Dashboard
-                    </Link>
-                  </Button>
-                ) : (
-                  <>
-                    <Button
-                      asChild
-                      variant="outline"
-                      className="rounded-full w-full bg-white/80 font-semibold"
-                      disabled={!stages.accountCreation}
-                    >
-                      <Link
-                        href={"/user/login"}
-                        onClick={(e) => {
-                          if (!stages.accountCreation) {
-                            e.preventDefault();
-                          } else {
-                            setMenuOpen(false);
-                          }
-                        }}
-                      >
-                        Login
-                      </Link>
-                    </Button>
-
-                    <Button
-                      asChild
-                      className="rounded-full w-full font-semibold"
-                      disabled={!stages.accountCreation}
-                    >
-                      <Link
-                        href={stages.accountCreation ? "/user/signup" : "#"}
-                        style={{ fontSize: "large" }}
-                        onClick={(e) => {
-                          if (!stages.accountCreation) {
-                            e.preventDefault();
-                          } else {
-                            setMenuOpen(false);
-                          }
-                        }}
-                      >
-                        Sign Up
-                      </Link>
-                    </Button>
-                  </>
-                )}
+                {renderAuthButtons(true)}
               </div>
             </div>
           </div>
