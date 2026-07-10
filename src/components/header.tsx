@@ -49,7 +49,7 @@ export function Header() {
           style={{ fontSize: isMobile ? undefined : "larger" }}
           className={cn(
             "font-medium transition",
-            isMobile ? "text-base" : "group relative text-base",
+            "group relative text-base",
             isActive
               ? (isMobile ? "text-sky-700" : "text-slate-950")
               : "text-slate-700 hover:text-slate-950"
