@@ -56,21 +56,19 @@ export function Header() {
           )}
         >
           {link.label}
-          {!isMobile && (
             <span
               className={cn(
                 "absolute -bottom-1 left-0 h-[2px] bg-sky-700 transition-all duration-300",
                 isActive ? "w-full" : "w-0 group-hover:w-full"
               )}
             />
-          )}
         </Link>
       );
     });
 
   const renderAuthButtons = (isMobile: boolean) => {
     const btnClass = cn("rounded-full font-semibold", isMobile && "w-full");
-    const textSize = isMobile ? { fontSize: "large" } : undefined;
+    const textSize = isMobile ? undefined : { fontSize: "large" };
 
     const handleAuthClick = (e: React.MouseEvent) => {
       if (!stages.accountCreation) {
@@ -115,6 +113,7 @@ export function Header() {
           <Link
             href={stages.accountCreation ? "/user/signup" : "#"}
             onClick={handleAuthClick}
+            style={textSize}
           >
             {isMobile ? "Sign Up" : "Get Started"}
           </Link>
