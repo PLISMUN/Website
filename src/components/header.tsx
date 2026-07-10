@@ -30,6 +30,7 @@ export function Header() {
   }, []);
 
   const links = [
+    { label: "Home", href: "/" },
     { label: "About", href: "/about" },
     { label: "Details", href: "/this-year" },
     { label: "Team", href: "/team" },
@@ -63,15 +64,15 @@ export function Header() {
             <Link
               href="/"
               aria-label="Go to homepage"
-              className="flex h-9 w-9 shrink-0 items-center justify-center"
+              className="flex shrink-0 items-center justify-center"
             >
               <Image
                 src="/logo.png"
                 alt="PLISMUN logo"
-                width={36}
-                height={36}
+                width={50}
+                height={50  }
                 priority
-                className="block h-9 w-9 object-contain"
+                className="block object-contain"
               />
             </Link>
 
@@ -82,6 +83,7 @@ export function Header() {
                   <Link
                     key={link.href}
                     href={link.href}
+                    style={{ fontSize: "larger" }}
                     className={cn(
                       "group relative text-base font-medium transition",
                       isActive
@@ -195,6 +197,7 @@ export function Header() {
                     <Link
                       href="/user/dashboard"
                       onClick={() => setMenuOpen(false)}
+                      style={{ fontSize: "large" }}
                     >
                       Dashboard
                     </Link>
@@ -228,6 +231,7 @@ export function Header() {
                     >
                       <Link
                         href={stages.accountCreation ? "/user/signup" : "#"}
+                        style={{ fontSize: "large" }}
                         onClick={(e) => {
                           if (!stages.accountCreation) {
                             e.preventDefault();
