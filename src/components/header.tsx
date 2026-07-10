@@ -84,7 +84,6 @@ export function Header() {
           <Link
             href="/user/dashboard"
             onClick={isMobile ? closeMenu : undefined}
-            style={textSize}
           >
             Dashboard
           </Link>
@@ -113,7 +112,6 @@ export function Header() {
           <Link
             href={stages.accountCreation ? "/user/signup" : "#"}
             onClick={handleAuthClick}
-            style={textSize}
           >
             {isMobile ? "Sign Up" : "Get Started"}
           </Link>
