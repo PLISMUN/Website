@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { Menu, X } from "lucide-react";
 
@@ -12,6 +13,7 @@ import { Button } from "@/components/ui/button";
 
 export function Header() {
   const { data: session } = useSession();
+  const pathname = usePathname();
 
   const [isScrolled, setIsScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -74,33 +76,46 @@ export function Header() {
             </Link>
 
             <div className="hidden items-center gap-7 md:flex">
-              {links.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className="group relative text-sm font-medium text-slate-700 transition hover:text-slate-950"
-                >
-                  {link.label}
-                  <span className="absolute -bottom-1 left-0 h-px w-0 bg-sky-700 transition-all duration-300 group-hover:w-full" />
-                </Link>
-              ))}
+              {links.map((link) => {
+                const isActive = pathname === link.href;
+                return (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className={cn(
+                      "group relative text-base font-medium transition",
+                      isActive
+                        ? "text-slate-950"
+                        : "text-slate-700 hover:text-slate-950"
+                    )}
+                  >
+                    {link.label}
+                    <span
+                      className={cn(
+                        "absolute -bottom-1 left-0 h-[2px] bg-sky-700 transition-all duration-300",
+                        isActive ? "w-full" : "w-0 group-hover:w-full"
+                      )}
+                    />
+                  </Link>
+                );
+              })}
             </div>
           </div>
 
           <div className="hidden items-center gap-3 md:flex">
             {session ? (
-              <Button asChild className="rounded-full">
+              <Button asChild className="rounded-full font-semibold">
                 <Link href="/user/dashboard">Dashboard</Link>
               </Button>
             ) : (
               <>
-                <Button 
-                  asChild 
-                  variant="outline" 
-                  className="rounded-full bg-white/80"
+                <Button
+                  asChild
+                  variant="outline"
+                  className="rounded-full bg-white/80 font-semibold"
                   disabled={!stages.accountCreation}
                 >
-                  <Link 
+                  <Link
                     href={"/user/login"}
                     onClick={(e) => {
                       if (!stages.accountCreation) {
@@ -114,7 +129,7 @@ export function Header() {
 
                 <Button
                   asChild
-                  className="rounded-full"
+                  className="rounded-full font-semibold"
                   disabled={!stages.accountCreation}
                 >
                   <Link
@@ -157,20 +172,26 @@ export function Header() {
         >
           <div className="border-t border-slate-200/80 px-6 pb-6 pt-4">
             <div className="flex flex-col gap-4">
-              {links.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  onClick={() => setMenuOpen(false)}
-                  className="text-sm font-medium text-slate-700 transition hover:text-slate-950"
-                >
-                  {link.label}
-                </Link>
-              ))}
+              {links.map((link) => {
+                const isActive = pathname === link.href;
+                return (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    onClick={() => setMenuOpen(false)}
+                    className={cn(
+                      "text-base font-medium transition",
+                      isActive ? "text-sky-700" : "text-slate-700 hover:text-slate-950"
+                    )}
+                  >
+                    {link.label}
+                  </Link>
+                );
+              })}
 
               <div className="flex flex-col gap-3 pt-2">
                 {session ? (
-                  <Button asChild className="rounded-full w-full">
+                  <Button asChild className="rounded-full w-full font-semibold">
                     <Link
                       href="/user/dashboard"
                       onClick={() => setMenuOpen(false)}
@@ -180,10 +201,10 @@ export function Header() {
                   </Button>
                 ) : (
                   <>
-                    <Button 
-                      asChild 
-                      variant="outline" 
-                      className="rounded-full w-full bg-white/80"
+                    <Button
+                      asChild
+                      variant="outline"
+                      className="rounded-full w-full bg-white/80 font-semibold"
                       disabled={!stages.accountCreation}
                     >
                       <Link
@@ -202,7 +223,7 @@ export function Header() {
 
                     <Button
                       asChild
-                      className="rounded-full w-full"
+                      className="rounded-full w-full font-semibold"
                       disabled={!stages.accountCreation}
                     >
                       <Link
