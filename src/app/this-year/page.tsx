@@ -5,8 +5,8 @@ import Venues from "@/components/venues"
 import Schedule from "@/components/schedule"
 
 export const metadata = {
-  title: "PLISMUN | This Year",
-  description: "PLISMUN This Year."
+  title: "PLISMUN | Details",
+  description: "PLISMUN Conference Details."
 }
 
 function ThisYearPage() {
