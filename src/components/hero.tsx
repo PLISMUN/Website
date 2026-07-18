@@ -87,6 +87,11 @@ export default function HeroSection() {
                       </Link>
                     </Button>
                   )}
+                  {!stages.accountCreation && (
+                    <p className="text-sm text-muted-foreground">
+                      Account creation is currently closed.
+                    </p>
+                  )}
                 </div>
 
                 <div className="mt-10">
