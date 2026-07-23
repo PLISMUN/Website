@@ -9,12 +9,43 @@ import { CalendarDays, ChevronRight, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { stages } from "@/config/stages";
 
-const IMAGES = ["/headers/headertest3.png"];
-const STACKED_IMAGE_SRC = "/headers/backimg1.JPG";
+const IMAGES = ["/headers/headertest3.webp"];
+const STACKED_IMAGES = [
+  "/headers/subheaders/IMG_2646.webp",
+  "/headers/subheaders/IMG_2693.webp",
+  "/headers/subheaders/IMG_2837.webp",
+  "/headers/subheaders/IMG_3312.webp",
+  "/headers/subheaders/IMG_3415.webp",
+  "/headers/subheaders/IMG_3448.webp",
+  "/headers/subheaders/IMG_3470.webp",
+  "/headers/subheaders/IMG_3573.webp",
+  "/headers/subheaders/IMG_3591.webp",
+  "/headers/subheaders/IMG_3722.webp",
+  "/headers/subheaders/IMG_3740.webp",
+  "/headers/subheaders/IMG_4874.webp",
+  "/headers/subheaders/IMG_5460.webp",
+  "/headers/subheaders/IMG_6213.webp",
+  "/headers/subheaders/IMG_6303.webp",
+  "/headers/subheaders/IMG_6305.webp",
+  "/headers/subheaders/IMG_6343.webp",
+  "/headers/subheaders/IMG_6473.webp",
+  "/headers/subheaders/IMG_6549.webp",
+];
 
 export default function HeroSection() {
   const { data: session } = useSession();
-  const randomImage = IMAGES[Math.floor(Math.random() * IMAGES.length)];
+  const [randomImage, setRandomImage] = React.useState(IMAGES[0]);
+  const [randomImageStacked, setRandomImageStacked] = React.useState(STACKED_IMAGES[0],);
+
+  React.useEffect(() => {
+    setRandomImageStacked(
+      STACKED_IMAGES[Math.floor(Math.random() * STACKED_IMAGES.length)],
+    );
+  }, []);
+
+  React.useEffect(() => {
+    setRandomImage(IMAGES[Math.floor(Math.random() * IMAGES.length)]);
+  }, []);
 
   return (
     <main className="overflow-hidden">
@@ -129,7 +160,7 @@ export default function HeroSection() {
             <div className="relative h-full isolate before:absolute before:-inset-x-3 before:bottom-0 before:top-0 before:-z-10 before:translate-y-6 before:rounded-[1.5rem] before:border before:border-foreground/5 before:bg-foreground/5">
               <div className="relative z-10 size-full rounded-[1.25rem] border border-white/40 bg-white/20 p-1.5 backdrop-blur-xl">
                 <Image
-                  src={STACKED_IMAGE_SRC}
+                  src={randomImageStacked}
                   alt="stacked detail screen"
                   fill
                   className="rounded-[0.9rem] object-cover"
