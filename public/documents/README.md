@@ -22,3 +22,8 @@ study-guides/ecosoc.pdf    Economic and Social Council
 
 Study guides are named after the committee shorthand, lowercased. Any file in
 here is publicly downloadable by anyone who knows the URL.
+
+A card whose PDF is missing renders greyed out, struck through, and stamped
+"Unavailable" instead of linking anywhere. That check happens at **build time**,
+so a newly added PDF only goes live on the next build/deploy — adding one to a
+server that is already running will not light up its card.
