@@ -13,7 +13,7 @@ export default function Features() {
                         <div className="space-y-4">
                             <Card className="aspect-video overflow-hidden px-6 flex items-center justify-center">
                                 <img
-                                    src="/headers/newheader.png"
+                                    src="/headers/newheader.webp"
                                     alt="Úvoz Campus"
                                     className="h-full w-full object-cover object-center scale-120 rounded-lg transition-transform duration-300"
                                 />
