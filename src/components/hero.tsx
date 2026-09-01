@@ -38,7 +38,7 @@ export default function HeroSection() {
   const [randomImageStacked, setRandomImageStacked] = React.useState(STACKED_IMAGES[0],);
 
   React.useEffect(() => {
-    setRandomImageStacked(
+    setRandomImageStacked(  
       STACKED_IMAGES[Math.floor(Math.random() * STACKED_IMAGES.length)],
     );
   }, []);
