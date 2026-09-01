@@ -7,6 +7,7 @@ export function GET() {
     { url: `${baseUrl}/`, lastModified: new Date() },
     { url: `${baseUrl}/about`, lastModified: new Date() },
     { url: `${baseUrl}/this-year`, lastModified: new Date() },
+    { url: `${baseUrl}/documents`, lastModified: new Date() },
     { url: `${baseUrl}/faq`, lastModified: new Date() },
     { url: `${baseUrl}/legal/privacy`, lastModified: new Date() },
     { url: `${baseUrl}/legal/tos`, lastModified: new Date() },
