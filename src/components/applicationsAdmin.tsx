@@ -25,6 +25,7 @@ type UserApplications = {
   email: string,
   name: string,
   birth: string,
+  phone: string,
   nationality: string,
   delegation: string,
   notes: string,
@@ -56,6 +57,7 @@ export default function ApplicationsAdmin() {
             email: app.userEmail,
             name: app.name,
             birth: app.birth,
+            phone: app.phone,
             nationality: app.nationality,
             delegation: app.delegation,
             notes: app.userNotes,
@@ -335,6 +337,7 @@ export default function ApplicationsAdmin() {
                     <div className="flex items-start justify-between">
                       <div>
                         <p><strong>Email:</strong> {user.email}</p>
+                        <p><strong>Phone:</strong> {user.phone}</p>
                         <p><strong>Birth:</strong> {user.birth}</p>
                         <p><strong>Nationality:</strong> {user.nationality}</p>
                         <p><strong>Delegation:</strong> {user.delegation}</p>

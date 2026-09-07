@@ -18,6 +18,7 @@ export default function DelegateInfoQuestion({ onSuccess }: { onSuccess?: () => 
     const [form, setForm] = useState({
         name: '',
         email: '', 
+        phone: '',
         nationality: '',
         delegation: '',
         diet: '',
@@ -74,6 +75,7 @@ export default function DelegateInfoQuestion({ onSuccess }: { onSuccess?: () => 
                             name: data[0]?.name || session?.user?.name || '',
                             email: session?.user?.email || '',
                             birth: data[0]?.birth || '',
+                            phone: data[0]?.phone || '',
                             nationality: data[0]?.nationality || '',
                             delegation: data[0]?.delegation || '',
                             diet: data[0]?.diet || '',
@@ -131,6 +133,17 @@ export default function DelegateInfoQuestion({ onSuccess }: { onSuccess?: () => 
                                         className="cursor-not-allowed bg-gray-100 text-gray-500"
                                     />
                                 </div>
+                                <div></div>
+                            <div>
+                                <Label htmlFor="phone">Phone number</Label>
+                                <Input
+                                    type="tel"
+                                    id="phone"
+                                    required
+                                    value={form.phone}
+                                    onChange={e => handleChange('phone', e.target.value)}
+                                />
+                            </div>
                             </div>
                             <div className="@md:grid-cols-2 grid gap-3 *:space-y-3">
                                 <div>

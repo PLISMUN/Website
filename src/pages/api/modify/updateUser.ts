@@ -12,6 +12,7 @@ import preFlightChecks from '@/pages/api/internal/preFlightChecks';
     isAdmin,
     isGoogleUser,
     birth,
+    phone,
     nationality,
     delegation,
     diet,
@@ -28,6 +29,7 @@ import preFlightChecks from '@/pages/api/internal/preFlightChecks';
     isAdmin: 0,
     name: 'Plis The Mun',
     birth: '2004-05-31',
+    phone: '+420 123 456 789',
     nationality: 'Czech Republic',
     delegation: 'Prague International School',
     diet: 'Vegetarian',
@@ -49,6 +51,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     isAdmin,
     isGoogleUser,
     birth,
+    phone,
     nationality,
     delegation,
     diet,
@@ -79,19 +82,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const peopleUpdateResult = await turso.execute({
       sql: `
       UPDATE people
-      SET name = ?, birth = ?, nationality = ?, delegation = ?, diet = ?, notes = ?
+      SET name = ?, birth = ?, phone = ?, nationality = ?, delegation = ?, diet = ?, notes = ?
       WHERE id = ?
       `,
-      args: [name, birth, nationality, delegation, diet, notes, id],
+      args: [name, birth, phone ?? null, nationality, delegation, diet, notes, id],
     })
 
     if (peopleUpdateResult.rowsAffected === 0) {
       await turso.execute({
       sql: `
-        INSERT INTO people (id, name, birth, nationality, delegation, diet, notes)
-        VALUES (?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO people (id, name, birth, phone, nationality, delegation, diet, notes)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
       `,
-      args: [id, name, birth, nationality, delegation, diet, notes],
+      args: [id, name, birth, phone ?? null, nationality, delegation, diet, notes],
       })
     }
 

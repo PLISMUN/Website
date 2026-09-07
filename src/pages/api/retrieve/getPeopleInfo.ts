@@ -23,13 +23,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const userId = userResult.rows[0].id;
 
     const personResult = await turso.execute({
-      sql: 'SELECT name, birth, nationality, delegation, diet, notes FROM people WHERE id = ?',
+      sql: 'SELECT name, birth, phone, nationality, delegation, diet, notes FROM people WHERE id = ?',
       args: [userId],
     });
     
     const personInfo = personResult.rows.map((row: any) => ({
         name: row.name?.toString() || '',
         birth: row.birth?.toString() || '',
+        phone: row.phone?.toString() || '',
         nationality: row.nationality?.toString() || '',
         delegation: row.delegation?.toString() || '',
         diet: row.diet?.toString() || '',
