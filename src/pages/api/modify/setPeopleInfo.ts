@@ -8,6 +8,7 @@ import preFlightChecks from '@/pages/api/internal/preFlightChecks';
  * @param {NextApiRequest[string]} req.body.email User's email
  * @param {NextApiRequest[string]} req.body.name User's name
  * @param {NextApiRequest[string]} req.body.birth User's birth date in YYYY-MM
+ * @param {NextApiRequest[string]} req.body.phone User's phone number
  * @param {NextApiRequest[string]} req.body.nationality User's nationality
  * @param {NextApiRequest[string]} req.body.delegation User's delegation
  * @param {NextApiRequest[string]} req.body.diet User's dietary preferences
@@ -17,7 +18,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   await preFlightChecks(req, res);
   await authAdmin(req, res);
   
-  const { email, name, birth, nationality, delegation, diet, notes } = req.body;
+  const { email, name, birth, phone, nationality, delegation, diet, notes } = req.body;
 
   // Normalize birth to YYYY-MM-DD accepting multiple common formats:
   // - ISO dates with or without time (1975-11-07 or 1975-11-07T00:00:00Z)
@@ -90,6 +91,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(400).json({ message: "Invalid birthday" });
   }
 
+  const phoneString = typeof phone === 'string' ? phone.trim() : '';
+  if (!/^\+?[0-9][0-9\s()-]{5,19}$/.test(phoneString)) {
+    return res.status(400).json({ message: 'Invalid phone number' });
+  }
+
   const validNationalities = [
   "Afghanistan", "Albania", "Algeria", "American Samoa", "Andorra", "Angola",
   "Antigua and Barbuda", "Argentina", "Armenia", "Aruba", "Australia", "Austria", "Azerbaijan",
@@ -147,7 +153,7 @@ if (typeof delegation !== 'string' || delegation.length > 100) {
 }
 
 const validDiets = [
-  "Omnivore", "Vegetarian", "Vegan", "Gluten Free", "Lactose Free", "Halal", "Other"
+  "Omnivore", "Vegetarian", "Other"
 ];
 if (typeof diet !== 'string' || !validDiets.includes(diet)) {
     return res.status(400).json({ message: 'Invalid diet option' });
@@ -177,8 +183,8 @@ if (typeof notes !== 'string' || notes.length > 2500) {
     });
 
     await turso.execute({
-      sql: 'INSERT INTO people (id, name, birth, nationality, delegation, diet, notes) VALUES (?, ?, ?, ?, ?, ?, ?)',
-      args: [userId, name, birthString, nationality, delegation, diet, notes],
+      sql: 'INSERT INTO people (id, name, birth, phone, nationality, delegation, diet, notes) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+      args: [userId, name, birthString, phoneString, nationality, delegation, diet, notes],
     });
     
     res.status(200).json({ message: 'Signup successful' });

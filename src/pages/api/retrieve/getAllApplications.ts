@@ -41,6 +41,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           u.email AS userEmail,
           p.name AS name,
           p.birth AS birth,
+          p.phone AS phone,
           p.nationality AS nationality,
           a.delegation AS delegation,
           p.notes AS userNotes,

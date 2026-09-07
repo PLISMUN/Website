@@ -25,6 +25,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       id INTEGER PRIMARY KEY UNIQUE,
       name TEXT NOT NULL,
       birth DATE NOT NULL,
+      phone TEXT,
       nationality TEXT NOT NULL,
       delegation TEXT NOT NULL,
       diet TEXT NOT NULL,
