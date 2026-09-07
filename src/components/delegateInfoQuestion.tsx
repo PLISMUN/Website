@@ -403,10 +403,6 @@ export default function DelegateInfoQuestion({ onSuccess }: { onSuccess?: () => 
                                         <SelectContent>
                                             <SelectItem value="Omnivore">Omnivore</SelectItem>
                                             <SelectItem value="Vegetarian">Vegetarian</SelectItem>
-                                            <SelectItem value="Vegan">Vegan</SelectItem>
-                                            <SelectItem value="Gluten Free">Gluten Free</SelectItem>
-                                            <SelectItem value="Lactose Free">Lactose Free</SelectItem>
-                                            {/* <SelectItem value="Halal">Halal</SelectItem> */}
                                             <SelectItem value="Other">Other</SelectItem>
                                         </SelectContent>
                                     </Select>
