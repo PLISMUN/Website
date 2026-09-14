@@ -36,7 +36,7 @@ import preFlightChecks from '@/pages/api/internal/preFlightChecks';
     notes: 'I am MUN itself',
     valueCzk: 1200,
     valueEur: 50,
-    status: 'pending',
+    status: false,
   },...]
  * @returns {Promise<void>}
  */
@@ -105,7 +105,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       SET valueCzk = ?, valueEur = ?, status = ?
       WHERE id = ?
       `,
-      args: [valueCzk, valueEur, status, id],
+      args: [valueCzk, valueEur, !!status, id],
     })
 
     if (paymentsUpdateResult.rowsAffected === 0) {
@@ -114,7 +114,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         INSERT INTO payments (id, valueCzk, valueEur, status)
         VALUES (?, ?, ?, ?)
       `,
-      args: [id, valueCzk, valueEur, status],
+      args: [id, valueCzk, valueEur, !!status],
       })
     }
 
@@ -130,7 +130,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       `,
     });
 
-    res.status(200).json({ people: peopleResult.rows })
+    const people = peopleResult.rows.map((row: any) => ({ ...row, status: Boolean(row.status) }))
+
+    res.status(200).json({ people })
   } catch (err: any) {
     res.status(500).json({ message: err.message || 'Something went wrong' })
   }

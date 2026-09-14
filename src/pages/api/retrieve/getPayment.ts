@@ -28,18 +28,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       args: [userId],
     });
 
-    if (!paymentsResult.rows.length) {
+    let rows = paymentsResult.rows;
+
+    if (!rows.length) {
         const newPayment = await turso.execute({
             sql: 'INSERT INTO payments (id, valueCzk, valueEur) VALUES (?, ?, ?) RETURNING *',
             args: [userId, process.env.NEXT_PUBLIC_PRICE_CZK || 0, process.env.NEXT_PUBLIC_PRICE_EUR || 0],
         });
+        rows = newPayment.rows;
     }
-    
-    const paymentInfo = paymentsResult.rows.map((row: any) => ({
+
+    const paymentInfo = rows.map((row: any) => ({
         valueCzk: row.valueCzk?.toString() || '',
         valueEur: row.valueEur?.toString() || '',
-        status: row.status?.toString() || '',
-        state: row.status?.toString() || '',
+        status: Boolean(row.status),
+        state: Boolean(row.status),
     }));
     res.status(200).json(paymentInfo);
   } catch (err: any) {

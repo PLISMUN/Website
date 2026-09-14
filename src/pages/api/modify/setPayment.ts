@@ -3,6 +3,7 @@ import { getTursoClient } from '@/pages/api/components/dbAuth'
 import sendEmail from '@/pages/api/internal/sendEmail';
 import authAdmin from '@/pages/api/internal/authAdmin';
 import preFlightChecks from '@/pages/api/internal/preFlightChecks';
+import { paymentStatusLabel } from '@/lib/utils';
 
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -42,12 +43,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       await turso.execute({
       sql: `
         INSERT INTO payments (id, valueCzk, valueEur)
-        VALUES (?, ?, ?, ?)
+        VALUES (?, ?, ?)
       `,
       args: [id, valueCzk, valueEur],
       })
     
     }
+
+    // Read the row back so the email reports the stored status rather than
+    // whatever the caller happened to send.
+    const paymentResult = await turso.execute({
+      sql: 'SELECT status FROM payments WHERE id = ?',
+      args: [id],
+    })
+    const status = paymentStatusLabel(paymentResult.rows[0]?.status)
+
     await sendEmail(email, 'Payment Information Updated', `Your payment information has been updated. Your new payment details are as follows:<br />Amount (CZK): ${valueCzk} <br />Amount (EUR): ${valueEur}<br />Status: ${status}`);
     res.status(200).json({ message: 'Payment information updated successfully' })
   } catch (err: any) {

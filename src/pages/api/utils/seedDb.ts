@@ -79,7 +79,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         id INTEGER PRIMARY KEY,
         valueCzk int NOT NULL,
         valueEur int NOT NULL,
-        status TEXT NOT NULL DEFAULT 'pending',
+        status BOOLEAN NOT NULL DEFAULT FALSE,
         FOREIGN KEY (id) REFERENCES users(id)
       )
     `);

@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/popover"
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
+import { paymentStatusLabel } from '@/lib/utils'
 
 
 export default function UsersAdmin({ onSuccess }: { onSuccess?: () => void }) {
@@ -124,7 +125,7 @@ export default function UsersAdmin({ onSuccess }: { onSuccess?: () => void }) {
                                         <td className="px-2 py-1 border">{row.id}</td>
                                         <td className="px-2 py-1 border">
                                             {isEditing ? (
-                                                <Input value={row.email} onChange={e => handleEditChange(user.id, 'email', e.target.value)} />
+                                                <Input value={row.email ?? ''} onChange={e => handleEditChange(user.id, 'email', e.target.value)} />
                                             ) : row.email}
                                         </td>
                                         <td className="px-2 py-1 border">
@@ -134,7 +135,7 @@ export default function UsersAdmin({ onSuccess }: { onSuccess?: () => void }) {
                                         </td>
                                         <td className="px-2 py-1 border">
                                             {isEditing ? (
-                                                <Input value={row.name} onChange={e => handleEditChange(user.id, 'name', e.target.value)} />
+                                                <Input value={row.name ?? ''} onChange={e => handleEditChange(user.id, 'name', e.target.value)} />
                                             ) : row.name}
                                         </td>
                                         <td className="px-2 py-1 border">
@@ -155,22 +156,22 @@ export default function UsersAdmin({ onSuccess }: { onSuccess?: () => void }) {
                                         </td>
                                         <td className="px-2 py-1 border">
                                             {isEditing ? (
-                                                <Input value={row.birth} onChange={e => handleEditChange(user.id, 'birth', e.target.value)} />
+                                                <Input value={row.birth ?? ''} onChange={e => handleEditChange(user.id, 'birth', e.target.value)} />
                                             ) : row.birth}
                                         </td>
                                         <td className="px-2 py-1 border">
                                             {isEditing ? (
-                                                <Input value={row.nationality} onChange={e => handleEditChange(user.id, 'nationality', e.target.value)} />
+                                                <Input value={row.nationality ?? ''} onChange={e => handleEditChange(user.id, 'nationality', e.target.value)} />
                                             ) : row.nationality}
                                         </td>
                                         <td className="px-2 py-1 border">
                                             {isEditing ? (
-                                                <Input value={row.delegation} onChange={e => handleEditChange(user.id, 'delegation', e.target.value)} />
+                                                <Input value={row.delegation ?? ''} onChange={e => handleEditChange(user.id, 'delegation', e.target.value)} />
                                             ) : row.delegation}
                                         </td>
                                         <td className="px-2 py-1 border">
                                             {isEditing ? (
-                                                <Input value={row.diet} onChange={e => handleEditChange(user.id, 'diet', e.target.value)} />
+                                                <Input value={row.diet ?? ''} onChange={e => handleEditChange(user.id, 'diet', e.target.value)} />
                                             ) : row.diet}
                                         </td>
                                         <td className="px-2 py-1 border">
@@ -180,28 +181,28 @@ export default function UsersAdmin({ onSuccess }: { onSuccess?: () => void }) {
                                                 </PopoverTrigger>
                                                 <PopoverContent>
                                                     {isEditing ? (
-                                                        <Input value={row.notes} onChange={e => handleEditChange(user.id, 'notes', e.target.value)} />
+                                                        <Input value={row.notes ?? ''} onChange={e => handleEditChange(user.id, 'notes', e.target.value)} />
                                                     ) : row.notes}
                                                 </PopoverContent>
                                             </Popover>
                                         </td>
                                         <td className="px-2 py-1 border">
                                             {isEditing ? (
-                                                <Input value={row.valueCzk} onChange={e => handleEditChange(user.id, 'valueCzk', e.target.value)} />
+                                                <Input value={row.valueCzk ?? ''} onChange={e => handleEditChange(user.id, 'valueCzk', e.target.value)} />
                                             ) : row.valueCzk}
                                         </td>
                                         <td className="px-2 py-1 border">
                                             {isEditing ? (
-                                                <Input value={row.valueEur} onChange={e => handleEditChange(user.id, 'valueEur', e.target.value)} />
+                                                <Input value={row.valueEur ?? ''} onChange={e => handleEditChange(user.id, 'valueEur', e.target.value)} />
                                             ) : row.valueEur}
                                         </td>
                                         <td className="px-2 py-1 border">
                                             {isEditing ? (
-                                                <select value={row.status ? "Completed" : "Pending"} onChange={e => handleEditChange(user.id, 'status', e.target.value)}>
+                                                <select value={row.status ? "Completed" : "Pending"} onChange={e => handleEditChange(user.id, 'status', e.target.value === "Completed")}>
                                                     <option value="Completed">Completed</option>
                                                     <option value="Pending">Pending</option>
                                                 </select>
-                                            ) : row.status}
+                                            ) : paymentStatusLabel(row.status)}
                                         </td>
                                         <td className="px-2 py-1 border">
                                             {isEditing ? (
