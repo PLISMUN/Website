@@ -398,16 +398,22 @@ export default function DelegateInfoQuestion({ onSuccess }: { onSuccess?: () => 
                             <div className="@md:grid-cols-2 grid gap-3 *:space-y-3">
                                 <div>
                                     <Label htmlFor="diet">Diet</Label>
-                                    <Select required value={form.diet} onValueChange={val => handleChange('diet', val)}>
-                                        <SelectTrigger>
-                                            <SelectValue placeholder="Select your diet" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem value="Omnivore">Omnivore</SelectItem>
-                                            <SelectItem value="Vegetarian">Vegetarian</SelectItem>
-                                            <SelectItem value="Other">Other</SelectItem>
-                                        </SelectContent>
-                                    </Select>
+                                    <div className="relative flex w-fit items-center">
+                                        <Select required value={form.diet} onValueChange={val => handleChange('diet', val)}>
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="Select your diet" />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                <SelectItem value="Omnivore">Omnivore</SelectItem>
+                                                <SelectItem value="Vegetarian">Vegetarian</SelectItem>
+                                                <SelectItem value="Vegan">Vegan</SelectItem>
+                                                <SelectItem value="Gluten Free">Gluten Free</SelectItem>
+                                                <SelectItem value="Lactose Free">Lactose Free</SelectItem>
+                                                <SelectItem value="Withdraw">No Lunch</SelectItem>
+                                            </SelectContent>
+                                        </Select>
+                                        <p className="text-muted-foreground pointer-events-none absolute top-1/2 left-full ml-3 -translate-y-1/2 text-xs whitespace-nowrap">We can't safely accomodate <br />all dietary needs and allergies. <br />Select <u>"No Lunch"</u> if necessary.</p>
+                                    </div>
                                 </div>
                                 <div>
                                     <Label htmlFor="birth">Date of birth</Label>
