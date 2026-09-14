@@ -128,6 +128,7 @@ export default function DelegateInfoQuestion({ onSuccess }: { onSuccess?: () => 
                                         type="email"
                                         id="email"
                                         required
+                                        placeholder="e.g. john.doe@example.com"
                                         value={session?.user?.email || ''}
                                         readOnly
                                         className="cursor-not-allowed bg-gray-100 text-gray-500"
@@ -139,6 +140,7 @@ export default function DelegateInfoQuestion({ onSuccess }: { onSuccess?: () => 
                                 <Input
                                     type="tel"
                                     id="phone"
+                                    placeholder="e.g. +420 234 567 890"
                                     required
                                     value={form.phone}
                                     onChange={e => handleChange('phone', e.target.value)}
@@ -413,9 +415,12 @@ export default function DelegateInfoQuestion({ onSuccess }: { onSuccess?: () => 
                                 </div>
                             </div>
                             <div>
-                                <Label htmlFor="notes">MUN achievements, conferences attended, allergies & notes</Label>
+                                <Label htmlFor="notes">MUN achievements, conferences attended & notes</Label>
                                 <Textarea
                                     id="notes"
+                                    required
+                                    minLength={20}
+                                    placeholder='For example "I have attended 3 MUN conferences and won Best Delegate in one of them. I am also the SG of ExampleMUN"'
                                     rows={3}
                                     value={form.notes}
                                     onChange={e => handleChange('notes', e.target.value)}
