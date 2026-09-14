@@ -22,7 +22,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       `,
     });
 
-    res.status(200).json({ people: peopleResult.rows });
+    const people = peopleResult.rows.map((row: any) => ({ ...row, status: Boolean(row.status) }));
+
+    res.status(200).json({ people });
   } catch (err: any) {
     res.status(500).json({ message: err.message || 'Something went wrong' });
   }

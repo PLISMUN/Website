@@ -8,6 +8,7 @@ import { QRCodeCanvas } from 'qrcode.react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { stages } from '@/config/stages';
+import { paymentStatusLabel } from '@/lib/utils';
 
 export default function paymentWidget({ onSuccess }: { onSuccess?: () => void }) {
     const [loading, setLoading] = useState(false)
@@ -87,10 +88,10 @@ return (
                                     Amount: {paymentInfo?.[0]?.valueCzk ? paymentInfo[0].valueCzk : process.env.NEXT_PUBLIC_PRICE_CZK || 0} CZK<br />
                                     Info for recipient: {(session?.user?.name ?? '').replace(/\W/g, '')}<br />
                                 </p>
-                                {paymentInfo?.[0]?.state && (
+                                {paymentInfo?.[0] && (
                                     <div
                                         style={{
-                                            backgroundColor: paymentInfo[0].state === 'Completed' ? 'green' : 'red',
+                                            backgroundColor: paymentInfo[0].state ? 'green' : 'red',
                                             borderRadius: '2.5rem',
                                             padding: '0.5rem 1.5rem',
                                             display: 'inline-block',
@@ -98,7 +99,7 @@ return (
                                             fontWeight: 'bold',
                                         }}
                                     >
-                                        {paymentInfo[0].state}
+                                        {paymentStatusLabel(paymentInfo[0].state)}
                                     </div>
                                 )}
                                 <p className="text-sm text-muted-foreground">
@@ -125,10 +126,10 @@ return (
                                     Amount: €{paymentInfo?.[0]?.valueEur ? paymentInfo[0].valueEur : process.env.NEXT_PUBLIC_PRICE_EUR || 0}<br />
                                     Info for recipient: {(session?.user?.name ?? '').replace(/\W/g, '')}<br />
                                 </p>
-                                {paymentInfo?.[0]?.state && (
+                                {paymentInfo?.[0] && (
                                     <div
                                         style={{
-                                            backgroundColor: paymentInfo[0].state === 'Completed' ? 'green' : 'red',
+                                            backgroundColor: paymentInfo[0].state ? 'green' : 'red',
                                             borderRadius: '2.5rem',
                                             padding: '0.5rem 1.5rem',
                                             display: 'inline-block',
@@ -136,7 +137,7 @@ return (
                                             fontWeight: 'bold',
                                         }}
                                     >
-                                        {paymentInfo[0].state}
+                                        {paymentStatusLabel(paymentInfo[0].state)}
                                     </div>
                                 )}
                                 <p className="text-sm text-muted-foreground">

@@ -25,10 +25,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const paymentsUpdateResult = await turso.execute({
         sql: `
         UPDATE payments
-        SET status = "Completed"
+        SET status = ?
         WHERE id = ?
         `,
-        args: [id],
+        args: [true, id],
         })
 
 

@@ -56,7 +56,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const combinedApplications = [
       ...applicationsResult.rows,
       ...applicationsSupervisorResult.rows,
-    ];
+    ].map((row: any) => ({ ...row, paymentStatus: Boolean(row.paymentStatus) }));
 
     res.status(200).json({ applications:combinedApplications });
   } catch (err: any) {
