@@ -48,15 +48,22 @@ const statusClass = (status: string) =>
 
 const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
 
-export default function DelegationMembers() {
+/**
+ * Members of a delegation. Without a delegationId, shows the delegations the signed-in user supervises.
+ * With a delegationId (e.g. admins viewing any delegation), shows just that delegation, without the page wrapper.
+ */
+export default function DelegationMembers({ delegationId }: { delegationId?: number }) {
+    const embedded = delegationId !== undefined
     const [delegations, setDelegations] = useState<SupervisedDelegation[]>([])
-    const [selectedId, setSelectedId] = useState<string>('')
+    const [selectedId, setSelectedId] = useState<string>(embedded ? delegationId.toString() : '')
+    const [delegation, setDelegation] = useState<SupervisedDelegation | null>(null)
     const [members, setMembers] = useState<Member[]>([])
-    const [loading, setLoading] = useState(true)
+    const [loading, setLoading] = useState(!embedded)
     const [membersLoading, setMembersLoading] = useState(false)
     const [error, setError] = useState<string | null>(null)
 
     useEffect(() => {
+        if (embedded) return
         const fetchDelegations = async () => {
             try {
                 const res = await fetch('/api/retrieve/getSupervisedDelegations', { method: 'POST' })
@@ -74,7 +81,7 @@ export default function DelegationMembers() {
             }
         }
         fetchDelegations()
-    }, [])
+    }, [embedded])
 
     useEffect(() => {
         if (!selectedId) return
@@ -91,6 +98,7 @@ export default function DelegationMembers() {
                     throw new Error(data?.message || 'Failed to fetch delegation members')
                 }
                 const data = await res.json()
+                setDelegation(data.delegation)
                 setMembers(data.members)
                 setError(null)
             } catch (err: any) {
@@ -103,17 +111,13 @@ export default function DelegationMembers() {
     }, [selectedId])
 
     if (loading) return <div>Loading...</div>
-    if (!delegations.length && !error) return <div>You are not an accepted leader of any delegation.</div>
+    if (!embedded && !delegations.length && !error) return <div>You are not an accepted leader of any delegation.</div>
 
-    const delegation = delegations.find(d => d.id.toString() === selectedId)
     const paidCount = members.filter(m => m.paymentStatus).length
     const acceptedCount = members.filter(m => m.applications.some(a => a.status === 'accepted')).length
 
-    return (
-    <section className="bg-muted">
-        <div className="mx-auto max-w-4xl px-4 py-4 lg:px-0 min-h-screen">
-            <div className="@container lg:col-span-3">
-                <Card className="p-8 sm:p-12">
+    const content = (
+                <>
                     <div className="flex flex-wrap items-end justify-between gap-4">
                         <div>
                             <h3 className="text-xl font-semibold">{delegation ? `${delegation.name} (${delegation.shorthand})` : 'My delegation'}</h3>
@@ -209,6 +213,17 @@ export default function DelegationMembers() {
                             )}
                         </>
                     )}
+                </>
+    )
+
+    if (embedded) return <div className="space-y-4">{content}</div>
+
+    return (
+    <section className="bg-muted">
+        <div className="mx-auto max-w-4xl px-4 py-4 lg:px-0 min-h-screen">
+            <div className="@container lg:col-span-3">
+                <Card className="p-8 sm:p-12">
+                    {content}
                 </Card>
             </div>
         </div>

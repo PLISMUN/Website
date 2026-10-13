@@ -1,11 +1,12 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getTursoClient } from '@/pages/api/components/dbAuth';
 import preFlightChecks from '@/pages/api/internal/preFlightChecks';
-import authSupervisor from '@/lib/authSupervisor';
+import authSupervisor, { SupervisedDelegation } from '@/lib/authSupervisor';
+import isSessionAdmin from '@/lib/sessionAdmin';
 
 /**
  * Lists everyone signed up under a delegation, with their personal information, payment and applications.
- * Only available to accepted delegation leaders of that delegation.
+ * Only available to accepted delegation leaders of that delegation, and to admins.
  *
  * @param {NextApiRequest[number]} req.body.delegationId Delegation ID to list members of
  * @returns {NextApiResponse} res.status(200).json({ delegation, members })
@@ -22,13 +23,29 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(400).json({ message: 'Invalid delegation ID' });
   }
 
-  const delegation = supervised.find(d => d.id === delegationId);
-  if (!delegation) {
-    return res.status(403).json({ message: 'You are not a supervisor of this delegation' });
-  }
-
   try {
     const turso = getTursoClient()
+
+    let delegation: SupervisedDelegation | undefined = supervised.find(d => d.id === delegationId);
+    if (!delegation) {
+      if (!(await isSessionAdmin(req, res))) {
+        return res.status(403).json({ message: 'You are not a supervisor of this delegation' });
+      }
+      const delegationResult = await turso.execute({
+        sql: 'SELECT id, name, shorthand, country FROM delegations WHERE id = ?',
+        args: [delegationId],
+      });
+      if (!delegationResult.rows.length) {
+        return res.status(404).json({ message: 'Delegation not found' });
+      }
+      const row = delegationResult.rows[0];
+      delegation = {
+        id: Number(row.id),
+        name: row.name as string,
+        shorthand: row.shorthand as string,
+        country: row.country as string,
+      };
+    }
 
     const membersResult = await turso.execute({
       sql: `

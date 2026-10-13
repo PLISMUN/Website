@@ -24,6 +24,7 @@ import {
     DialogHeader,
     DialogTitle,
 } from '@/components/ui/dialog'
+import DelegationMembers from '@/components/delegationMembers'
 import {
     Popover,
     PopoverContent,
@@ -114,6 +115,8 @@ export default function DelegationsAdmin() {
     const [form, setForm] = useState<DelegationForm | null>(null)
     const [saving, setSaving] = useState(false)
     const [formError, setFormError] = useState<string | null>(null)
+
+    const [viewing, setViewing] = useState<Delegation | null>(null)
 
     const [linking, setLinking] = useState<SupervisorApplication | null>(null)
     const [linkDelegationId, setLinkDelegationId] = useState('')
@@ -386,8 +389,9 @@ export default function DelegationsAdmin() {
                                                     </Popover>
                                                 ) : null}
                                             </td>
-                                            <td className="px-2 py-1 border">
-                                                <Button size="sm" variant="outline" onClick={() => openEdit(delegation)}>Edit</Button>
+                                            <td className="px-2 py-1 border whitespace-nowrap">
+                                                <Button size="sm" variant="outline" onClick={() => setViewing(delegation)}>Details</Button>
+                                                <Button size="sm" variant="ghost" onClick={() => openEdit(delegation)}>Edit</Button>
                                             </td>
                                         </tr>
                                     ))}
@@ -502,6 +506,16 @@ export default function DelegationsAdmin() {
                         </DialogFooter>
                     </form>
                 )}
+            </DialogContent>
+        </Dialog>
+
+        <Dialog open={!!viewing} onOpenChange={open => { if (!open) setViewing(null) }}>
+            <DialogContent className="sm:max-w-6xl max-h-[90vh] overflow-y-auto">
+                <DialogHeader>
+                    <DialogTitle>Delegation details</DialogTitle>
+                    <DialogDescription>What the delegation&apos;s supervisors see on their My Delegation page.</DialogDescription>
+                </DialogHeader>
+                {viewing && <DelegationMembers key={viewing.id} delegationId={viewing.id} />}
             </DialogContent>
         </Dialog>
 
