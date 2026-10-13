@@ -3,7 +3,11 @@ import { getServerSession } from 'next-auth/next';
 import { authOptions } from '../auth/[...nextauth]';
 import { getTursoClient } from '@/pages/api/components/dbAuth';
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+/**
+ * @param allowSelf When true (default), a request whose body.email matches the session user passes.
+ *                  Pass false for endpoints that must only ever be reachable by admins.
+ */
+export default async function handler(req: NextApiRequest, res: NextApiResponse, allowSelf: boolean = true) {
       var isAdmin = false;
 
       // Master password check (for example for postman debuging) using query param. 
@@ -24,7 +28,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
       // Check if user being talked about is user making request
       try {
-        if (req.body.email === session.user.email) {
+        if (allowSelf && req.body.email === session.user.email) {
           isAdmin = true;
           return;
         }

@@ -36,9 +36,13 @@ export default function DelegateInfoQuestion({ onSuccess }: { onSuccess?: () => 
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
-        setLoading(true)
         setError(null)
         setSuccess(false)
+        if (!form.birth) {
+            setError('Please select your date of birth')
+            return
+        }
+        setLoading(true)
         try {
             const res = await fetch('/api/modify/setPeopleInfo', {
                 method: 'POST',
@@ -60,7 +64,12 @@ export default function DelegateInfoQuestion({ onSuccess }: { onSuccess?: () => 
 
     
     const [delegations, setDelegations] = useState<{ id: number, name: string }[]>([])
-    
+
+    // Depend on the email rather than the session object: next-auth hands out a new session
+    // object on every tab refocus, which would re-run this and wipe unsaved form edits
+    const sessionEmail = session?.user?.email || ''
+    const sessionName = session?.user?.name || ''
+
     useEffect(() => {
             const getInfo = async (email: string) => {
                 try {
@@ -73,8 +82,8 @@ export default function DelegateInfoQuestion({ onSuccess }: { onSuccess?: () => 
                         const data = await res.json()
                         setForm((prev) => ({
                             ...prev,
-                            name: data[0]?.name || session?.user?.name || '',
-                            email: session?.user?.email || '',
+                            name: data[0]?.name || sessionName,
+                            email: sessionEmail,
                             birth: data[0]?.birth || '',
                             phone: data[0]?.phone || '',
                             nationality: data[0]?.nationality || '',
@@ -100,8 +109,8 @@ export default function DelegateInfoQuestion({ onSuccess }: { onSuccess?: () => 
             }
         }
         fetchDelegations()
-        getInfo(session?.user?.email || "")
-    }, [session])
+        getInfo(sessionEmail)
+    }, [sessionEmail, sessionName])
 
     return (
         <section className="bg-muted">

@@ -6,7 +6,9 @@ import {
   IconUsers,
   IconUser,
   IconCreditCardPay,
-  IconConfetti
+  IconConfetti,
+  IconFlag,
+  IconUsersGroup
 } from "@tabler/icons-react"
 
 import { NavCategory } from "@/components/nav-category"
@@ -32,6 +34,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const router = useRouter()
 
   const [isAdmin, setIsAdmin] = React.useState(false)
+  const [isSupervisor, setIsSupervisor] = React.useState(false)
 
   const data = {
     user: {
@@ -57,6 +60,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         icon: IconCreditCardPay,
       }
     ],
+    supervisor: [
+      {
+        name: "My Delegation",
+        url: "/user/supervisor/delegation",
+        icon: IconUsersGroup,
+      },
+    ],
     admin: [
       {
         name: "Users",
@@ -67,6 +77,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         name: "Applications",
         url: "/user/admin/applications",
         icon: IconReport,
+      },
+      {
+        name: "Delegations",
+        url: "/user/admin/delegations",
+        icon: IconFlag,
       },
     ],
   }
@@ -103,6 +118,22 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     }
     checkAdmin()
   }, [session?.user?.email])
+
+  React.useEffect(() => {
+    async function checkSupervisor() {
+      if (!session?.user?.email) return
+      try {
+        const res = await fetch("/api/retrieve/getSupervisedDelegations", { method: "POST" })
+        if (res.ok) {
+          const result = await res.json()
+          setIsSupervisor(result.delegations?.length > 0)
+        }
+      } catch (e) {
+        setIsSupervisor(false)
+      }
+    }
+    checkSupervisor()
+  }, [session?.user?.email])
   return (
     <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>
@@ -123,6 +154,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarContent>
         <NavMain items={data.navMain} />
         <NavCategory items={data.delegate} title="Delegate" />
+        {isSupervisor && <NavCategory items={data.supervisor} title="Supervisor" />}
         {isAdmin && <NavCategory items={data.admin} title="Admin" />}
       </SidebarContent>
       <SidebarFooter>

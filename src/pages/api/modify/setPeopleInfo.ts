@@ -85,14 +85,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(400).json({ message: "Invalid birthday" });
   }
   const now = new Date();
-  const eightyYearsAgo = new Date(now.getFullYear() - 80, now.getMonth(), now.getDate());
+  const hundredYearsAgo = new Date(now.getFullYear() - 100, now.getMonth(), now.getDate());
   const sevenYearsAgo = new Date(now.getFullYear() - 7, now.getMonth(), now.getDate());
-  if (birthDate < eightyYearsAgo || birthDate > sevenYearsAgo) {
+  if (birthDate < hundredYearsAgo || birthDate > sevenYearsAgo) {
     return res.status(400).json({ message: "Invalid birthday" });
   }
 
   const phoneString = typeof phone === 'string' ? phone.trim() : '';
-  if (!/^\+?[0-9][0-9\s()-]{5,19}$/.test(phoneString)) {
+  // Allow formatting like "+49 (0) 151 1234 5678"; check the digit count separately (E.164 max is 15, +1 for a "(0)" trunk prefix)
+  const phoneDigits = phoneString.replace(/\D/g, '').length;
+  if (!/^\+?[0-9][0-9\s()-]{5,29}$/.test(phoneString) || phoneDigits < 6 || phoneDigits > 16) {
     return res.status(400).json({ message: 'Invalid phone number' });
   }
 

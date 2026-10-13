@@ -17,14 +17,21 @@ interface CalendarBirthdayProps {
   selected?: string
 }
 
+// Parse YYYY-MM-DD as a local date; new Date("YYYY-MM-DD") is UTC midnight and
+// shows as the previous day for users west of UTC
+function parseLocalDate(value?: string): Date | undefined {
+  const match = value?.match(/^(\d{4})-(\d{2})-(\d{2})/)
+  if (!match) return undefined
+  return new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]))
+}
+
 export default function CalendarBirthday({ onChange, selected }: CalendarBirthdayProps) {
   const [open, setOpen] = React.useState(false)
-  const [date, setDate] = React.useState<Date | undefined>(
-    selected ? new Date(selected) : undefined
-  )
+  const [date, setDate] = React.useState<Date | undefined>(parseLocalDate(selected))
 
+  // Mirror the parent's value both ways, including clears, so the button never shows a stale date
   React.useEffect(() => {
-    if (selected) setDate(new Date(selected))
+    setDate(parseLocalDate(selected))
   }, [selected])
 
   return (
