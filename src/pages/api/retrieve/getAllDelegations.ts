@@ -4,8 +4,8 @@ import authAdmin from '@/pages/api/internal/authAdmin';
 import preFlightChecks from '@/pages/api/internal/preFlightChecks';
 
 /**
- * Admin view of delegations, together with the delegation leader (supervisor) applications
- * and the list of users that can be assigned as a delegation leader.
+ * Admin view of delegations, together with the supervisor (delegation leader) applications
+ * and the list of users that can be added as a supervisor.
  *
  * @returns {NextApiResponse} res.status(200).json({ delegations, supervisors, users })
  */
@@ -22,12 +22,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       sql: `
         SELECT
           d.*,
-          u.email AS leaderEmail,
-          p.name AS leaderName,
-          (SELECT COUNT(*) FROM people pp WHERE pp.delegation = d.name) AS memberCount
+          (SELECT COUNT(*) FROM people p WHERE p.delegation = d.name) AS memberCount
         FROM delegations d
-        LEFT JOIN users u ON u.id = d.adminId
-        LEFT JOIN people p ON p.id = d.adminId
         ORDER BY d.name
       `,
     });
@@ -66,10 +62,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       name: row.name,
       shorthand: row.shorthand,
       country: row.country,
-      adminId: Number(row.adminId),
       notes: row.notes || '',
-      leaderEmail: row.leaderEmail || null,
-      leaderName: row.leaderName || null,
       memberCount: Number(row.memberCount),
     }));
 

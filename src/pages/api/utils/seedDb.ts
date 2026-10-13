@@ -41,9 +41,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         name TEXT NOT NULL UNIQUE,
         shorthand TEXT NOT NULL UNIQUE,
         country TEXT NOT NULL,
-        adminId TEXT NOT NULL,
-        notes TEXT,
-        FOREIGN KEY (adminId) REFERENCES users(id)
+        notes TEXT
       )
     `);
 

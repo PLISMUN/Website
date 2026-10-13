@@ -17,7 +17,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       name: row.name,
       shorthand: row.shorthand,
       country: row.country,
-      adminId: row.adminId,
       notes: row.notes || '',
     }));
     res.setHeader('Cache-Control', 'public, max-age=43200');

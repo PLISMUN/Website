@@ -36,10 +36,7 @@ type Delegation = {
     name: string
     shorthand: string
     country: string
-    adminId: number
     notes: string
-    leaderEmail: string | null
-    leaderName: string | null
     memberCount: number
 }
 
@@ -52,7 +49,7 @@ type SupervisorApplication = {
     name: string | null
 }
 
-type LeaderCandidate = {
+type SupervisorCandidate = {
     id: number
     email: string
     name: string | null
@@ -64,7 +61,6 @@ type DelegationForm = {
     name: string
     shorthand: string
     country: string
-    adminId: string
     notes: string
     supervisorId?: number
     acceptSupervisor: boolean
@@ -74,7 +70,6 @@ const emptyForm: DelegationForm = {
     name: '',
     shorthand: '',
     country: '',
-    adminId: '',
     notes: '',
     acceptSupervisor: false,
 }
@@ -92,23 +87,28 @@ const personLabel = (name: string | null, email: string) => name ? `${name} (${e
 const suggestShorthand = (name: string) =>
     name.split(/\s+/).filter(Boolean).map(word => word[0]).join('').toUpperCase().slice(0, 20)
 
-// Accepts the supervisor application and emails the applicant
-const acceptSupervisorApplication = async (supervisorId: number) => {
-    const res = await fetch('/api/modify/acceptApplication', {
+const postJson = async (url: string, body: object, fallbackError: string) => {
+    const res = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ [supervisorId]: true }),
+        body: JSON.stringify(body),
     })
-    if (!res.ok) {
-        const data = await res.json().catch(() => null)
-        throw new Error(data?.message || 'Delegation saved, but failed to accept the application')
-    }
+    const data = await res.json().catch(() => null)
+    if (!res.ok) throw new Error(data?.message || fallbackError)
+    return data
 }
+
+// Accepts the supervisor application and emails the applicant
+const acceptSupervisorApplication = (supervisorId: number) =>
+    postJson('/api/modify/acceptApplication', { [supervisorId]: true }, 'Failed to accept the supervisor application')
+
+const setDelegationSupervisor = (body: object) =>
+    postJson('/api/modify/setDelegationSupervisor', body, 'Failed to update supervisors')
 
 export default function DelegationsAdmin() {
     const [delegations, setDelegations] = useState<Delegation[]>([])
     const [supervisors, setSupervisors] = useState<SupervisorApplication[]>([])
-    const [users, setUsers] = useState<LeaderCandidate[]>([])
+    const [users, setUsers] = useState<SupervisorCandidate[]>([])
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState<string | null>(null)
 
@@ -117,6 +117,11 @@ export default function DelegationsAdmin() {
     const [formError, setFormError] = useState<string | null>(null)
 
     const [viewing, setViewing] = useState<Delegation | null>(null)
+
+    const [managing, setManaging] = useState<Delegation | null>(null)
+    const [addUserId, setAddUserId] = useState('')
+    const [supervisorBusy, setSupervisorBusy] = useState(false)
+    const [supervisorError, setSupervisorError] = useState<string | null>(null)
 
     const [linking, setLinking] = useState<SupervisorApplication | null>(null)
     const [linkDelegationId, setLinkDelegationId] = useState('')
@@ -147,7 +152,7 @@ export default function DelegationsAdmin() {
 
     const delegationNames = useMemo(() => new Set(delegations.map(d => d.name)), [delegations])
 
-    // Leader applications whose requested delegation doesn't exist yet
+    // Supervisor applications whose requested delegation doesn't exist yet
     const unlinkedSupervisors = useMemo(
         () => supervisors.filter(s => !delegationNames.has(s.delegation) && s.status !== 'rejected'),
         [supervisors, delegationNames]
@@ -156,15 +161,19 @@ export default function DelegationsAdmin() {
     const supervisorsByDelegation = useMemo(() => {
         const map: Record<string, SupervisorApplication[]> = {}
         for (const s of supervisors) {
-            if (!delegationNames.has(s.delegation)) continue
+            // Rejected applications are removed supervisors
+            if (!delegationNames.has(s.delegation) || s.status === 'rejected') continue
             if (!map[s.delegation]) map[s.delegation] = []
             map[s.delegation].push(s)
         }
         return map
     }, [supervisors, delegationNames])
 
-    const supervisorUsers = users.filter(u => u.isSupervisor)
-    const otherUsers = users.filter(u => !u.isSupervisor)
+    const managingSupervisors = managing ? supervisorsByDelegation[managing.name] ?? [] : []
+    // Users that can still be added as a supervisor of the delegation being managed
+    const addableUsers = users.filter(u => !managingSupervisors.some(s => s.userId === u.id))
+    const supervisorUsers = addableUsers.filter(u => u.isSupervisor)
+    const otherUsers = addableUsers.filter(u => !u.isSupervisor)
 
     const openCreate = () => {
         setFormError(null)
@@ -177,7 +186,6 @@ export default function DelegationsAdmin() {
             ...emptyForm,
             name: application.delegation,
             shorthand: suggestShorthand(application.delegation),
-            adminId: application.userId.toString(),
             supervisorId: application.id,
             acceptSupervisor: application.status !== 'accepted',
         })
@@ -190,7 +198,6 @@ export default function DelegationsAdmin() {
             name: delegation.name,
             shorthand: delegation.shorthand,
             country: delegation.country,
-            adminId: delegation.adminId.toString(),
             notes: delegation.notes,
             acceptSupervisor: false,
         })
@@ -200,49 +207,37 @@ export default function DelegationsAdmin() {
         setForm(prev => prev ? { ...prev, [field]: value } : prev)
     }
 
-    const saveDelegation = async (body: object, acceptSupervisorId?: number) => {
-        const res = await fetch('/api/modify/setDelegation', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(body),
-        })
-        if (!res.ok) {
-            const data = await res.json().catch(() => null)
-            throw new Error(data?.message || 'Failed to save delegation')
-        }
-        try {
-            if (acceptSupervisorId !== undefined) {
-                await acceptSupervisorApplication(acceptSupervisorId)
-            }
-        } finally {
-            await fetchDelegations()
-        }
+    // Links a supervisor application to a delegation, optionally accepting it (which emails the applicant)
+    const linkSupervisor = async (delegationId: number, supervisorId: number, accept: boolean) => {
+        await setDelegationSupervisor({ action: 'link', delegationId, supervisorId })
+        if (accept) await acceptSupervisorApplication(supervisorId)
     }
 
     const handleFormSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         if (!form) return
         if (!form.country) return setFormError('Please select a country')
-        if (!form.adminId) return setFormError('Please select a delegation leader')
 
         setSaving(true)
         setFormError(null)
         try {
-            await saveDelegation(
-                {
-                    id: form.id,
-                    name: form.name,
-                    shorthand: form.shorthand,
-                    country: form.country,
-                    adminId: Number(form.adminId),
-                    notes: form.notes,
-                    supervisorId: form.supervisorId,
-                },
-                form.supervisorId !== undefined && form.acceptSupervisor ? form.supervisorId : undefined
-            )
+            const data = await postJson('/api/modify/setDelegation', {
+                id: form.id,
+                name: form.name,
+                shorthand: form.shorthand,
+                country: form.country,
+                notes: form.notes,
+            }, 'Failed to save delegation')
+            if (form.supervisorId !== undefined) {
+                // A retry after a failed link should update the delegation just created, not create another
+                setForm(prev => prev ? { ...prev, id: data.id } : prev)
+                await linkSupervisor(data.id, form.supervisorId, form.acceptSupervisor)
+            }
             setForm(null)
         } catch (err: any) {
             setFormError(err.message)
+        } finally {
+            await fetchDelegations()
         }
         setSaving(false)
     }
@@ -263,30 +258,47 @@ export default function DelegationsAdmin() {
         setSaving(true)
         setFormError(null)
         try {
-            await saveDelegation(
-                {
-                    id: delegation.id,
-                    name: delegation.name,
-                    shorthand: delegation.shorthand,
-                    country: delegation.country,
-                    adminId: delegation.adminId,
-                    notes: delegation.notes,
-                    supervisorId: linking.id,
-                },
-                linkAccept ? linking.id : undefined
-            )
+            await linkSupervisor(delegation.id, linking.id, linkAccept)
             setLinking(null)
         } catch (err: any) {
             setFormError(err.message)
+        } finally {
+            await fetchDelegations()
         }
         setSaving(false)
+    }
+
+    const openManage = (delegation: Delegation) => {
+        setSupervisorError(null)
+        setAddUserId('')
+        setManaging(delegation)
+    }
+
+    const runSupervisorAction = async (action: () => Promise<unknown>) => {
+        setSupervisorBusy(true)
+        setSupervisorError(null)
+        try {
+            await action()
+        } catch (err: any) {
+            setSupervisorError(err.message)
+        } finally {
+            await fetchDelegations()
+        }
+        setSupervisorBusy(false)
+    }
+
+    const handleAddSupervisor = (e: React.FormEvent) => {
+        e.preventDefault()
+        if (!managing || !addUserId) return
+        runSupervisorAction(async () => {
+            await setDelegationSupervisor({ action: 'add', delegationId: managing.id, userId: Number(addUserId) })
+            setAddUserId('')
+        })
     }
 
     const formApplication = form?.supervisorId !== undefined
         ? supervisors.find(s => s.id === form.supervisorId)
         : undefined
-    // Keep the current leader selectable even if they no longer exist in the users list
-    const leaderMissing = !!form?.adminId && !users.some(u => u.id.toString() === form.adminId)
 
     if (loading) return <div>Loading...</div>
     if (error) return <div className="text-red-600">{error}</div>
@@ -297,9 +309,9 @@ export default function DelegationsAdmin() {
             <div className="@container lg:col-span-3">
                 <Card className="p-8 sm:p-12">
                     <div>
-                        <h3 className="text-xl font-semibold">Leader applications without a delegation</h3>
+                        <h3 className="text-xl font-semibold">Supervisor applications without a delegation</h3>
                         <p className="text-sm text-muted-foreground">
-                            Delegation leader / teacher applications whose delegation doesn&apos;t exist yet. Create the delegation, or link the application to an existing one.
+                            Supervisor (delegation leader / teacher) applications whose delegation doesn&apos;t exist yet. Create the delegation, or link the application to an existing one.
                         </p>
                     </div>
                     {unlinkedSupervisors.length ? (
@@ -331,7 +343,7 @@ export default function DelegationsAdmin() {
                             </table>
                         </div>
                     ) : (
-                        <p className="text-sm">All leader applications are linked to a delegation.</p>
+                        <p className="text-sm">All supervisor applications are linked to a delegation.</p>
                     )}
                 </Card>
             </div>
@@ -351,8 +363,7 @@ export default function DelegationsAdmin() {
                                         <th className="px-2 py-1 border">Name</th>
                                         <th className="px-2 py-1 border">Shorthand</th>
                                         <th className="px-2 py-1 border">Country</th>
-                                        <th className="px-2 py-1 border">Leader</th>
-                                        <th className="px-2 py-1 border">Leader applications</th>
+                                        <th className="px-2 py-1 border">Supervisors</th>
                                         <th className="px-2 py-1 border">Members</th>
                                         <th className="px-2 py-1 border">Notes</th>
                                         <th className="px-2 py-1 border"></th>
@@ -365,11 +376,6 @@ export default function DelegationsAdmin() {
                                             <td className="px-2 py-1 border">{delegation.name}</td>
                                             <td className="px-2 py-1 border">{delegation.shorthand}</td>
                                             <td className="px-2 py-1 border">{delegation.country}</td>
-                                            <td className="px-2 py-1 border">
-                                                {delegation.leaderEmail
-                                                    ? personLabel(delegation.leaderName, delegation.leaderEmail)
-                                                    : <span className="text-red-600">Unknown user #{delegation.adminId}</span>}
-                                            </td>
                                             <td className="px-2 py-1 border">
                                                 {supervisorsByDelegation[delegation.name]?.map(application => (
                                                     <div key={application.id}>
@@ -391,6 +397,7 @@ export default function DelegationsAdmin() {
                                             </td>
                                             <td className="px-2 py-1 border whitespace-nowrap">
                                                 <Button size="sm" variant="outline" onClick={() => setViewing(delegation)}>Details</Button>
+                                                <Button size="sm" variant="ghost" onClick={() => openManage(delegation)}>Supervisors</Button>
                                                 <Button size="sm" variant="ghost" onClick={() => openEdit(delegation)}>Edit</Button>
                                             </td>
                                         </tr>
@@ -413,12 +420,12 @@ export default function DelegationsAdmin() {
                             <DialogTitle>{form.id !== undefined ? 'Edit delegation' : 'New delegation'}</DialogTitle>
                             {formApplication && (
                                 <DialogDescription>
-                                    From the leader application of {personLabel(formApplication.name, formApplication.email)}.
+                                    From the supervisor application of {personLabel(formApplication.name, formApplication.email)}, who will be linked as a supervisor.
                                 </DialogDescription>
                             )}
                             {form.id !== undefined && (
                                 <DialogDescription>
-                                    Renaming updates the delegation on every member and leader application.
+                                    Renaming updates the delegation on every member and supervisor.
                                 </DialogDescription>
                             )}
                         </DialogHeader>
@@ -451,35 +458,6 @@ export default function DelegationsAdmin() {
                             />
                         </div>
                         <div className="space-y-2">
-                            <Label>Delegation leader</Label>
-                            <Select value={form.adminId} onValueChange={val => handleFormChange('adminId', val)}>
-                                <SelectTrigger className="w-full">
-                                    <SelectValue placeholder="Select a leader" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    {leaderMissing && (
-                                        <SelectItem value={form.adminId}>Unknown user #{form.adminId}</SelectItem>
-                                    )}
-                                    {supervisorUsers.length > 0 && (
-                                        <SelectGroup>
-                                            <SelectLabel>Leader applicants</SelectLabel>
-                                            {supervisorUsers.map(u => (
-                                                <SelectItem key={u.id} value={u.id.toString()}>{personLabel(u.name, u.email)}</SelectItem>
-                                            ))}
-                                        </SelectGroup>
-                                    )}
-                                    {otherUsers.length > 0 && (
-                                        <SelectGroup>
-                                            <SelectLabel>Other users</SelectLabel>
-                                            {otherUsers.map(u => (
-                                                <SelectItem key={u.id} value={u.id.toString()}>{personLabel(u.name, u.email)}</SelectItem>
-                                            ))}
-                                        </SelectGroup>
-                                    )}
-                                </SelectContent>
-                            </Select>
-                        </div>
-                        <div className="space-y-2">
                             <Label htmlFor="delegation-notes">Notes</Label>
                             <Textarea
                                 id="delegation-notes"
@@ -496,7 +474,7 @@ export default function DelegationsAdmin() {
                                     checked={form.acceptSupervisor}
                                     onCheckedChange={checked => handleFormChange('acceptSupervisor', checked === true)}
                                 />
-                                <Label htmlFor="delegation-accept">Accept the leader application and email the applicant</Label>
+                                <Label htmlFor="delegation-accept">Accept the supervisor application and email the applicant</Label>
                             </div>
                         )}
                         {formError && <p className="text-red-600 text-sm">{formError}</p>}
@@ -516,6 +494,95 @@ export default function DelegationsAdmin() {
                     <DialogDescription>What the delegation&apos;s supervisors see on their My Delegation page.</DialogDescription>
                 </DialogHeader>
                 {viewing && <DelegationMembers key={viewing.id} delegationId={viewing.id} />}
+            </DialogContent>
+        </Dialog>
+
+        <Dialog open={!!managing} onOpenChange={open => { if (!open && !supervisorBusy) setManaging(null) }}>
+            <DialogContent className="sm:max-w-2xl">
+                {managing && (
+                    <div className="space-y-4">
+                        <DialogHeader>
+                            <DialogTitle>Supervisors of {managing.name}</DialogTitle>
+                            <DialogDescription>
+                                Accepted supervisors can see every member of this delegation on their My Delegation page.
+                            </DialogDescription>
+                        </DialogHeader>
+                        {managingSupervisors.length ? (
+                            <table className="min-w-full border border-gray-200 rounded">
+                                <thead>
+                                    <tr className="bg-gray-100">
+                                        <th className="px-2 py-1 border">Supervisor</th>
+                                        <th className="px-2 py-1 border">Status</th>
+                                        <th className="px-2 py-1 border"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {managingSupervisors.map(supervisor => (
+                                        <tr key={supervisor.id} className="border-t">
+                                            <td className="px-2 py-1 border">{personLabel(supervisor.name, supervisor.email)}</td>
+                                            <td className={`px-2 py-1 border ${statusClass(supervisor.status)}`}>{capitalize(supervisor.status)}</td>
+                                            <td className="px-2 py-1 border whitespace-nowrap">
+                                                {supervisor.status !== 'accepted' && (
+                                                    <Button
+                                                        size="sm"
+                                                        disabled={supervisorBusy}
+                                                        title="Accept and email the applicant"
+                                                        onClick={() => runSupervisorAction(() => acceptSupervisorApplication(supervisor.id))}
+                                                    >
+                                                        Accept
+                                                    </Button>
+                                                )}
+                                                <Button
+                                                    size="sm"
+                                                    variant="ghost"
+                                                    disabled={supervisorBusy}
+                                                    onClick={() => runSupervisorAction(() => setDelegationSupervisor({ action: 'remove', supervisorId: supervisor.id }))}
+                                                >
+                                                    Remove
+                                                </Button>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        ) : (
+                            <p className="text-sm">This delegation has no supervisors yet.</p>
+                        )}
+                        <form onSubmit={handleAddSupervisor} className="flex items-end gap-2">
+                            <div className="flex-1 space-y-2">
+                                <Label>Add supervisor</Label>
+                                <Select value={addUserId} onValueChange={setAddUserId}>
+                                    <SelectTrigger className="w-full">
+                                        <SelectValue placeholder="Select a user" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {supervisorUsers.length > 0 && (
+                                            <SelectGroup>
+                                                <SelectLabel>Supervisor applicants</SelectLabel>
+                                                {supervisorUsers.map(u => (
+                                                    <SelectItem key={u.id} value={u.id.toString()}>{personLabel(u.name, u.email)}</SelectItem>
+                                                ))}
+                                            </SelectGroup>
+                                        )}
+                                        {otherUsers.length > 0 && (
+                                            <SelectGroup>
+                                                <SelectLabel>Other users</SelectLabel>
+                                                {otherUsers.map(u => (
+                                                    <SelectItem key={u.id} value={u.id.toString()}>{personLabel(u.name, u.email)}</SelectItem>
+                                                ))}
+                                            </SelectGroup>
+                                        )}
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                            <Button type="submit" disabled={supervisorBusy || !addUserId}>Add</Button>
+                        </form>
+                        <p className="text-xs text-muted-foreground">
+                            Added users become accepted supervisors immediately, without an email.
+                        </p>
+                        {supervisorError && <p className="text-red-600 text-sm">{supervisorError}</p>}
+                    </div>
+                )}
             </DialogContent>
         </Dialog>
 
@@ -549,7 +616,7 @@ export default function DelegationsAdmin() {
                                     checked={linkAccept}
                                     onCheckedChange={checked => setLinkAccept(checked === true)}
                                 />
-                                <Label htmlFor="link-accept">Accept the leader application and email the applicant</Label>
+                                <Label htmlFor="link-accept">Accept the supervisor application and email the applicant</Label>
                             </div>
                         )}
                         {formError && <p className="text-red-600 text-sm">{formError}</p>}
