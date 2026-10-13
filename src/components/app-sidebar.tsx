@@ -6,7 +6,8 @@ import {
   IconUsers,
   IconUser,
   IconCreditCardPay,
-  IconConfetti
+  IconConfetti,
+  IconFlag
 } from "@tabler/icons-react"
 
 import { NavCategory } from "@/components/nav-category"
@@ -67,6 +68,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         name: "Applications",
         url: "/user/admin/applications",
         icon: IconReport,
+      },
+      {
+        name: "Delegations",
+        url: "/user/admin/delegations",
+        icon: IconFlag,
       },
     ],
   }
