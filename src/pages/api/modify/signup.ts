@@ -26,7 +26,7 @@ if (typeof password !== 'string' || password.length < 8 || password.length > 100
     return res.status(400).json({ message: 'Password must be between 8 and 100 characters long' });
 }
 
-// Hash the password before storing
+
 const hashedPassword = await bcrypt.hash(password, 10);
 
 const isGoogleUserBool = Boolean(isGoogleUser)

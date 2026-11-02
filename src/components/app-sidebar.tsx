@@ -8,7 +8,8 @@ import {
   IconCreditCardPay,
   IconConfetti,
   IconFlag,
-  IconUsersGroup
+  IconUsersGroup,
+  IconUserShield
 } from "@tabler/icons-react"
 
 import { NavCategory } from "@/components/nav-category"
@@ -27,6 +28,7 @@ import {
 import { useSession } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import { title } from "process"
+import { SUPERVISOR_APPLY_PATH } from "@/config/supervisor"
 
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
@@ -34,7 +36,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const router = useRouter()
 
   const [isAdmin, setIsAdmin] = React.useState(false)
-  const [isSupervisor, setIsSupervisor] = React.useState(false)
+  // applicant: has a supervisor application that wasn't rejected; leader: can see My Delegation.
+  // null until known, so students and supervisors don't briefly see each other's menu
+  const [supervisorRole, setSupervisorRole] = React.useState<{ applicant: boolean, leader: boolean } | null>(null)
 
   const data = {
     user: {
@@ -62,10 +66,20 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     ],
     supervisor: [
       {
+        name: supervisorRole?.applicant ? "Supervisor Application" : "Apply as Supervisor",
+        url: SUPERVISOR_APPLY_PATH,
+        icon: IconUserShield,
+      },
+      ...(supervisorRole?.leader ? [{
         name: "My Delegation",
         url: "/user/supervisor/delegation",
         icon: IconUsersGroup,
-      },
+      }] : []),
+      ...(supervisorRole?.applicant ? [{
+        name: "Payment",
+        url: "/user/payment",
+        icon: IconCreditCardPay,
+      }] : []),
     ],
     admin: [
       {
@@ -123,13 +137,15 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     async function checkSupervisor() {
       if (!session?.user?.email) return
       try {
-        const res = await fetch("/api/retrieve/getSupervisedDelegations", { method: "POST" })
-        if (res.ok) {
-          const result = await res.json()
-          setIsSupervisor(result.delegations?.length > 0)
-        }
+        const res = await fetch("/api/retrieve/getSupervisorApplications", { method: "POST" })
+        if (!res.ok) throw new Error("Failed to fetch supervisor applications")
+        const { applications } = await res.json()
+        setSupervisorRole({
+          applicant: applications.some((a: { status: string }) => a.status !== "rejected"),
+          leader: applications.some((a: { status: string, linked: boolean }) => a.status === "accepted" && a.linked),
+        })
       } catch (e) {
-        setIsSupervisor(false)
+        setSupervisorRole({ applicant: false, leader: false })
       }
     }
     checkSupervisor()
@@ -153,8 +169,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
-        <NavCategory items={data.delegate} title="Delegate" />
-        {isSupervisor && <NavCategory items={data.supervisor} title="Supervisor" />}
+        {supervisorRole && !supervisorRole.applicant && <NavCategory items={data.delegate} title="Delegate" />}
+        {supervisorRole && <NavCategory items={data.supervisor} title={supervisorRole.applicant ? "Supervisor" : "Teachers & Supervisors"} />}
         {isAdmin && <NavCategory items={data.admin} title="Admin" />}
       </SidebarContent>
       <SidebarFooter>

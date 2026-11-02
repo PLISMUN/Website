@@ -65,6 +65,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(400).json({ message: 'Invalid user ID' })
   }
 
+  // people.delegation references delegations(name); a blank one means the person has no delegation (yet)
+  const delegationName = typeof delegation === 'string' && delegation.trim() ? delegation.trim() : null
+
   try {
     const turso = getTursoClient()
 
@@ -85,7 +88,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       SET name = ?, birth = ?, phone = ?, nationality = ?, delegation = ?, diet = ?, notes = ?
       WHERE id = ?
       `,
-      args: [name, birth, phone ?? null, nationality, delegation, diet, notes, id],
+      args: [name, birth, phone ?? null, nationality, delegationName, diet, notes, id],
     })
 
     if (peopleUpdateResult.rowsAffected === 0) {
@@ -94,7 +97,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         INSERT INTO people (id, name, birth, phone, nationality, delegation, diet, notes)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?)
       `,
-      args: [id, name, birth, phone ?? null, nationality, delegation, diet, notes],
+      args: [id, name, birth, phone ?? null, nationality, delegationName, diet, notes],
       })
     }
 

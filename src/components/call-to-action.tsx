@@ -8,10 +8,15 @@ import { useSession } from "next-auth/react";
 
 type CallToActionProps = {
   text: string;
+  buttonText?: string;
+  // Portal page to continue to after signing up or logging in, e.g. the supervisor application
+  next?: string;
 };
 
-export function CallToAction({ text }: CallToActionProps) {
+export function CallToAction({ text, buttonText = "Get Started", next }: CallToActionProps) {
   const { data: session } = useSession();
+  const nextQuery = next ? `?next=${encodeURIComponent(next)}` : "";
+  const startHref = next && session ? next : `/user/signup${nextQuery}`;
     return (
         <section>
             <div className="py-32 bg-muted">
@@ -25,14 +30,14 @@ export function CallToAction({ text }: CallToActionProps) {
                 disabled={!stages.accountCreation}
               >
                 <Link
-                  href="/user/signup"
+                  href={startHref}
                   onClick={(e) => {
                     if (!stages.accountCreation) {
                       e.preventDefault();
                     }
                   }}
                 >
-                  <span className="text-nowrap">Get Started</span>
+                  <span className="text-nowrap">{buttonText}</span>
                   <ChevronRight className="ml-1 h-4 w-4 opacity-60" />
                 </Link>
               </Button>
@@ -45,7 +50,7 @@ export function CallToAction({ text }: CallToActionProps) {
                   disabled={!stages.accountCreation}
                 >
                   <Link
-                    href="/user/login"
+                    href={`/user/login${nextQuery}`}
                     onClick={(e) => {
                       if (!stages.accountCreation) {
                         e.preventDefault();

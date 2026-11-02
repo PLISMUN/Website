@@ -16,6 +16,11 @@ export default function FAQs() {
             answer: 'Sign up and follow the instructions! If you apply as a chair, you can also apply as a delegate at the same time in case you get rejected.',
         },
         {
+            id: 'item-supervisor',
+            question: 'I am a teacher. How do I register my delegation?',
+            answer: 'Supervisors have their own application, separate from students. Visit the Supervisors page for a step-by-step guide and the link to apply.',
+        },
+        {
             id: 'item-3',
             question: 'Where can I find this yearʹs committees & topics?',
             answer: 'Go to the Details page. If you want to know more about the committees, just click on them!',

@@ -70,7 +70,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         await sendEmail(
           email,
           'Supervisor Application Accepted',
-          `Congratulations! Your supervisor application (id ${id}) for delegation ${delegation} has been accepted.`
+          `Congratulations! Your supervisor application (id ${id}) for delegation ${delegation} has been accepted.<br /><br />` +
+          `Ask your students to select <b>${delegation}</b> as their delegation when they sign up. ` +
+          `You can follow every member of your delegation, their applications and payments in the portal under <i>My Delegation</i>.`
         );
 
         await turso.execute({

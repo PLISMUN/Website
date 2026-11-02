@@ -9,6 +9,7 @@ export function GET() {
     { url: `${baseUrl}/this-year`, lastModified: new Date() },
     { url: `${baseUrl}/documents`, lastModified: new Date() },
     { url: `${baseUrl}/delegate-info`, lastModified: new Date() },
+    { url: `${baseUrl}/supervisors`, lastModified: new Date() },
     { url: `${baseUrl}/faq`, lastModified: new Date() },
     { url: `${baseUrl}/legal/privacy`, lastModified: new Date() },
     { url: `${baseUrl}/legal/tos`, lastModified: new Date() },

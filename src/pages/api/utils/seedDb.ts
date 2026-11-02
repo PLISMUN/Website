@@ -27,7 +27,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       birth DATE NOT NULL,
       phone TEXT,
       nationality TEXT NOT NULL,
-      delegation TEXT NOT NULL,
+      delegation TEXT, -- NULL for a supervisor whose delegation hasn't been created yet
       diet TEXT NOT NULL,
       notes TEXT,
       FOREIGN KEY (delegation) REFERENCES delegations(name),
@@ -88,6 +88,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         userId INTEGER NOT NULL,
         delegation TEXT NOT NULL,
         status TEXT NOT NULL DEFAULT 'pending',
+        country TEXT,
+        students INTEGER,
         FOREIGN KEY (userId) REFERENCES users(id)
       )
     `);

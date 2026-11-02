@@ -9,6 +9,8 @@ import { useRouter } from "next/navigation"
 import { useEffect } from 'react'
 import { signIn } from "next-auth/react"
 import { Checkbox } from "@/components/ui/checkbox"
+import { portalRedirect } from '@/lib/utils'
+import { SUPERVISOR_APPLY_PATH } from '@/config/supervisor'
 
 export default function LoginPage() {
     
@@ -21,11 +23,20 @@ export default function LoginPage() {
     const { data: session, status } = useSession()
     const router = useRouter()
 
+    // Where to go once signed in, from ?next= (e.g. the supervisor application). Read after mount
+    // because useSearchParams would need a Suspense boundary; undefined until then.
+    const [next, setNext] = useState<string | null | undefined>(undefined)
     useEffect(() => {
-        if (status === "authenticated") {
-            router.push("/user/dashboard")
+        setNext(new URLSearchParams(window.location.search).get("next"))
+    }, [])
+    const redirectTo = portalRedirect(next)
+    const isSupervisor = redirectTo === SUPERVISOR_APPLY_PATH
+
+    useEffect(() => {
+        if (status === "authenticated" && next !== undefined) {
+            router.push(redirectTo)
         }
-    }, [status, router])
+    }, [status, router, redirectTo, next])
 
     const passwordToggle = () => {
         const passwordInput = document.getElementById("password") as HTMLInputElement;
@@ -56,6 +67,9 @@ export default function LoginPage() {
       }
 
       setSuccess(true);
+      // Sign straight in and carry on, instead of making the user log in again
+      const login = await signIn("credentials", { redirect: false, email, password });
+      if (login?.ok) window.location.href = redirectTo;
     } catch (err: any) {
       setError(err.message || 'An error occurred');
     } finally {
@@ -76,7 +90,11 @@ export default function LoginPage() {
                             <img src="/logo.png" alt="Logo" className="h-8 w-auto" />
                         </Link>
                         <h1 className="mt-6 text-balance text-xl font-semibold">
-                            <span className="text-muted-foreground">Welcome to PLISMUN!</span> Create an Account to Get Started
+                            {isSupervisor ? (
+                                <><span className="text-muted-foreground">Welcome, teachers & supervisors!</span> Create an account to register your delegation</>
+                            ) : (
+                                <><span className="text-muted-foreground">Welcome to PLISMUN!</span> Create an Account to Get Started</>
+                            )}
                         </h1>
                     </div>
 
@@ -86,7 +104,7 @@ export default function LoginPage() {
                             variant="outline"
                             size="default"
                             className="w-full"
-                            onClick={() => signIn("google")}
+                            onClick={() => signIn("google", { callbackUrl: redirectTo })}
                             >
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -184,7 +202,7 @@ export default function LoginPage() {
                             asChild
                             variant="link"
                             className="px-2">
-                            <Link href="/user/login">Sign In</Link>
+                            <Link href={next ? `/user/login?next=${encodeURIComponent(next)}` : "/user/login"}>Sign In</Link>
                         </Button>
                     </p>
                 </div>

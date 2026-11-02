@@ -122,6 +122,17 @@ SELECT * FROM committees LIMIT 1;
     ]
 ```
 
+### Migrations
+
+Existing databases need these run once (send a request with the `INTERNAL_API_PASSWORD` as the `password` URL param, like `seedDb`). Each is safe to run more than once.
+
+- `api/utils/migratePaymentStatus` - payments.status becomes a boolean
+- `api/utils/migrateSupervisorApplications` - required by the supervisor application flow: people.delegation becomes nullable (a supervisor of a new delegation has none until an admin creates it) and supervisors gains `country` and `students`
+
+## Supervisors
+
+Supervisors (teachers / delegation leaders) have their own application at `/user/supervisor/apply`, separate from the student flow, and a public guide at `/supervisors`. A supervisor either joins an existing delegation or requests a new one; admins create and link requested delegations from the Delegations admin page. Accepted supervisors of an existing delegation get the My Delegation page.
+
 ## Environment Variables
 
 ```env

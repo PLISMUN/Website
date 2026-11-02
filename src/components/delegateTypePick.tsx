@@ -7,10 +7,12 @@ import { Label } from '@/components/ui/label'
 import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import { useEffect } from 'react'
+import Link from 'next/link'
 import { IconPodium, IconLaurelWreath, IconUserShield, IconUser } from "@tabler/icons-react"
 import { stages } from "@/config/stages"
+import { SUPERVISOR_APPLY_PATH } from "@/config/supervisor"
 
-export default function DelegateTypePick({ onPickType }: { onPickType: (type: 'delegate' | 'chair' | "supervisor" ) => void }) {
+export default function DelegateTypePick({ onPickType }: { onPickType: (type: 'delegate' | 'chair') => void }) {
 
     const { data: session } = useSession()
 
@@ -66,28 +68,11 @@ export default function DelegateTypePick({ onPickType }: { onPickType: (type: 'd
                                     />
                                     <span className="text-sm">Chair</span>
                                 </Button>
-                                <span className="mx-6 h-12 border-l border-gray-300" aria-hidden="true"></span>
-                                <Button
-                                    variant="secondary"
-                                    className="flex flex-col items-center justify-center cursor-pointer"
-                                    style={{ background: "none", boxShadow: "none" }}
-                                    aria-label="Apply as Supervisor"
-                                    onClick={() => {
-                                        onPickType('supervisor')
-                                    }}
-                                    disabled={!stages.supervisorApplication}
-                                >
-                                    <IconUserShield
-                                        className=""
-                                        stroke={1}
-                                        style={{
-                                            width: 'clamp(24px, 5vw, 60px)',
-                                            height: 'clamp(24px, 5vw, 60px)',
-                                        }}
-                                    />
-                                    <span className="text-sm">Supervisor</span>
-                                </Button>
                             </div>
+                            <p className="mt-8 text-center text-sm text-muted-foreground">
+                                <IconUserShield className="mr-1 inline size-4 align-text-bottom" stroke={1.5} />
+                                Teacher or supervisor? <Link href={SUPERVISOR_APPLY_PATH} className="underline">Use the supervisor application instead</Link>.
+                            </p>
                         </Card>
                     </div>
                 </div>
