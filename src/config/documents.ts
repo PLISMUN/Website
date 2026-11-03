@@ -32,13 +32,8 @@ export const documentGroups: DocumentGroup[] = [
     blurb: "Everything you need to prepare for your committee, written by this year's chairs.",
   },
   {
-    id: "rules-procedure",
-    heading: "Rules & Procedure",
-    blurb: "The rules every committee runs on. Read these before you arrive.",
-  },
-  {
-    id: "getting-started",
-    heading: "Getting Started",
-    blurb: "New to Model UN? Start here.",
+    id: "useful-important",
+    heading: "Useful & Important Documents",
+    blurb: "The rules of procedure, guides, and anything else worth reading before you arrive.",
   },
 ]
