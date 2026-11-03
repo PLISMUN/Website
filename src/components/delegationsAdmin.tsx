@@ -45,6 +45,8 @@ type SupervisorApplication = {
     userId: number
     delegation: string
     status: string
+    country: string | null
+    students: number | null
     email: string
     name: string | null
 }
@@ -186,6 +188,7 @@ export default function DelegationsAdmin() {
             ...emptyForm,
             name: application.delegation,
             shorthand: suggestShorthand(application.delegation),
+            country: application.country ?? '',
             supervisorId: application.id,
             acceptSupervisor: application.status !== 'accepted',
         })
@@ -322,6 +325,8 @@ export default function DelegationsAdmin() {
                                         <th className="px-2 py-1 border">ID</th>
                                         <th className="px-2 py-1 border">Applicant</th>
                                         <th className="px-2 py-1 border">Requested delegation</th>
+                                        <th className="px-2 py-1 border">Country</th>
+                                        <th className="px-2 py-1 border">Students</th>
                                         <th className="px-2 py-1 border">Status</th>
                                         <th className="px-2 py-1 border"></th>
                                     </tr>
@@ -332,6 +337,8 @@ export default function DelegationsAdmin() {
                                             <td className="px-2 py-1 border">{application.id}</td>
                                             <td className="px-2 py-1 border">{personLabel(application.name, application.email)}</td>
                                             <td className="px-2 py-1 border">{application.delegation}</td>
+                                            <td className="px-2 py-1 border">{application.country ?? ''}</td>
+                                            <td className="px-2 py-1 border">{application.students ?? ''}</td>
                                             <td className={`px-2 py-1 border ${statusClass(application.status)}`}>{capitalize(application.status)}</td>
                                             <td className="px-2 py-1 border whitespace-nowrap">
                                                 <Button size="sm" onClick={() => openCreateFromApplication(application)}>Create delegation</Button>

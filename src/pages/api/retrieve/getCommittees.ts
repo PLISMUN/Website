@@ -4,6 +4,7 @@ import preFlightChecks from '@/pages/api/internal/preFlightChecks';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     await preFlightChecks(req, res);
+    if (res.headersSent) return;
 
     try {
     const turso = getTursoClient()

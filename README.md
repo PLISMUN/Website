@@ -122,6 +122,29 @@ SELECT * FROM committees LIMIT 1;
     ]
 ```
 
+### Migrations
+
+Existing databases need these run once (send a request with the `INTERNAL_API_PASSWORD` as the `password` URL param, like `seedDb`). Each is safe to run more than once.
+
+- `api/utils/migratePaymentStatus` - payments.status becomes a boolean
+- `api/utils/migrateSupervisorApplications` - required by the supervisor application flow: people.delegation becomes nullable (a supervisor of a new delegation has none until an admin creates it) and supervisors gains `country` and `students`
+- `api/utils/migrateDocuments` - required by the Documents admin page: adds the `documents` table
+
+## Supervisors
+
+Supervisors (teachers / delegation leaders) have their own application at `/user/supervisor/apply`, separate from the student flow, and a public guide at `/supervisors`. A supervisor either joins an existing delegation or requests a new one; admins create and link requested delegations from the Delegations admin page. Accepted supervisors of an existing delegation get the My Delegation page.
+
+## Documents
+
+The PDFs on `/documents` and `/delegate-info` are uploaded by admins from the Documents admin page, and stored in [Vercel Blob](https://vercel.com/docs/vercel-blob) because a Vercel deployment can't write to its own filesystem.
+
+- **Setup:** in the Vercel project, go to Storage and create a Blob store with **Public** access, connected to the environments you use. This adds `BLOB_READ_WRITE_TOKEN`. Then run the `migrateDocuments` migration.
+- **Adding a document:** on the Documents admin page, choose "New document" in a section, then upload its PDF. Until then it shows as "Unavailable". There are no defaults: documents live in the `documents` table, and a section with none is hidden. The sections themselves are in `src/config/documents.ts`.
+- **Deleting a document** also deletes its PDF, so links to it stop working.
+- **How an upload works:** the browser sends the file straight to Blob, which avoids the 4.5 MB limit on Vercel functions. `api/modify/uploadDocument` only hands out a token for a document that exists, then `api/modify/setDocument` records the upload in the `documents` table, which is what the public page reads.
+- **Replacing a document** overwrites the same URL, so links that were already shared keep working. Someone who already opened the old file may see their cached copy for up to an hour.
+- **Hobby plan limits:** 1 GB of storage and 10 GB of downloads a month. Going over locks the Blob store for 30 days, so keep an eye on usage around the conference.
+
 ## Environment Variables
 
 ```env
@@ -153,6 +176,8 @@ NEXT_PUBLIC_PRICE_EUR_SUPERVISOR=30
 
 NEXTAUTH_URL=
 INTERNAL_API_PASSWORD=
+
+BLOB_READ_WRITE_TOKEN=
 ```
 
 ## Your job
@@ -168,6 +193,7 @@ Things to do every year:
 - Update partners (hero) in the code
 - Update secretariat members & their pictures (`/about` and in the `public/people` dir)  
 - Update Social Event and schedule (`/this-year`)
+- Replace last year's documents from the Documents admin page. Delete them there rather than clearing out the table, or their PDFs stay in the Blob store
 - Get the databases ready (clear out and then seed)
 - Update who is maintaing the site. Please don't delete credits of previous contributors. This is a multi-mun-generational project :).
 

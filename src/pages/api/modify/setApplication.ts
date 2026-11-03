@@ -8,7 +8,7 @@ import sendEmail from '@/pages/api/internal/sendEmail';
  * Creates a new application for the user.
  * 
  * @param {NextApiRequest[string]} req.body.email User's email
- * @param {NextApiRequest[string]} req.body.type Type of application (e.g., "delegate", "chair")
+ * @param {NextApiRequest[string]} req.body.type Type of application ("delegate" or "chair"; supervisors use setSupervisorApplication)
  * @param {NextApiRequest[string]} req.body.committee Committee ID the user is applying to
  * @param {NextApiRequest[string]} req.body.role Role the user is applying for
  * @param {NextApiRequest[string]} req.body.notes Additional notes for the application
@@ -16,7 +16,9 @@ import sendEmail from '@/pages/api/internal/sendEmail';
  */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await preFlightChecks(req, res);
-  await authAdmin(req, res);
+  if (res.headersSent) return;
+  await authAdmin(req, res, true);
+  if (res.headersSent) return;
   
   const { email, type, committee, role, notes } = req.body;
 
@@ -34,12 +36,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const userId = userResult.rows[0].id;
 
-    if (type !== 'supervisor') {
+    if (type === 'supervisor') {
+      return res.status(400).json({ message: 'Supervisor applications are submitted through /api/modify/setSupervisorApplication' });
+    }
+
     const applicationResult = await turso.execute({
       sql: 'INSERT INTO applications (type, userId, committeeId, role, notes) VALUES (?, ?, ?, ?, ?) RETURNING id',
       args: [type, userId, committee, role, notes],
     });
-    
+
     const applicationId = applicationResult.rows[0].id;
 
     if (type !== 'chair') {
@@ -49,13 +54,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     res.status(200).json({ message: 'Signup successful', applicationId });
-    } else {
-      const applicationResult = await turso.execute({
-        sql: 'INSERT INTO supervisors (userId, delegation) VALUES (?, ?) RETURNING id',
-        args: [userId, committee],
-      });
-      res.status(200).json({ message: 'Signup successful'});
-    }
   } catch (err: any) {
     res.status(500).json({ message: err.message || 'Something went wrong' });
   }

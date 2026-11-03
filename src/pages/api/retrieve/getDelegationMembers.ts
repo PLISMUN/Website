@@ -4,13 +4,7 @@ import preFlightChecks from '@/pages/api/internal/preFlightChecks';
 import authSupervisor, { SupervisedDelegation } from '@/lib/authSupervisor';
 import isSessionAdmin from '@/lib/sessionAdmin';
 
-/**
- * Lists everyone signed up under a delegation, with their personal information, payment and applications.
- * Only available to accepted delegation leaders of that delegation, and to admins.
- *
- * @param {NextApiRequest[number]} req.body.delegationId Delegation ID to list members of
- * @returns {NextApiResponse} res.status(200).json({ delegation, members })
- */
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await preFlightChecks(req, res);
   if (res.headersSent) return;

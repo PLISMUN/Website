@@ -4,16 +4,22 @@ import { authOptions } from '../auth/[...nextauth]';
 import { getTursoClient } from '@/pages/api/components/dbAuth';
 
 /**
- * @param allowSelf When true (default), a request whose body.email matches the session user passes.
- *                  Pass false for endpoints that must only ever be reachable by admins.
+ * Sends the error response if the request isn't allowed, so callers MUST stop when it has:
+ *   await authAdmin(req, res);
+ *   if (res.headersSent) return;
+ *
+ * @param allowSelf When true, a request whose body.email matches the session user also passes, for
+ *                  endpoints where users act on their own data. Those endpoints must only ever touch
+ *                  the user named by body.email. Everything else stays admin-only by leaving this off.
  */
-export default async function handler(req: NextApiRequest, res: NextApiResponse, allowSelf: boolean = true) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse, allowSelf: boolean = false) {
       var isAdmin = false;
 
       // Master password check (for example for postman debuging) using query param. 
       // Ex http://localhost:3000/api/modify/acceptApplication?password=IncrediblelyStrongPassword123!
       try {
-        if (req.query["password"] === process.env.INTERNAL_API_PASSWORD) {
+        // An unset password must not match a request that sent none: undefined === undefined
+        if (process.env.INTERNAL_API_PASSWORD && req.query["password"] === process.env.INTERNAL_API_PASSWORD) {
           isAdmin = true;
           return;
         }

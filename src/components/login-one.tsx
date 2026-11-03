@@ -9,6 +9,7 @@ import { signIn } from "next-auth/react"
 import { useSession } from 'next-auth/react'
 import { useRouter } from "next/navigation"
 import { useEffect } from 'react'
+import { portalRedirect } from '@/lib/utils'
 
 export default function LoginPage() {
     const [email, setEmail] = useState("")
@@ -19,11 +20,19 @@ export default function LoginPage() {
     const { data: session, status } = useSession()
     const router = useRouter()
 
+    // Where to go once signed in, from ?next= (e.g. the supervisor application). Read after mount
+    // because useSearchParams would need a Suspense boundary; undefined until then.
+    const [next, setNext] = useState<string | null | undefined>(undefined)
     useEffect(() => {
-        if (status === "authenticated") {
-            router.push("/user/dashboard")
+        setNext(new URLSearchParams(window.location.search).get("next"))
+    }, [])
+    const redirectTo = portalRedirect(next)
+
+    useEffect(() => {
+        if (status === "authenticated" && next !== undefined) {
+            router.push(redirectTo)
         }
-    }, [status, router])
+    }, [status, router, redirectTo, next])
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -41,7 +50,7 @@ export default function LoginPage() {
             setError(res.error)
         } else if (res?.ok) {
             setSuccess(true)
-            window.location.href = "/user/dashboard"
+            window.location.href = redirectTo
         }
         setLoading(false)
     }
@@ -68,7 +77,7 @@ export default function LoginPage() {
                             variant="outline"
                             size="default"
                             className="w-full"
-                            onClick={() => signIn("google")}
+                            onClick={() => signIn("google", { callbackUrl: redirectTo })}
                         >
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -152,7 +161,7 @@ export default function LoginPage() {
                             asChild
                             variant="link"
                             className="px-2">
-                            <Link href="/user/signup">Create account</Link>
+                            <Link href={next ? `/user/signup?next=${encodeURIComponent(next)}` : "/user/signup"}>Create account</Link>
                         </Button>
                     </p>
                 </div>

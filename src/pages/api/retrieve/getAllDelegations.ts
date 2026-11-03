@@ -3,12 +3,7 @@ import { getTursoClient } from '@/pages/api/components/dbAuth';
 import authAdmin from '@/pages/api/internal/authAdmin';
 import preFlightChecks from '@/pages/api/internal/preFlightChecks';
 
-/**
- * Admin view of delegations, together with the supervisor (delegation leader) applications
- * and the list of users that can be added as a supervisor.
- *
- * @returns {NextApiResponse} res.status(200).json({ delegations, supervisors, users })
- */
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await preFlightChecks(req, res);
   if (res.headersSent) return;
@@ -35,6 +30,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           s.userId,
           s.delegation,
           s.status,
+          s.country,
+          s.students,
           u.email,
           p.name
         FROM supervisors s
@@ -71,6 +68,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       userId: Number(row.userId),
       delegation: row.delegation,
       status: row.status,
+      country: row.country || null,
+      students: row.students === null || row.students === undefined ? null : Number(row.students),
       email: row.email,
       name: row.name || null,
     }));

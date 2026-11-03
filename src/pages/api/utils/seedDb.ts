@@ -5,7 +5,9 @@ import preFlightChecks from '@/pages/api/internal/preFlightChecks';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await preFlightChecks(req, res);
-  await authAdmin(req, res);
+  if (res.headersSent) return;
+  await authAdmin(req, res, false);
+  if (res.headersSent) return;
 
     try {
     const turso = getTursoClient()
@@ -27,7 +29,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       birth DATE NOT NULL,
       phone TEXT,
       nationality TEXT NOT NULL,
-      delegation TEXT NOT NULL,
+      delegation TEXT, -- NULL for a supervisor whose delegation hasn't been created yet
       diet TEXT NOT NULL,
       notes TEXT,
       FOREIGN KEY (delegation) REFERENCES delegations(name),
@@ -88,7 +90,22 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         userId INTEGER NOT NULL,
         delegation TEXT NOT NULL,
         status TEXT NOT NULL DEFAULT 'pending',
+        country TEXT,
+        students INTEGER,
         FOREIGN KEY (userId) REFERENCES users(id)
+      )
+    `);
+
+    await turso.execute(`
+      CREATE TABLE IF NOT EXISTS documents (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        groupId TEXT NOT NULL,
+        title TEXT NOT NULL,
+        description TEXT NOT NULL,
+        path TEXT NOT NULL UNIQUE,
+        url TEXT, -- url, size and uploadedAt are NULL until a PDF has been uploaded
+        size INTEGER,
+        uploadedAt TEXT
       )
     `);
 

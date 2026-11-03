@@ -59,7 +59,7 @@ export default function Pricing() {
                                         className="w-full"
                                         variant="neutral"
                                         disabled={!stages.supervisorApplication}>
-                                        <Link href="/user/signup">Get Started</Link>
+                                        <Link href="/supervisors">Supervisor guide</Link>
                                     </Button>
                                 </div>
                             </div>

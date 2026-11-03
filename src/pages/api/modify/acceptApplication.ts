@@ -11,7 +11,9 @@ import preFlightChecks from '@/pages/api/internal/preFlightChecks';
  */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await preFlightChecks(req, res);
-  await authAdmin(req, res);
+  if (res.headersSent) return;
+  await authAdmin(req, res, false);
+  if (res.headersSent) return;
 
   try {
     const turso = getTursoClient()
@@ -42,7 +44,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           );
 
           await turso.execute({
-            sql: 'UPDATE applications SET status = "accepted" WHERE id = ?',
+            sql: `UPDATE applications SET status = 'accepted' WHERE id = ?`,
             args: [id],
           });
           continue;
@@ -70,20 +72,22 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         await sendEmail(
           email,
           'Supervisor Application Accepted',
-          `Congratulations! Your supervisor application (id ${id}) for delegation ${delegation} has been accepted.`
+          `Congratulations! Your supervisor application (id ${id}) for delegation ${delegation} has been accepted.<br /><br />` +
+          `Ask your students to select <b>${delegation}</b> as their delegation when they sign up. ` +
+          `You can follow every member of your delegation, their applications and payments in the portal under <i>My Delegation</i>.`
         );
 
         await turso.execute({
-          sql: 'UPDATE supervisors SET status = "accepted" WHERE id = ?',
+          sql: `UPDATE supervisors SET status = 'accepted' WHERE id = ?`,
           args: [id],
         });
       } else if (status === false) {
         await turso.execute({
-          sql: 'UPDATE applications SET status = "rejected" WHERE id = ?',
+          sql: `UPDATE applications SET status = 'rejected' WHERE id = ?`,
           args: [id],
         });
         await turso.execute({
-          sql: 'UPDATE supervisors SET status = "rejected" WHERE id = ?',
+          sql: `UPDATE supervisors SET status = 'rejected' WHERE id = ?`,
           args: [id],
         });
       }
