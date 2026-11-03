@@ -94,6 +94,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       )
     `);
 
+    await turso.execute(`
+      CREATE TABLE IF NOT EXISTS documents (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        groupId TEXT NOT NULL,
+        title TEXT NOT NULL,
+        description TEXT NOT NULL,
+        path TEXT NOT NULL UNIQUE,
+        url TEXT, -- url, size and uploadedAt are NULL until a PDF has been uploaded
+        size INTEGER,
+        uploadedAt TEXT
+      )
+    `);
+
     // Set AUTOINCREMENT starting value for supervisors.id to 90
     await turso.execute(`
       INSERT OR REPLACE INTO sqlite_sequence (name, seq)

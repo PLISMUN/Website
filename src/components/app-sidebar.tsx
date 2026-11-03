@@ -2,6 +2,7 @@
 
 import * as React from "react"
 import {
+  IconFileText,
   IconReport,
   IconUsers,
   IconUser,
@@ -96,6 +97,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         name: "Delegations",
         url: "/user/admin/delegations",
         icon: IconFlag,
+      },
+      {
+        name: "Documents",
+        url: "/user/admin/documents",
+        icon: IconFileText,
       },
     ],
   }

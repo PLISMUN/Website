@@ -1,23 +1,13 @@
-import fs from 'node:fs'
-import path from 'node:path'
+'use client'
 
+import { useEffect, useState } from 'react'
 import { FileText } from 'lucide-react'
 
 import { Badge } from '@/components/ui/badge'
 import { Card } from '@/components/ui/card'
+import { Skeleton } from '@/components/ui/skeleton'
 import { cn } from '@/lib/utils'
 import { documentGroups, type DocumentEntry } from '@/config/documents'
-
-// Both pages that render this section are statically prerendered, so this runs
-// at build time: a PDF dropped into public/documents/ turns its card into a
-// working link on the next build, with no config change.
-function isAvailable(doc: DocumentEntry): boolean {
-    try {
-        return fs.existsSync(path.join(process.cwd(), 'public', doc.href))
-    } catch {
-        return false
-    }
-}
 
 function DocumentCard({ doc }: { doc: DocumentEntry }) {
     return (
@@ -79,7 +69,30 @@ function UnavailableCard({ doc }: { doc: DocumentEntry }) {
 // `compact` drops the extra top padding that clears the fixed header, for when
 // this section is embedded below another one rather than opening a page.
 export default function Documents({ compact = false }: { compact?: boolean }) {
-    const groups = documentGroups.filter((group) => group.documents.length > 0)
+    // null until known
+    const [documents, setDocuments] = useState<DocumentEntry[] | null>(null)
+    const [failed, setFailed] = useState(false)
+
+    // Fetched in the browser so that these pages can stay static, and a document
+    // an admin adds still shows up straight away without a rebuild.
+    useEffect(() => {
+        async function fetchDocuments() {
+            try {
+                const res = await fetch('/api/retrieve/getDocuments', { method: 'POST' })
+                if (!res.ok) throw new Error('Failed to fetch documents')
+                const data = await res.json()
+                setDocuments(data.documents)
+            } catch (err) {
+                console.error('Error fetching documents:', err)
+                setFailed(true)
+            }
+        }
+        fetchDocuments()
+    }, [])
+
+    const groups = documentGroups
+        .map((group) => ({ ...group, documents: (documents ?? []).filter((doc) => doc.groupId === group.id) }))
+        .filter((group) => group.documents.length > 0)
 
     return (
         <section>
@@ -90,32 +103,42 @@ export default function Documents({ compact = false }: { compact?: boolean }) {
                         <p className="text-muted-foreground mb-12 mt-4 text-balance text-lg">Study guides, the rules of procedure, and everything else you need to read before the conference.</p>
                     </div>
 
-                    <div className="space-y-16">
-                        {groups.map((group) => (
-                            <div key={group.heading}>
-                                <h3 className="text-foreground text-2xl font-semibold">{group.heading}</h3>
-                                <p className="text-muted-foreground mt-2 text-lg">{group.blurb}</p>
+                    {failed ? (
+                        <p className="text-muted-foreground">The documents couldn&apos;t be loaded. Please try again later.</p>
+                    ) : documents === null ? (
+                        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                            {[0, 1, 2].map((i) => <Skeleton key={i} className="h-44" />)}
+                        </div>
+                    ) : groups.length === 0 ? (
+                        <p className="text-muted-foreground">No documents have been published yet. Check back closer to the conference.</p>
+                    ) : (
+                        <div className="space-y-16">
+                            {groups.map((group) => (
+                                <div key={group.id}>
+                                    <h3 className="text-foreground text-2xl font-semibold">{group.heading}</h3>
+                                    <p className="text-muted-foreground mt-2 text-lg">{group.blurb}</p>
 
-                                <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                                    {group.documents.map((doc) =>
-                                        isAvailable(doc) ? (
-                                            <a
-                                                key={doc.href}
-                                                href={doc.href}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="group"
-                                            >
-                                                <DocumentCard doc={doc} />
-                                            </a>
-                                        ) : (
-                                            <UnavailableCard key={doc.href} doc={doc} />
-                                        )
-                                    )}
+                                    <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                                        {group.documents.map((doc) =>
+                                            doc.url ? (
+                                                <a
+                                                    key={doc.id}
+                                                    href={doc.url}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="group"
+                                                >
+                                                    <DocumentCard doc={doc} />
+                                                </a>
+                                            ) : (
+                                                <UnavailableCard key={doc.id} doc={doc} />
+                                            )
+                                        )}
+                                    </div>
                                 </div>
-                            </div>
-                        ))}
-                    </div>
+                            ))}
+                        </div>
+                    )}
                 </div>
             </div>
         </section>
