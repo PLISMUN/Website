@@ -8,7 +8,9 @@ import { paymentStatusLabel } from '@/lib/utils';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await preFlightChecks(req, res);
-  await authAdmin(req, res);
+  if (res.headersSent) return;
+  await authAdmin(req, res, false);
+  if (res.headersSent) return;
 
   const { email, valueCzk = process.env.NEXT_PUBLIC_PRICE_CZK, valueEur = process.env.NEXT_PUBLIC_PRICE_EUR } = req.body
 

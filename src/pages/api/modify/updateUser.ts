@@ -24,7 +24,6 @@ import preFlightChecks from '@/pages/api/internal/preFlightChecks';
     [{
     id: 2,
     email: 'plismun@parklane-is.com',
-    password: 'ya29.a0AW4XtxhYnWRHlBESc2PvI2MomAtWdg95oOyWdNO0YdDlsrbEFUQqN_830IFy4qz9JT2CcBXAnB0Ds9URaQNY2erg_m2XmQSf9YHtMBN9E9gXUSOkvyhR4QjOLok21O0844R6QhWIrQ8mO1WNaNERxGpXzxD0HXhb69xRFGS4SgaCgYKAboSARQSFQHGX2MihqMp6wFfBwyiwBVtAIye_Q0177',
     isGoogleUser: 1,
     isAdmin: 0,
     name: 'Plis The Mun',
@@ -42,7 +41,9 @@ import preFlightChecks from '@/pages/api/internal/preFlightChecks';
  */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await preFlightChecks(req, res);
-  await authAdmin(req, res);
+  if (res.headersSent) return;
+  await authAdmin(req, res, false);
+  if (res.headersSent) return;
 
   const {
     id,
@@ -123,8 +124,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const peopleResult = await turso.execute({
       sql: `
-        SELECT 
-          u.*, 
+        SELECT
+          u.id, u.email, u.isGoogleUser, u.isAdmin, -- not u.*: the browser has no business with password hashes
           p.*,
           pay.*
         FROM users u

@@ -11,7 +11,9 @@ import preFlightChecks from '@/pages/api/internal/preFlightChecks';
  */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await preFlightChecks(req, res);
-  await authAdmin(req, res);
+  if (res.headersSent) return;
+  await authAdmin(req, res, false);
+  if (res.headersSent) return;
 
   try {
     const turso = getTursoClient()
@@ -42,7 +44,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           );
 
           await turso.execute({
-            sql: 'UPDATE applications SET status = "accepted" WHERE id = ?',
+            sql: `UPDATE applications SET status = 'accepted' WHERE id = ?`,
             args: [id],
           });
           continue;
@@ -76,16 +78,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         );
 
         await turso.execute({
-          sql: 'UPDATE supervisors SET status = "accepted" WHERE id = ?',
+          sql: `UPDATE supervisors SET status = 'accepted' WHERE id = ?`,
           args: [id],
         });
       } else if (status === false) {
         await turso.execute({
-          sql: 'UPDATE applications SET status = "rejected" WHERE id = ?',
+          sql: `UPDATE applications SET status = 'rejected' WHERE id = ?`,
           args: [id],
         });
         await turso.execute({
-          sql: 'UPDATE supervisors SET status = "rejected" WHERE id = ?',
+          sql: `UPDATE supervisors SET status = 'rejected' WHERE id = ?`,
           args: [id],
         });
       }
