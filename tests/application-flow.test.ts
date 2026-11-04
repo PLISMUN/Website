@@ -156,6 +156,39 @@ describe('a supervisor applying', () => {
   })
 })
 
+describe('text someone typed that ends up in an email', () => {
+  const typed = '<img src=x onerror=alert(1)>'
+
+  const expectEscaped = (to: string, title: string) => {
+    expect(sendEmail).toHaveBeenLastCalledWith(to, title, expect.stringContaining('&lt;img src=x onerror=alert(1)&gt;'))
+    expect(sendEmail).toHaveBeenLastCalledWith(to, title, expect.not.stringContaining('<img'))
+  }
+
+  it('is escaped when a student\'s application is registered and accepted', async () => {
+    session.email = STUDENT
+    const result = await call(setApplication, {
+      body: { email: STUDENT, type: 'delegate', committee: '1', role: typed, notes: '' },
+    })
+    expectEscaped(STUDENT, 'Application registered')
+
+    session.email = ADMIN
+    await call(acceptApplication, { body: { [String(result.data.applicationId)]: true } })
+    expectEscaped(STUDENT, 'Application Accepted')
+  })
+
+  it('is escaped when a supervisor\'s application is received and accepted', async () => {
+    session.email = TEACHER
+    const result = await call(setSupervisorApplication, {
+      body: { ...personalInfo, name: 'Test Teacher', birth: '1985-01-15', existing: false, delegation: typed, country: 'Czechia', students: 5 },
+    })
+    expectEscaped(TEACHER, 'Supervisor Application Received')
+
+    session.email = ADMIN
+    await call(acceptApplication, { body: { [String(result.data.supervisorId)]: true } })
+    expectEscaped(TEACHER, 'Supervisor Application Accepted')
+  })
+})
+
 describe('what someone else can\'t do', () => {
   it('a student can\'t see another user\'s data', async () => {
     session.email = STUDENT

@@ -1,10 +1,11 @@
-import { MetadataRoute } from 'next'
+import type { MetadataRoute } from 'next'
 import { conference } from '@/config/conference'
 
-export function GET() {
+// Next.js serves this as XML at /sitemap.xml
+export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = conference.siteUrl
 
-  const routes: MetadataRoute.Sitemap = [
+  return [
     { url: `${baseUrl}/`, lastModified: new Date() },
     { url: `${baseUrl}/about`, lastModified: new Date() },
     { url: `${baseUrl}/this-year`, lastModified: new Date() },
@@ -17,6 +18,4 @@ export function GET() {
     { url: `${baseUrl}/user/login`, lastModified: new Date() },
     { url: `${baseUrl}/user/signup`, lastModified: new Date() },
   ]
-
-  return Response.json(routes)
 }

@@ -1,5 +1,5 @@
 import { getTursoClient } from '@/server/db';
-import { sendEmail } from '@/server/email';
+import { escapeHtml, sendEmail } from '@/server/email';
 import { requireUserId } from '@/server/users';
 import { withApi } from '@/server/with-api';
 
@@ -30,7 +30,7 @@ export default withApi({ auth: 'adminOrSelf' }, async ({ req, res }) => {
   const applicationId = applicationResult.rows[0].id;
 
   if (type !== 'chair') {
-    await sendEmail(email, 'Application registered', `Hello! Your application as ${role} has been registered.<br /><br />Please keep in mind your application will be reviewed only <u>after</u> payment is processed.`);
+    await sendEmail(email, 'Application registered', `Hello! Your application as ${escapeHtml(role)} has been registered.<br /><br />Please keep in mind your application will be reviewed only <u>after</u> payment is processed.`);
   } else {
     await sendEmail(email, 'Chair Application registered', `Hello! Your chair application has been registered.`);
   }

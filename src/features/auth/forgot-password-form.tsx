@@ -56,7 +56,7 @@ export default function ForgotPage() {
                 <div className="p-6">
                     <div>
                         <Link
-                            href="/mist"
+                            href="/"
                             aria-label="go home">
                             <img src="/logo.png" alt="Logo" className="h-8 w-auto" />
                         </Link>

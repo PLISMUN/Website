@@ -1,5 +1,5 @@
 import { getTursoClient } from '@/server/db';
-import { sendEmail } from '@/server/email';
+import { escapeHtml, sendEmail } from '@/server/email';
 import { withApi } from '@/server/with-api';
 
 /**
@@ -33,7 +33,7 @@ export default withApi({ auth: 'admin' }, async ({ req, res }) => {
         await sendEmail(
           email,
           'Application Accepted',
-          `Congratulations! Your application (id ${id}) for the ${committeeName} committee as ${role} has been accepted.`
+          `Congratulations! Your application (id ${id}) for the ${escapeHtml(committeeName)} committee as ${escapeHtml(role)} has been accepted.`
         );
 
         await turso.execute({
@@ -62,11 +62,12 @@ export default withApi({ auth: 'admin' }, async ({ req, res }) => {
         return res.status(400).json({ message: 'Invalid email address' });
       }
 
+      const safeDelegation = escapeHtml(delegation);
       await sendEmail(
         email,
         'Supervisor Application Accepted',
-        `Congratulations! Your supervisor application (id ${id}) for delegation ${delegation} has been accepted.<br /><br />` +
-        `Ask your students to select <b>${delegation}</b> as their delegation when they sign up. ` +
+        `Congratulations! Your supervisor application (id ${id}) for delegation ${safeDelegation} has been accepted.<br /><br />` +
+        `Ask your students to select <b>${safeDelegation}</b> as their delegation when they sign up. ` +
         `You can follow every member of your delegation, their applications and payments in the portal under <i>My Delegation</i>.`
       );
 

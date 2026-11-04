@@ -4,9 +4,19 @@ import { conference } from '@/config/conference'
 import { emailConfig } from '@/config/email'
 import { getEnv } from '@/server/env'
 
-/** Escapes text that came from a user before it goes into the HTML of an email. */
-export const escapeHtml = (s: string) =>
-  s.replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c] as string);
+const ENTITIES: Record<string, string> = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
+const CHARACTERS = Object.fromEntries(Object.entries(ENTITIES).map(([character, entity]) => [entity, character]));
+
+/** Escapes text that came from a user or the database before it goes into the HTML of an email. */
+export const escapeHtml = (value: unknown) =>
+  String(value).replace(/[&<>"']/g, c => ENTITIES[c]);
+
+/** Turns the HTML of an email body into its plain-text version, undoing escapeHtml. */
+export const htmlToText = (html: string) =>
+  html
+    .replace(/<br\s*\/?>/gi, '\n')
+    .replace(/<[^>]*>/g, '')
+    .replace(/&(?:amp|lt|gt|quot|#39);/g, entity => CHARACTERS[entity]);
 
 const footerText = () => {
   const { copyrightHolder, madeBy, maintainedBy } = conference.credits
@@ -80,7 +90,7 @@ export async function sendEmail(email: string, title: string, body: string): Pro
 
   const text_message = `
     ${title}
-    ${body}
+    ${htmlToText(body)}
     Sincerely,
     ${conference.name} Team
     `;
