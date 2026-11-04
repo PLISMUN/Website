@@ -8,6 +8,7 @@ import { usePathname } from "next/navigation"
 
 import Header from "@/components/layout/header"
 import FooterSection from "@/components/layout/footer"
+import { Analytics } from "@/components/analytics"
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -39,6 +40,7 @@ export default function RootLayout({
           {/*</ViewTransition>*/}
         </SessionProvider>
         {!hideHeaderFooter && <FooterSection />}
+        <Analytics />
       </body>
     </html>
   );

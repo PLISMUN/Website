@@ -39,8 +39,6 @@ export const conference = {
   // Shown in the site and email footers. Add yourself to maintainedBy when you take over,
   // and please don't delete previous contributors: this is a multi-mun-generational project :)
   credits: {
-    copyrightHolder: 'Tomáš Stoklásek',
-    madeBy: { name: 'Tomáš Stoklásek', url: 'https://stoklasek.org/' },
-    maintainedBy: ['Tomáš Stoklásek', "Sebastian Doležal"],
+    maintainedBy: ['Tomáš Stoklásek', 'Sebastian Doléžal'],
   },
 }

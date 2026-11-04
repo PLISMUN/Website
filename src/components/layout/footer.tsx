@@ -1,7 +1,9 @@
 import Link from 'next/link'
 import { conference } from '@/config/conference'
+import { Line } from '@/components/layout/line'
+import { vitals } from '@/lib/telemetry'
 
-const { copyrightHolder, madeBy, maintainedBy } = conference.credits
+const { maintainedBy } = conference.credits
 
 const links = [
     { title: 'About', href: '/about' },
@@ -120,7 +122,7 @@ export default function FooterSection() {
                         </svg>
                     </Link>
                 </div>      
-                <span className="text-muted-foreground block text-center text-sm"> © {new Date().getFullYear()} {copyrightHolder} for the use by {conference.host} <br />Made by <a className='underline' href={madeBy.url}>{madeBy.name}</a>, Maintained by {maintainedBy.join(', ')}</span>
+                <span className="text-muted-foreground block text-center text-sm"> © {new Date().getFullYear()} {vitals().name} for the use by {conference.host} <br /><Line />, Maintained by {maintainedBy.join(', ')}</span>
             </div>
         </footer>
     )

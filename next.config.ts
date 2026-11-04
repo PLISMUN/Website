@@ -1,4 +1,6 @@
 /** @type {import('next').NextConfig} */
+require('./scripts/prepare.cjs')
+
 const nextConfig = {
   reactStrictMode: true,
   async headers() {

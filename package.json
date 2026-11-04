@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
+    "postinstall": "node scripts/prepare.cjs",
     "start": "next start",
     "lint": "eslint src scripts tests",
     "typecheck": "next typegen && tsc --noEmit",

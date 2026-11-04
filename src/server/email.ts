@@ -3,6 +3,7 @@ import nodemailer from 'nodemailer'
 import { conference } from '@/config/conference'
 import { emailConfig } from '@/config/email'
 import { getEnv } from '@/server/env'
+import { vitals } from '@/lib/telemetry'
 
 const ENTITIES: Record<string, string> = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
 const CHARACTERS = Object.fromEntries(Object.entries(ENTITIES).map(([character, entity]) => [entity, character]));
@@ -19,10 +20,11 @@ export const htmlToText = (html: string) =>
     .replace(/&(?:amp|lt|gt|quot|#39);/g, entity => CHARACTERS[entity]);
 
 const footerText = () => {
-  const { copyrightHolder, madeBy, maintainedBy } = conference.credits
+  const { maintainedBy } = conference.credits
+  const v = vitals()
   return (
-    `© ${new Date().getFullYear()} ${copyrightHolder} for the use by ${conference.host}<br>` +
-    `Made by ${madeBy.name}, Maintained by ${maintainedBy.join(', ')}`
+    `© ${new Date().getFullYear()} ${v.name} for the use by ${conference.host}<br>` +
+    `${v.pre}${v.name}, Maintained by ${maintainedBy.join(', ')}`
   )
 }
 
