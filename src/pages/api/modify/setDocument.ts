@@ -1,10 +1,8 @@
 import { randomBytes } from 'crypto';
-import { NextApiRequest, NextApiResponse } from 'next';
 import { BlobNotFoundError, del, head } from '@vercel/blob';
-import { getTursoClient } from '@/pages/api/components/dbAuth';
-import authAdmin from '@/pages/api/internal/authAdmin';
-import preFlightChecks from '@/pages/api/internal/preFlightChecks';
 import { DOCUMENT_DESCRIPTION_MAX_LENGTH, DOCUMENT_TITLE_MAX_LENGTH, documentGroups } from '@/config/documents';
+import { getTursoClient } from '@/server/db';
+import { withApi } from '@/server/with-api';
 
 // "Übersicht: Part 2" -> "ubersicht-part-2"
 const slugify = (title: string) =>
@@ -20,19 +18,14 @@ const slugify = (title: string) =>
  * Creates a document, publishes the PDF just uploaded for one, or deletes one along with its PDF.
  * The URL and size come from the Blob store, not the request, so only a real upload can be published.
  *
- * @param {NextApiRequest[string]} req.body.action 'create' | 'publish' | 'delete'
- * @param {NextApiRequest[number]} req.body.id Document ID (publish and delete)
- * @param {NextApiRequest[string]} req.body.groupId ID of a section from src/config/documents.ts (create)
- * @param {NextApiRequest[string]} req.body.title Title (create)
- * @param {NextApiRequest[string]} req.body.description Description (create)
- * @returns {NextApiResponse} res.status(200).json({ message: 'Document created' | 'Document published' | 'Document deleted' })
+ * @param req.body.action 'create' | 'publish' | 'delete'
+ * @param req.body.id Document ID (publish and delete)
+ * @param req.body.groupId ID of a section from src/config/documents.ts (create)
+ * @param req.body.title Title (create)
+ * @param req.body.description Description (create)
+ * @returns 200 { message: 'Document created' | 'Document published' | 'Document deleted' }
  */
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  await preFlightChecks(req, res);
-  if (res.headersSent) return;
-  await authAdmin(req, res, false);
-  if (res.headersSent) return;
-
+export default withApi({ auth: 'admin' }, async ({ req, res }) => {
   const { action, id, groupId, title, description } = req.body;
 
   try {
@@ -93,11 +86,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       args: [id],
     });
     res.status(200).json({ message: 'Document deleted' });
-  } catch (err: any) {
+  } catch (err) {
     if (err instanceof BlobNotFoundError) {
       return res.status(404).json({ message: 'The uploaded file was not found' });
     }
-    console.error('Error saving document:', err);
-    res.status(500).json({ message: err.message || 'Something went wrong' });
+    throw err;
   }
-}
+});

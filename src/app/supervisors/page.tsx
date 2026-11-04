@@ -1,10 +1,10 @@
 import React from "react"
-import SupervisorHero from "@/components/supervisorHero"
-import SupervisorSteps from "@/components/supervisorSteps"
-import SupervisorPortalTour from "@/components/supervisorPortalTour"
-import SupervisorFAQ from "@/components/supervisorFaq"
-import { CallToAction } from "@/components/call-to-action"
-import { SUPERVISOR_APPLY_PATH } from "@/config/supervisor"
+import SupervisorHero from "@/features/supervisors/supervisor-hero"
+import SupervisorSteps from "@/features/supervisors/supervisor-steps"
+import SupervisorPortalTour from "@/features/supervisors/supervisor-portal-tour"
+import SupervisorFAQ from "@/features/supervisors/supervisor-faq"
+import { CallToAction } from "@/features/marketing/call-to-action"
+import { SUPERVISOR_APPLY_PATH } from "@/features/supervisors/paths"
 
 export const metadata = {
   title: "PLISMUN | Supervisors",
@@ -23,5 +23,4 @@ function SupervisorsPage() {
     )
 }
 
-SupervisorsPage.mainPage = true
 export default SupervisorsPage

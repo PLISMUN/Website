@@ -1,7 +1,7 @@
 import React from "react"
-import Header from "@/components/header"
-import FooterSection from "@/components/footer-one"
-import ForgotPassword from "@/components/forgot-password-one"
+import Header from "@/components/layout/header"
+import FooterSection from "@/components/layout/footer"
+import ForgotPassword from "@/features/auth/forgot-password-form"
 import { stages } from "@/config/stages"
 
 export const metadata = {
@@ -23,5 +23,4 @@ function ForgotPage() {
     )
 }
 
-ForgotPage.mainPage = true
 export default ForgotPage

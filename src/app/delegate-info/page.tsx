@@ -1,9 +1,9 @@
 import React from "react"
-import Committees from "@/components/committees"
-import Documents from "@/components/documents"
-import Venues from "@/components/venues"
-import Schedule from "@/components/schedule"
-import { CallToAction } from "@/components/call-to-action"
+import Committees from "@/features/committees/committees-section"
+import Documents from "@/features/documents/documents-section"
+import Venues from "@/features/marketing/venues"
+import Schedule from "@/features/marketing/schedule"
+import { CallToAction } from "@/features/marketing/call-to-action"
 
 export const metadata = {
   title: "PLISMUN | Delegate Information",
@@ -23,10 +23,4 @@ function DelegateInfoPage() {
     )
     }
 
-DelegateInfoPage.mainPage = true
 export default DelegateInfoPage
-
-// Apply call to action + price
-// committees
-// venues
-// schedule

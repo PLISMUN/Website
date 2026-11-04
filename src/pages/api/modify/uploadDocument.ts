@@ -1,9 +1,7 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import { handleUpload } from '@vercel/blob/client';
-import { getTursoClient } from '@/pages/api/components/dbAuth';
-import authAdmin from '@/pages/api/internal/authAdmin';
-import preFlightChecks from '@/pages/api/internal/preFlightChecks';
+import { handleUpload, type HandleUploadBody } from '@vercel/blob/client';
 import { DOCUMENT_MAX_SIZE_MB } from '@/config/documents';
+import { getTursoClient } from '@/server/db';
+import { withApi } from '@/server/with-api';
 
 const ONE_HOUR_IN_SECONDS = 60 * 60;
 
@@ -14,18 +12,13 @@ const ONE_HOUR_IN_SECONDS = 60 * 60;
  * There's deliberately no onUploadCompleted: that webhook can't reach localhost or a preview
  * behind Deployment Protection. The browser calls /api/modify/setDocument after uploading instead.
  *
- * @param {NextApiRequest[HandleUploadBody]} req.body Sent by upload() from @vercel/blob/client
- * @returns {NextApiResponse} res.status(200).json({ type: 'blob.generate-client-token', clientToken: <string> })
+ * @param req.body Sent by upload() from @vercel/blob/client
+ * @returns 200 { type: 'blob.generate-client-token', clientToken: <string> }
  */
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  await preFlightChecks(req, res);
-  if (res.headersSent) return;
-  await authAdmin(req, res, false);
-  if (res.headersSent) return;
-
+export default withApi({ auth: 'admin' }, async ({ req, res }) => {
   try {
     const result = await handleUpload({
-      body: req.body,
+      body: req.body as HandleUploadBody,
       request: req,
       onBeforeGenerateToken: async (pathname) => {
         const existing = await getTursoClient().execute({
@@ -48,8 +41,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     });
 
     res.status(200).json(result);
-  } catch (err: any) {
+  } catch (err) {
     console.error('Error creating document upload token:', err);
-    res.status(400).json({ message: err.message || 'Something went wrong' });
+    res.status(400).json({ message: (err instanceof Error && err.message) || 'Something went wrong' });
   }
-}
+});

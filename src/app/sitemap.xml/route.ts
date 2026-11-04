@@ -1,7 +1,8 @@
 import { MetadataRoute } from 'next'
+import { conference } from '@/config/conference'
 
 export function GET() {
-  const baseUrl = 'https://www.plismun.com'
+  const baseUrl = conference.siteUrl
 
   const routes: MetadataRoute.Sitemap = [
     { url: `${baseUrl}/`, lastModified: new Date() },

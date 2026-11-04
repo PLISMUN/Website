@@ -32,13 +32,18 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+!.env.example
 
 # vercel
 .vercel
+
+# local database (see .env.example)
+*.db
+*.db-*
 
 # typescript
 *.tsbuildinfo
 next-env.d.ts
 
 .timetracker
-.github
+.github/copilot-instructions.md

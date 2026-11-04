@@ -20,7 +20,7 @@ function TosPage() {
 
                             <section>
                                 <p>
-                                    In these Terms and Conditions, the PLISMUN Secretariat and Park Lane International School is collectively referred to as 'we' or 'us', with all participants referred to as 'you'. By applying to attend, and by attending PLISMUN, you accept and agree to these Terms and Conditions.
+                                    In these Terms and Conditions, the PLISMUN Secretariat and Park Lane International School is collectively referred to as &apos;we&apos; or &apos;us&apos;, with all participants referred to as &apos;you&apos;. By applying to attend, and by attending PLISMUN, you accept and agree to these Terms and Conditions.
                                 </p>
                             </section>
 
@@ -42,7 +42,7 @@ function TosPage() {
                                             <li>Life-endangering objects that have the capacity to cause bodily harm</li>
                                         </ul>
                                     </li>
-                                    <li>Acknowledge PLISMUN's right to expulsion from the conference in the event of breaking any of the above-mentioned duties</li>
+                                    <li>Acknowledge PLISMUN&apos;s right to expulsion from the conference in the event of breaking any of the above-mentioned duties</li>
                                 </ul>
                             </section>
 
@@ -112,5 +112,4 @@ function TosPage() {
     )
 }
 
-TosPage.mainPage = true
 export default TosPage

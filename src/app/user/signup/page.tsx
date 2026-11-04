@@ -1,7 +1,7 @@
 import React from "react"
-import Header from "@/components/header"
-import FooterSection from "@/components/footer-one"
-import Signup from "@/components/sign-up-one"
+import Header from "@/components/layout/header"
+import FooterSection from "@/components/layout/footer"
+import Signup from "@/features/auth/signup-form"
 import { stages } from "@/config/stages"
 
 
@@ -24,5 +24,4 @@ function SignupPage() {
     )
 }
 
-SignupPage.mainPage = true
 export default SignupPage

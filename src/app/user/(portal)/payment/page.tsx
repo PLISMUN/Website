@@ -1,18 +1,18 @@
 "use client"
-import PaymentWidget from "@/components/paymentWidget"
+import PaymentWidget from "@/features/payments/payment-widget"
 import { stages } from "@/config/stages"
 import React from "react"
 
 export default function Page() {
+  React.useEffect(() => {
+    document.title = "PLISMUN | Payment";
+  }, []);
+
   if (!stages.accountCreation) {
     return null
   }
 
-    React.useEffect(() => {
-      document.title = "PLISMUN | Payment";
-    }, []);
-
   return (
-      <PaymentWidget onSuccess={() => {}} />
+      <PaymentWidget />
   )
 }

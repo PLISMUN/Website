@@ -1,5 +1,5 @@
-import { AppSidebar } from "@/components/app-sidebar"
-import { SiteHeader } from "@/components/dashboard-header"
+import { PortalSidebar } from "@/components/layout/portal-sidebar"
+import { PortalHeader } from "@/components/layout/portal-header"
 import {
   SidebarInset,
   SidebarProvider,
@@ -19,9 +19,9 @@ export default function Layout({
         } as React.CSSProperties
       }
     >
-      <AppSidebar variant="inset" />
+      <PortalSidebar variant="inset" />
       <SidebarInset>
-        <SiteHeader title="Applications" />
+        <PortalHeader title="Applications" />
         <div className="flex flex-1 flex-col">
           <div className="@container/main flex flex-1 flex-col gap-2">
             <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6 min-h-screen">

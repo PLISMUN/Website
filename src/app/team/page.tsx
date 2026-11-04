@@ -1,5 +1,5 @@
 import React from "react"
-import TeamSection from "@/components/team"
+import TeamSection from "@/features/marketing/team"
 
 export const metadata = {
   title: "PLISMUN | Team",
@@ -15,5 +15,4 @@ function TeamPage() {
     )
     }
 
-TeamPage.mainPage = true
 export default TeamPage

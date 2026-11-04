@@ -2,6 +2,7 @@
 import { stages } from "@/config/stages"
 import React from "react"
 import { useSession } from "next-auth/react"
+import { getIsAdmin } from "@/features/users/api"
 
 export default function DashboardLayout({
   children,
@@ -15,17 +16,7 @@ export default function DashboardLayout({
         async function checkAdmin() {
           if (!session?.user?.email) return setIsAdmin(false)
           try {
-            const res = await fetch("/api/retrieve/getAdmin", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ email: session.user.email }),
-            })
-            if (res.ok) {
-              const result = await res.json()
-              setIsAdmin(result[0]?.isAdmin === "1")
-            } else {
-              setIsAdmin(false)
-            }
+            setIsAdmin(await getIsAdmin())
           } catch {
             setIsAdmin(false)
           }

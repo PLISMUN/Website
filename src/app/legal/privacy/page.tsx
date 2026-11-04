@@ -2,6 +2,7 @@ import React from "react"
 import { Separator } from "@/components/ui/separator"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Mail, ShieldAlert } from "lucide-react"
+import { conference } from "@/config/conference"
 
 export const metadata = {
   title: "PLISMUN | Privacy Policy",
@@ -24,11 +25,11 @@ function PrivacyPage() {
                                 <section>
                                     <h2 className="text-2xl font-semibold">1. Who We Are</h2>
                                     <p className="mt-2">
-                                    PLISMUN ("we" or "us") is the data controller of your personal information. We are committed to handling personal data in accordance with GDPR and Czech law.
+                                    PLISMUN (&quot;we&quot; or &quot;us&quot;) is the data controller of your personal information. We are committed to handling personal data in accordance with GDPR and Czech law.
                                     </p>
                                     <p className="mt-4 flex items-center gap-2">
                                     <Mail className="w-5 h-5 text-primary" />
-                                    <a href="mailto:plismun@parklane-is.com" className="text-primary underline">plismun@parklane-is.com</a>
+                                    <a href={`mailto:${conference.contactEmail}`} className="text-primary underline">{conference.contactEmail}</a>
                                     </p>
                                 </section>
 
@@ -185,7 +186,7 @@ function PrivacyPage() {
                                     </ul>
                                     <p className="mt-4">
                                     To exercise any of these rights, email: <br />
-                                    <a href="mailto:plismun@parklane-is.com" className="ml-1 text-primary underline">plismun@parklane-is.com</a>
+                                    <a href={`mailto:${conference.contactEmail}`} className="ml-1 text-primary underline">{conference.contactEmail}</a>
                                     </p>
                                     <p className="text-sm text-muted-foreground mt-1">Proof of identity may be required. We respond within 1 month.</p>
                                 </section>
@@ -207,5 +208,4 @@ function PrivacyPage() {
     )
     }
 
-PrivacyPage.mainPage = true
 export default PrivacyPage

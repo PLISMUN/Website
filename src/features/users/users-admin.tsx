@@ -1,0 +1,208 @@
+"use client"
+import { Card } from '@/components/ui/card'
+import { useEffect } from 'react'
+import { useState } from 'react'
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
+import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
+import { errorMessage } from '@/lib/api-client'
+import { paymentStatusLabel } from '@/lib/utils'
+import { getUsers, updateUser } from './api'
+import type { UserRow } from './types'
+
+
+export default function UsersAdmin() {
+    const [loading, setLoading] = useState(false)
+    const [error, setError] = useState<string | null>(null)
+
+    const [users, setUsers] = useState<UserRow[]>([])
+    const [editRows, setEditRows] = useState<{ [id: number]: UserRow }>({})
+
+    useEffect(() => {
+        getUsers()
+            .then((data) => setUsers(data.people))
+            .catch((err) => console.error('Error fetching users info:', err))
+    }, [])
+
+    const handleEditChange = (id: number, field: string, value: string | boolean) => {
+        setEditRows(prev => ({
+            ...prev,
+            [id]: {
+                ...prev[id],
+                [field]: value,
+            }
+        }))
+    }
+
+    const handleEditStart = (user: UserRow) => {
+        setEditRows(prev => ({
+            ...prev,
+            [user.id]: { ...user }
+        }))
+    }
+
+    const handleEditCancel = (id: number) => {
+        setEditRows(prev => {
+            const copy = { ...prev }
+            delete copy[id]
+            return copy
+        })
+    }
+
+    const handleEditSave = async (id: number) => {
+        setLoading(true)
+        setError(null)
+        try {
+            const data = await updateUser(editRows[id])
+            setEditRows(prev => {
+                const copy = { ...prev }
+                delete copy[id]
+                return copy
+            })
+            setUsers(data.people)
+        } catch (err) {
+            setError(errorMessage(err, 'Failed to update user'))
+        }
+        setLoading(false)
+    }
+
+    return (
+    <section className="bg-muted">
+        <div className="mx-auto max-w-4xl px-4 py-4 lg:px-0 min-h-screen">
+            <div className="@container lg:col-span-3">
+                <Card className="p-8 sm:p-12">
+                    {error && <p className="text-red-600">{error}</p>}
+                    <div className="overflow-x-auto">
+                        <table className="min-w-full border border-gray-200 rounded">
+                            <thead>
+                                <tr className="bg-gray-100">
+                                    <th className="px-2 py-1 border">ID</th>
+                                    <th className="px-2 py-1 border">Email</th>
+                                    <th className="px-2 py-1 border">Phone</th>
+                                    <th className="px-2 py-1 border">Name</th>
+                                    <th className="px-2 py-1 border">Admin</th>
+                                    <th className="px-2 py-1 border">Google User</th>
+                                    <th className="px-2 py-1 border">Birth</th>
+                                    <th className="px-2 py-1 border">Nationality</th>
+                                    <th className="px-2 py-1 border">Delegation</th>
+                                    <th className="px-2 py-1 border">Diet</th>
+                                    <th className="px-2 py-1 border">Notes</th>
+                                    <th className="px-2 py-1 border">Payment Value CZK</th>
+                                    <th className="px-2 py-1 border">Payment Value EUR</th>
+                                    <th className="px-2 py-1 border">Payment Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {users.map((user) => {
+                                    const isEditing = !!editRows[user.id]
+                                    const row = isEditing ? editRows[user.id] : user
+                                    return (
+                                    <tr key={user.id} className="border-t">
+                                        <td className="px-2 py-1 border">{row.id}</td>
+                                        <td className="px-2 py-1 border">
+                                            {isEditing ? (
+                                                <Input value={row.email ?? ''} onChange={e => handleEditChange(user.id, 'email', e.target.value)} />
+                                            ) : row.email}
+                                        </td>
+                                        <td className="px-2 py-1 border">
+                                            {isEditing ? (
+                                                <Input value={row.phone ?? ''} onChange={e => handleEditChange(user.id, 'phone', e.target.value)} />
+                                            ) : row.phone}
+                                        </td>
+                                        <td className="px-2 py-1 border">
+                                            {isEditing ? (
+                                                <Input value={row.name ?? ''} onChange={e => handleEditChange(user.id, 'name', e.target.value)} />
+                                            ) : row.name}
+                                        </td>
+                                        <td className="px-2 py-1 border">
+                                            {isEditing ? (
+                                                <select value={row.isAdmin ? "Yes" : "No"} onChange={e => handleEditChange(user.id, 'isAdmin', e.target.value === "Yes")}>
+                                                    <option value="Yes">Yes</option>
+                                                    <option value="No">No</option>
+                                                </select>
+                                            ) : row.isAdmin ? "Yes" : "No"}
+                                        </td>
+                                        <td className="px-2 py-1 border">
+                                            {isEditing ? (
+                                                <select value={row.isGoogleUser ? "Yes" : "No"} onChange={e => handleEditChange(user.id, 'isGoogleUser', e.target.value === "Yes")}>
+                                                    <option value="Yes">Yes</option>
+                                                    <option value="No">No</option>
+                                                </select>
+                                            ) : row.isGoogleUser ? "Yes" : "No"}
+                                        </td>
+                                        <td className="px-2 py-1 border">
+                                            {isEditing ? (
+                                                <Input value={row.birth ?? ''} onChange={e => handleEditChange(user.id, 'birth', e.target.value)} />
+                                            ) : row.birth}
+                                        </td>
+                                        <td className="px-2 py-1 border">
+                                            {isEditing ? (
+                                                <Input value={row.nationality ?? ''} onChange={e => handleEditChange(user.id, 'nationality', e.target.value)} />
+                                            ) : row.nationality}
+                                        </td>
+                                        <td className="px-2 py-1 border">
+                                            {isEditing ? (
+                                                <Input value={row.delegation ?? ''} onChange={e => handleEditChange(user.id, 'delegation', e.target.value)} />
+                                            ) : row.delegation}
+                                        </td>
+                                        <td className="px-2 py-1 border">
+                                            {isEditing ? (
+                                                <Input value={row.diet ?? ''} onChange={e => handleEditChange(user.id, 'diet', e.target.value)} />
+                                            ) : row.diet}
+                                        </td>
+                                        <td className="px-2 py-1 border">
+                                            <Popover>
+                                                <PopoverTrigger asChild>
+                                                    <Button size="sm" variant="outline">View</Button>
+                                                </PopoverTrigger>
+                                                <PopoverContent>
+                                                    {isEditing ? (
+                                                        <Input value={row.notes ?? ''} onChange={e => handleEditChange(user.id, 'notes', e.target.value)} />
+                                                    ) : row.notes}
+                                                </PopoverContent>
+                                            </Popover>
+                                        </td>
+                                        <td className="px-2 py-1 border">
+                                            {isEditing ? (
+                                                <Input value={row.valueCzk ?? ''} onChange={e => handleEditChange(user.id, 'valueCzk', e.target.value)} />
+                                            ) : row.valueCzk}
+                                        </td>
+                                        <td className="px-2 py-1 border">
+                                            {isEditing ? (
+                                                <Input value={row.valueEur ?? ''} onChange={e => handleEditChange(user.id, 'valueEur', e.target.value)} />
+                                            ) : row.valueEur}
+                                        </td>
+                                        <td className="px-2 py-1 border">
+                                            {isEditing ? (
+                                                <select value={row.status ? "Completed" : "Pending"} onChange={e => handleEditChange(user.id, 'status', e.target.value === "Completed")}>
+                                                    <option value="Completed">Completed</option>
+                                                    <option value="Pending">Pending</option>
+                                                </select>
+                                            ) : paymentStatusLabel(row.status)}
+                                        </td>
+                                        <td className="px-2 py-1 border">
+                                            {isEditing ? (
+                                                <>
+                                                    <Button size="sm" onClick={() => handleEditSave(user.id)} disabled={loading}>Save</Button>
+                                                    <Button size="sm" variant="ghost" onClick={() => handleEditCancel(user.id)} disabled={loading}>Cancel</Button>
+                                                </>
+                                            ) : (
+                                                <Button size="sm" variant="outline" onClick={() => handleEditStart(user)}>Edit</Button>
+                                            )}
+                                        </td>
+                                    </tr>
+                                    )
+                                })}
+                            </tbody>
+                        </table>
+                    </div>
+                </Card>
+            </div>
+        </div>
+    </section>
+    )
+}

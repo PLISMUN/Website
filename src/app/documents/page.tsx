@@ -1,5 +1,5 @@
 import React from "react"
-import Documents from "@/components/documents"
+import Documents from "@/features/documents/documents-section"
 
 export const metadata = {
   title: "PLISMUN | Documents",
@@ -15,5 +15,4 @@ function DocumentsPage() {
     )
     }
 
-DocumentsPage.mainPage = true
 export default DocumentsPage

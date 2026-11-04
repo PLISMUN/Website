@@ -1,8 +1,8 @@
+// Which parts of the conference are open right now. Changing one needs a redeploy.
 export const stages = {
-  public: true,
-  accountCreation: process.env.NEXT_PUBLIC_STAGE_ACCOUNT_CREATION === "true",
-  paymentsAccepted: process.env.NEXT_PUBLIC_STAGE_PAYMENTS_ACCEPTED === "true",
-  chairApplication: process.env.NEXT_PUBLIC_STAGE_CHAIR === "true",
-  delegateApplication: process.env.NEXT_PUBLIC_STAGE_DELEGATE === "true",
-  supervisorApplication: process.env.NEXT_PUBLIC_STAGE_SUPERVISOR === "true",
+  accountCreation: true,
+  paymentsAccepted: true,
+  chairApplication: true,
+  delegateApplication: true,
+  supervisorApplication: true,
 }
