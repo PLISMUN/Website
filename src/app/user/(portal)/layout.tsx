@@ -4,6 +4,7 @@ import {
   SidebarInset,
   SidebarProvider,
 } from "@/components/ui/sidebar"
+import FooterSection from "@/components/layout/footer"
 
 export default function Layout({
   children,
@@ -24,8 +25,9 @@ export default function Layout({
         <PortalHeader title="Applications" />
         <div className="flex flex-1 flex-col">
           <div className="@container/main flex flex-1 flex-col gap-2">
-            <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6 min-h-screen">
+            <div className="flex flex-col min-h-screen">
                 {children}
+            <FooterSection />
             </div>
           </div>
         </div>

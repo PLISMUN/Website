@@ -2,7 +2,7 @@
 export const stages = {
   accountCreation: true,
   paymentsAccepted: true,
-  chairApplication: true,
+  chairApplication: false,
   delegateApplication: true,
   supervisorApplication: true,
 }
