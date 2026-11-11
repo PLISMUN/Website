@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useSession } from "next-auth/react";
-import { CalendarDays, Check, ChevronRight, CreditCard, ListChecks, MailCheck, MapPin } from "lucide-react";
+import { CalendarDays, Check, ChevronRight, CreditCard, ListChecks, MailCheck } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { useSiteConfig } from "@/features/site-config/context";

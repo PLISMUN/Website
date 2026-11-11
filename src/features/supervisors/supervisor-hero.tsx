@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useSession } from "next-auth/react";
-import { CalendarDays, ChevronRight, Clock, CreditCard, School, ShieldCheck, UserRound } from "lucide-react";
+import { CalendarDays, ChevronRight, CreditCard, School, ShieldCheck, UserRound } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { useSiteConfig } from "@/features/site-config/context";

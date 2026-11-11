@@ -76,7 +76,7 @@ function PaymentShell({ children }: { children: ReactNode }) {
     )
 }
 
-function PaymentConfirmed({ name }: { name?: string | null }) {
+function PaymentConfirmed() {
     return (
         <div className="flex flex-col items-center px-2 py-10 text-center sm:py-16">
             <span className="flex size-20 items-center justify-center rounded-full bg-green-100 text-green-700">
@@ -241,7 +241,7 @@ export default function PaymentWidget() {
     if (isPaid(payment?.state)) {
         return (
             <PaymentShell>
-                <PaymentConfirmed name={session?.user?.name} />
+                <PaymentConfirmed />
             </PaymentShell>
         )
     }

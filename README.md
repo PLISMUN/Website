@@ -42,7 +42,8 @@ src/
   pages/api/    The API routes. Every file in here is a public URL, so only routes go in here
   features/     The code for each part of the site, with the components, API calls and types together
     marketing/    The public pages: hero, countdown, team, venues, pricing, ...
-    committees/   auth/   applications/   people/
+    committees/   The committee cards on the public pages, and the Committees admin page
+    auth/   applications/   people/
     delegations/  documents/   payments/   supervisors/   users/
     site-config/  The Settings admin page, and the checks on what it saves
   components/
@@ -85,11 +86,11 @@ export default withApi({ auth: 'admin' }, async ({ req, res, user }) => {
 
 Routes are `POST` unless you pass `method: 'GET'`. To answer with an error from anywhere inside a handler, throw `new ApiError(404, 'message')`. Anything else that's thrown becomes a 500.
 
-One route lives in the App Router instead: `src/app/api/modify/setSiteConfig/route.ts`, which saves the Settings admin page. It has to, because it clears the cached settings with `revalidateTag`, which `src/pages/api` routes can't call. It uses `withAdminRoute` from `src/server/with-route.ts`, the App Router version of `withApi` for admins. A route can't exist in both places, so don't add a `src/pages/api` file with the same path.
+Two routes live in the App Router instead, under `src/app/api/modify`: `setSiteConfig` (the Settings admin page) and `setCommittee` (the Committees admin page). They have to, because they clear cached data with `revalidateTag`, which `src/pages/api` routes can't call. It uses `withAdminRoute` from `src/server/with-route.ts`, the App Router version of `withApi` for admins. A route can't exist in both places, so don't add a `src/pages/api` file with the same path.
 
 ### Caching
 
-Public pages are cached and rebuilt at most once an hour (`revalidate` in `src/app/layout.tsx`). Pages read the settings with `getSiteConfig()`, which comes from Next's data cache, and saving on the Settings page clears it, so the change shows straight away without touching the database on every visit. API routes and emails use `getLatestSiteConfig()` instead, which always reads the database, so what they charge or enforce is never out of date. The portal under `/user` is rendered on every request but still reads the cached settings.
+Public pages are cached and rebuilt at most once an hour (`revalidate` in `src/app/layout.tsx`). Pages read the settings with `getSiteConfig()`, which comes from Next's data cache, and saving on the Settings page clears it, so the change shows straight away without touching the database on every visit. API routes and emails use `getLatestSiteConfig()` instead, which always reads the database, so what they charge or enforce is never out of date. The portal under `/user` is rendered on every request but still reads the cached settings. Committees work the same way: pages use `getCachedCommittees()`, which saving on the Committees admin page clears, and API routes use `getCommittees()`.
 
 ## GIT Workflow
 
@@ -170,7 +171,7 @@ I've tried to make the website take as much as possible from the database, so ge
 Things to do every year:
 
 - Go through the checklist in [`src/config`](src/config/README.md), on the Settings admin page or in the files
-- Update the committees in the database
+- Update the committees from the Committees admin page
 - Replace last year's documents from the Documents admin page. Delete them there rather than clearing out the table, or their PDFs stay in the Blob store
 - Get the databases ready: clear out last year's applications, people, payments and users, then run `pnpm db:setup --yes` against them
 

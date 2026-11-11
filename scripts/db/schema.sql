@@ -32,7 +32,8 @@ CREATE TABLE IF NOT EXISTS delegations (
   notes TEXT
 );
 
--- Filled in by hand every year. See committees in sample-data.ts for what roles and topics look like.
+-- Managed from the Committees admin page. roles is a JSON list of { role, difficulty } and topics a JSON object
+-- of { topic1: { name, description }, topic2: ... }; see committees in sample-data.ts.
 CREATE TABLE IF NOT EXISTS committees (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   name TEXT NOT NULL UNIQUE,

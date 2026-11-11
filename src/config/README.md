@@ -46,7 +46,7 @@ Closing account creation also hides the login page. Admins who are still signed 
 
 Some things change every year but live in their own tables:
 
-- **Committees** are in the `committees` table, added by hand. `scripts/db/sample-data.ts` shows the format, and the README has more on the database. The pages that show them pick up a change within an hour.
+- **Committees** are managed from the Committees admin page (`/user/admin/committees`), and live in the `committees` table. A change made there shows straight away; one made to the table by hand shows within an hour. A committee people have applied for can't be deleted, since their applications would disappear from the admin pages with it.
 - **Documents** are managed from the Documents admin page. Replace last year's there rather than clearing out the table, or their PDFs stay in the Blob store.
 - **Applications, people, payments and delegations** from last year need clearing out. See "Your job" in the README.
 

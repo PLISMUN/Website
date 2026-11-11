@@ -9,6 +9,7 @@ type Base = { key: string; label: string; help?: string }
 export type Field =
   | (Base & { kind: 'text'; multiline?: boolean; image?: boolean; placeholder?: string })
   | (Base & { kind: 'number' })
+  | (Base & { kind: 'select'; options: string[] })
   | (Base & { kind: 'boolean' })
   | (Base & { kind: 'group'; fields: Field[] })
   | (Base & { kind: 'textList'; itemLabel: string; multiline?: boolean; image?: boolean })
@@ -17,6 +18,8 @@ export type Field =
       itemLabel: string
       // The field shown as the title of each item, so a long list can be scanned while collapsed
       titleKey?: string
+      // Each item's fields side by side on one line instead of in a box that opens, for short items
+      inline?: boolean
       fields: Field[]
       newItem: () => Record<string, unknown>
     })

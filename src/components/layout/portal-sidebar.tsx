@@ -12,7 +12,8 @@ import {
   IconFlag,
   IconUsersGroup,
   IconUserShield,
-  IconSettings
+  IconSettings,
+  IconWorld
 } from "@tabler/icons-react"
 
 import { NavCategory } from "@/components/layout/nav-category"
@@ -100,6 +101,11 @@ export function PortalSidebar({ ...props }: React.ComponentProps<typeof Sidebar>
         name: "Delegations",
         url: "/user/admin/delegations",
         icon: IconFlag,
+      },
+      {
+        name: "Committees",
+        url: "/user/admin/committees",
+        icon: IconWorld,
       },
       {
         name: "Documents",

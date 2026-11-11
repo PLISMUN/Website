@@ -6,7 +6,8 @@ import { pricing } from '../../src/config/pricing'
 // Every sample account uses this password.
 export const SAMPLE_PASSWORD = 'password123'
 
-// This is the format committees need in the real database too: roles and topics are JSON strings
+// This is the format committees are stored in, with roles and topics as JSON strings. Add real ones from the
+// Committees admin page, which writes this format (see src/features/committees/schema.ts).
 const committees = [
   {
     name: 'World Health Organisation (WHO)',
