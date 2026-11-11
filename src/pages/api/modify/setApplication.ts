@@ -1,60 +1,39 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import { getTursoClient } from '@/pages/api/components/dbAuth';
-import authAdmin from '@/pages/api/internal/authAdmin';
-import preFlightChecks from '@/pages/api/internal/preFlightChecks';
-import sendEmail from '@/pages/api/internal/sendEmail';
+import { getTursoClient } from '@/server/db';
+import { escapeHtml, sendEmail } from '@/server/email';
+import { requireUserId } from '@/server/users';
+import { withApi } from '@/server/with-api';
 
 /**
  * Creates a new application for the user.
- * 
- * @param {NextApiRequest[string]} req.body.email User's email
- * @param {NextApiRequest[string]} req.body.type Type of application ("delegate" or "chair"; supervisors use setSupervisorApplication)
- * @param {NextApiRequest[string]} req.body.committee Committee ID the user is applying to
- * @param {NextApiRequest[string]} req.body.role Role the user is applying for
- * @param {NextApiRequest[string]} req.body.notes Additional notes for the application
- * @returns {NextApiResponse} res.status(200).json({ message: 'Signup successful', applicationId: <int> })
+ *
+ * @param req.body.email User's email
+ * @param req.body.type Type of application ("delegate" or "chair"; supervisors use setSupervisorApplication)
+ * @param req.body.committee Committee ID the user is applying to
+ * @param req.body.role Role the user is applying for
+ * @param req.body.notes Additional notes for the application
+ * @returns 200 { message: 'Signup successful', applicationId: <int> }
  */
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  await preFlightChecks(req, res);
-  if (res.headersSent) return;
-  await authAdmin(req, res, true);
-  if (res.headersSent) return;
-  
+export default withApi({ auth: 'adminOrSelf' }, async ({ req, res }) => {
   const { email, type, committee, role, notes } = req.body;
 
-  try {
-    const turso = getTursoClient();
+  const userId = await requireUserId(email);
 
-    const userResult = await turso.execute({
-      sql: 'SELECT id FROM users WHERE email = ?',
-      args: [email],
-    });
-
-    if (!userResult.rows.length) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-
-    const userId = userResult.rows[0].id;
-
-    if (type === 'supervisor') {
-      return res.status(400).json({ message: 'Supervisor applications are submitted through /api/modify/setSupervisorApplication' });
-    }
-
-    const applicationResult = await turso.execute({
-      sql: 'INSERT INTO applications (type, userId, committeeId, role, notes) VALUES (?, ?, ?, ?, ?) RETURNING id',
-      args: [type, userId, committee, role, notes],
-    });
-
-    const applicationId = applicationResult.rows[0].id;
-
-    if (type !== 'chair') {
-      await sendEmail(email, 'Application registered', `Hello! Your application as ${role} has been registered.<br /><br />Please keep in mind your application will be reviewed only <u>after</u> payment is processed.`);
-    } else {
-      await sendEmail(email, 'Chair Application registered', `Hello! Your chair application has been registered.`);
-    }
-
-    res.status(200).json({ message: 'Signup successful', applicationId });
-  } catch (err: any) {
-    res.status(500).json({ message: err.message || 'Something went wrong' });
+  if (type === 'supervisor') {
+    return res.status(400).json({ message: 'Supervisor applications are submitted through /api/modify/setSupervisorApplication' });
   }
-}
+
+  const applicationResult = await getTursoClient().execute({
+    sql: 'INSERT INTO applications (type, userId, committeeId, role, notes) VALUES (?, ?, ?, ?, ?) RETURNING id',
+    args: [type, userId, committee, role, notes],
+  });
+
+  const applicationId = applicationResult.rows[0].id;
+
+  if (type !== 'chair') {
+    await sendEmail(email, 'Application registered', `Hello! Your application as ${escapeHtml(role)} has been registered.<br /><br />Please keep in mind your application will be reviewed only <u>after</u> payment is processed.`);
+  } else {
+    await sendEmail(email, 'Chair Application registered', `Hello! Your chair application has been registered.`);
+  }
+
+  res.status(200).json({ message: 'Signup successful', applicationId });
+});

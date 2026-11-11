@@ -1,5 +1,5 @@
 import React from "react"
-import FAQ from "@/components/faqs-section-one"
+import FAQ from "@/features/marketing/faq"
 
 export const metadata = {
   title: "PLISMUN | FAQ",
@@ -14,5 +14,4 @@ function FAQPage() {
     )
 }
 
-FAQPage.mainPage = true
 export default FAQPage

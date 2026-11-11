@@ -1,0 +1,37 @@
+PLISMUN Website License
+Copyright (c) 2025-2026 Tomáš Stoklásek
+
+Permission is hereby granted, free of charge, to any person or organisation
+obtaining a copy of this software and associated files (the "Software"), to
+use, copy, modify, and deploy the Software, subject to the following
+conditions:
+
+1. Attribution. Every deployed or distributed copy of the Software MUST
+   retain, visibly and without obfuscation, the author credit as shipped in
+   the Software (the "Made by" credit shown in the site footer and in emails
+   sent by the Software), together with this notice. The credit must remain
+   legible to end users and must not be hidden, removed, overlaid, minimised,
+   or altered to misrepresent authorship.
+
+2. No misrepresentation of lineage. You may add your own credit (for example,
+   as a later maintainer) but must not remove or diminish the credits already
+   present. This is a multi-generational project; preserve the lineage of
+   contributors.
+
+3. This notice and the conditions above must be included in all copies or
+   substantial portions of the Software.
+
+Removing, hiding, or circumventing the attribution required by Section 1
+automatically terminates the rights granted by this license. A deployment that
+no longer carries the required credit is unlicensed and infringing, and may be
+reported to its hosting provider and taken offline under applicable copyright
+law (including the DMCA, 17 U.S.C. Section 512, and equivalent laws in other
+jurisdictions).
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.

@@ -1,6 +1,6 @@
 "use client"
 import React from "react"
-import SupervisorApplication from "@/components/supervisorApplication"
+import SupervisorApplication from "@/features/supervisors/supervisor-application"
 
 export default function Page() {
   React.useEffect(() => {

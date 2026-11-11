@@ -1,6 +1,6 @@
 "use client"
 import React from "react"
-import DelegationsAdmin from "@/components/delegationsAdmin"
+import DelegationsAdmin from "@/features/delegations/delegations-admin"
 
 export default function Page() {
   React.useEffect(() => {

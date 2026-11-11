@@ -1,27 +1,20 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import { InStatement } from '@libsql/client';
-import { getTursoClient } from '@/pages/api/components/dbAuth';
-import authAdmin from '@/pages/api/internal/authAdmin';
-import preFlightChecks from '@/pages/api/internal/preFlightChecks';
+import type { InStatement } from '@libsql/client';
+import { getTursoClient } from '@/server/db';
+import { withApi } from '@/server/with-api';
 
 /**
  * Creates a delegation, or updates an existing one when an ID is provided.
  * Renaming a delegation also renames it on every person and supervisor application referencing it.
  * Supervisors are managed separately through /api/modify/setDelegationSupervisor.
  *
- * @param {NextApiRequest[number]} req.body.id Delegation ID to update (omit to create a new delegation)
- * @param {NextApiRequest[string]} req.body.name Delegation name
- * @param {NextApiRequest[string]} req.body.shorthand Delegation shorthand
- * @param {NextApiRequest[string]} req.body.country Country the delegation is from
- * @param {NextApiRequest[string]} req.body.notes Additional notes
- * @returns {NextApiResponse} res.status(200).json({ message: 'Delegation saved', id: <int> })
+ * @param req.body.id Delegation ID to update (omit to create a new delegation)
+ * @param req.body.name Delegation name
+ * @param req.body.shorthand Delegation shorthand
+ * @param req.body.country Country the delegation is from
+ * @param req.body.notes Additional notes
+ * @returns 200 { message: 'Delegation saved', id: <int> }
  */
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  await preFlightChecks(req, res);
-  if (res.headersSent) return;
-  await authAdmin(req, res, false);
-  if (res.headersSent) return;
-
+export default withApi({ auth: 'admin' }, async ({ req, res }) => {
   const { id, name, shorthand, country, notes } = req.body;
 
   if (id !== undefined && id !== null && typeof id !== 'number') {
@@ -89,11 +82,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     });
 
     res.status(200).json({ message: 'Delegation saved', id: Number(inserted.rows[0].id) });
-  } catch (err: any) {
-    if (typeof err?.message === 'string' && err.message.includes('UNIQUE constraint failed')) {
+  } catch (err) {
+    if (err instanceof Error && err.message.includes('UNIQUE constraint failed')) {
       return res.status(409).json({ message: 'A delegation with this name or shorthand already exists' });
     }
-    console.error('Error saving delegation:', err);
-    res.status(500).json({ message: err.message || 'Something went wrong' });
+    throw err;
   }
-}
+});

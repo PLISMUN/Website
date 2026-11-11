@@ -1,6 +1,6 @@
 "use client"
 import React from "react"
-import DocumentsAdmin from "@/components/documentsAdmin"
+import DocumentsAdmin from "@/features/documents/documents-admin"
 
 export default function Page() {
   React.useEffect(() => {

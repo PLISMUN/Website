@@ -1,54 +1,33 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import { getTursoClient } from '@/pages/api/components/dbAuth';
-import authAdmin from '@/pages/api/internal/authAdmin';
-import preFlightChecks from '@/pages/api/internal/preFlightChecks';
+import { getTursoClient } from '@/server/db';
+import { getLatestSiteConfig } from '@/server/site-config';
+import { requireUserId } from '@/server/users';
+import { withApi } from '@/server/with-api';
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  await preFlightChecks(req, res);
-  if (res.headersSent) return;
-  await authAdmin(req, res, true);
-  if (res.headersSent) return;
-  
-  const { email } = req.body;
+export default withApi({ auth: 'adminOrSelf' }, async ({ req, res }) => {
+  const userId = await requireUserId(req.body.email);
+  const turso = getTursoClient();
 
-    try {
-    const turso = getTursoClient()
+  const paymentsResult = await turso.execute({
+    sql: 'SELECT * FROM payments WHERE id = ?',
+    args: [userId],
+  });
 
-    const userResult = await turso.execute({
-      sql: 'SELECT id FROM users WHERE email = ?',
-      args: [email],
+  let rows = paymentsResult.rows;
+
+  if (!rows.length) {
+    const { pricing } = await getLatestSiteConfig();
+    const newPayment = await turso.execute({
+      sql: 'INSERT INTO payments (id, valueCzk, valueEur) VALUES (?, ?, ?) RETURNING *',
+      args: [userId, pricing.delegate.czk, pricing.delegate.eur],
     });
-
-    if (!userResult.rows.length) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-
-    const userId = userResult.rows[0].id;
-
-    const paymentsResult = await turso.execute({
-      sql: 'SELECT * FROM payments WHERE id = ?',
-      args: [userId],
-    });
-
-    let rows = paymentsResult.rows;
-
-    if (!rows.length) {
-        const newPayment = await turso.execute({
-            sql: 'INSERT INTO payments (id, valueCzk, valueEur) VALUES (?, ?, ?) RETURNING *',
-            args: [userId, process.env.NEXT_PUBLIC_PRICE_CZK || 0, process.env.NEXT_PUBLIC_PRICE_EUR || 0],
-        });
-        rows = newPayment.rows;
-    }
-
-    const paymentInfo = rows.map((row: any) => ({
-        valueCzk: row.valueCzk?.toString() || '',
-        valueEur: row.valueEur?.toString() || '',
-        status: Boolean(row.status),
-        state: Boolean(row.status),
-    }));
-    res.status(200).json(paymentInfo);
-  } catch (err: any) {
-    console.error('Error fetching payments:', err);
-    res.status(500).json({ message: err.message || 'Something went wrong' });
+    rows = newPayment.rows;
   }
-}
+
+  const paymentInfo = rows.map((row) => ({
+    valueCzk: row.valueCzk?.toString() || '',
+    valueEur: row.valueEur?.toString() || '',
+    status: Boolean(row.status),
+    state: Boolean(row.status),
+  }));
+  res.status(200).json(paymentInfo);
+});

@@ -4,17 +4,19 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useSession } from "next-auth/react"
 import { IconUserShield } from "@tabler/icons-react"
-import DelegateInfoQuestion from "@/components/delegateInfoQuestion"
-import DelegateTypePick from "@/components/delegateTypePick"
-import DelegateApply from "@/components/delegateApply"
-import ChairApply from "@/components/chairApply"
-import PaymentWidget from "@/components/paymentWidget"
+import DelegateInfoQuestion from "@/features/applications/personal-info-form"
+import DelegateTypePick from "@/features/applications/application-type-picker"
+import DelegateApply from "@/features/applications/delegate-application-form"
+import ChairApply from "@/features/applications/chair-application-form"
+import PaymentWidget from "@/features/payments/payment-widget"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { stages } from "@/config/stages"
-import { SUPERVISOR_APPLY_PATH } from "@/config/supervisor"
+import { useSiteConfig } from "@/features/site-config/context"
+import { getSupervisorApplications } from "@/features/supervisors/api"
+import { SUPERVISOR_APPLY_PATH } from "@/features/supervisors/paths"
 import React from "react"
 
 export default function Page() {
+  const { stages } = useSiteConfig()
   const [infoSubmitted, setInfoSubmitted] = useState(false)
   const [typeSubmitted, setTypeSubmitted] = useState("")
   const [applySuccess, setApplySuccess] = useState(false)
@@ -31,9 +33,8 @@ export default function Page() {
     if (!session?.user?.email) return
     const checkSupervisor = async () => {
       try {
-        const res = await fetch("/api/retrieve/getSupervisorApplications", { method: "POST" })
-        const data = res.ok ? await res.json() : null
-        const applicant = Boolean(data?.applications?.some((a: { status: string }) => a.status !== "rejected"))
+        const { applications } = await getSupervisorApplications()
+        const applicant = applications.some((a) => a.status !== "rejected")
         if (applicant) router.replace(SUPERVISOR_APPLY_PATH)
         setIsSupervisor(applicant)
       } catch {

@@ -1,15 +1,16 @@
 import React from "react"
-import Header from "@/components/header"
-import FooterSection from "@/components/footer-one"
-import Login from "@/components/login-one"
-import { stages } from "@/config/stages"
+import Header from "@/components/layout/header"
+import FooterSection from "@/components/layout/footer"
+import Login from "@/features/auth/login-form"
+import { getSiteConfig } from "@/server/site-config"
 
 export const metadata = {
   title: "PLISMUN | Login",
   description: "Login to PLISMUN."
 }
 
-function LoginPage() {
+async function LoginPage() {
+    const { stages } = await getSiteConfig()
   if (!stages.accountCreation) {
     return null
   }
@@ -23,5 +24,4 @@ function LoginPage() {
   )
 }
 
-LoginPage.mainPage = true
 export default LoginPage

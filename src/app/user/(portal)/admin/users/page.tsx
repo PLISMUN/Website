@@ -1,6 +1,6 @@
 "use client"
 import React from "react"
-import UsersAdmin from "@/components/usersAdmin"
+import UsersAdmin from "@/features/users/users-admin"
 
 export default function Page() {
 

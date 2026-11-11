@@ -1,8 +1,8 @@
 import React from "react"
-import Committees from "@/components/committees"
-import Pricing from "@/components/pricing-section-two"
-import Venues from "@/components/venues"
-import Schedule from "@/components/schedule"
+import Committees from "@/features/committees/committees-section"
+import Pricing from "@/features/marketing/pricing"
+import Venues from "@/features/marketing/venues"
+import Schedule from "@/features/marketing/schedule"
 
 export const metadata = {
   title: "PLISMUN | Details",
@@ -20,5 +20,4 @@ function ThisYearPage() {
     )
 }
 
-ThisYearPage.mainPage = true
 export default ThisYearPage

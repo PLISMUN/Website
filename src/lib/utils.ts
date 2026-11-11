@@ -18,3 +18,11 @@ export function paymentStatusLabel(status: unknown): "Completed" | "Pending" {
 export function portalRedirect(next: string | null | undefined): string {
   return next && next.startsWith("/user/") && !next.startsWith("//") ? next : "/user/dashboard"
 }
+
+export const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
+
+// The colour of an application's status, wherever it's shown
+export const statusClass = (status: string) =>
+  status === "pending" ? "text-yellow-600" :
+  status === "accepted" ? "text-green-600" :
+  status === "rejected" ? "text-red-600" : ""

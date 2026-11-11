@@ -1,8 +1,20 @@
 /** @type {import('next').NextConfig} */
+require('./scripts/prepare.cjs')
+
 const nextConfig = {
   reactStrictMode: true,
   async headers() {
     return [
+      // The default. When several rules set the same header the last match wins, so this has to stay first.
+      {
+      source: '/:path*',
+      headers: [
+        {
+        key: 'Cache-Control',
+        value: 'no-store',
+        },
+      ],
+      },
       {
       source: '/',
       headers: [
@@ -59,15 +71,6 @@ const nextConfig = {
       },
       {
       source: '/api/:path*',
-      headers: [
-        {
-        key: 'Cache-Control',
-        value: 'no-store',
-        },
-      ],
-      },
-      {
-      source: '/:path*',
       headers: [
         {
         key: 'Cache-Control',

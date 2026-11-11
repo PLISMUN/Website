@@ -1,8 +1,8 @@
 import React from "react"
-import HeroSection from "@/components/hero"
-import News from "@/components/news"
-import Committees from "@/components/committees"
-import Countdown from "@/components/countdown";
+import HeroSection from "@/features/marketing/hero"
+import News from "@/features/marketing/news"
+import Committees from "@/features/committees/committees-section"
+import Countdown from "@/features/marketing/countdown";
 
 
 function Home() {
@@ -17,7 +17,6 @@ function Home() {
   )
 }
 
-Home.mainPage = true
 
 export const metadata = {
   title: "PLISMUN | Home",
