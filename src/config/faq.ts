@@ -57,6 +57,45 @@ export const generalFaq: FaqItem[] = [
     }
 ]
 
+// The questions at the bottom of the /delegate-info page
+export const delegateFaq: FaqItem[] = [
+    {
+        id: 'chair-and-delegate',
+        question: 'Can I apply to be a chair and a delegate?',
+        answer: 'Yes. If you apply to chair, you can also apply as a delegate in case your chair application is not successful.',
+    },
+    {
+        id: 'delegation',
+        question: "My school isn't in the list of delegations. What do I do?",
+        answer: 'Ask your teacher to register your school on the Supervisors page. Once it has been set up, open Apply in the portal, choose your school under Delegation and submit your details again.',
+    },
+    {
+        id: 'when',
+        question: 'When will I find out my committee and role?',
+        answer: 'Applications are reviewed once your payment has been processed, which can take up to 7 business days. We email you when your application is accepted, and you can check its status under Applications in the portal at any time.',
+    },
+    {
+        id: 'change',
+        question: 'What if I want to change my application?',
+        answer: "Use the Applications tab in the portal. If your application has already been accepted, email the team and we'll see what we can do :)",
+    },
+    {
+        id: 'diet',
+        question: 'I have dietary requirements or allergies. What should I choose?',
+        answer: 'Choose your diet when you fill in your details. We can\'t safely accommodate every dietary need or allergy, so if yours isn\'t covered, choose "No Lunch".',
+    },
+    {
+        id: 'pay',
+        question: 'How much does it cost and how do I pay?',
+        answer: `The delegate fee is ${pricing.delegate.czk} CZK (€${pricing.delegate.eur}) and the chair fee is ${pricing.chair.czk} CZK (€${pricing.chair.eur}). You pay by bank transfer: open Payment in the portal for the bank details and a QR code to scan in your banking app. There is no card payment. If you applied to chair, wait until your chair application is accepted before you pay.`,
+    },
+    {
+        id: 'no-email',
+        question: "I haven't heard anything about my application.",
+        answer: `You should always get an email when you submit an application. If nothing arrives within 24 hours, check your spam folder, check that there are no typos in your email address, and then email us at ${conference.contactEmail}.`,
+    },
+]
+
 // The questions at the bottom of the /supervisors page
 export const supervisorFaq: FaqItem[] = [
     {

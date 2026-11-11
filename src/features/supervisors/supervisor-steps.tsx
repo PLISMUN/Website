@@ -5,11 +5,12 @@ import { Check, ChevronDown, Copy, MailCheck, MousePointer2, School, UsersRound 
 import { QRCodeSVG } from "qrcode.react";
 
 import { Button } from "@/components/ui/button";
+import { IllustratedSteps, MockCard, MockField, type IllustratedStep } from "@/components/illustrated-steps";
 import { conference } from "@/config/conference";
 import { pricing } from "@/config/pricing";
 import { cn } from "@/lib/utils";
 
-const STEPS = [
+const STEPS: IllustratedStep[] = [
   {
     title: "Create your account",
     description: "Sign up with Google or with your email address. It takes less than a minute.",
@@ -58,24 +59,7 @@ export default function SupervisorSteps() {
           </p>
         </div>
 
-        <ol className="mt-12 space-y-6 md:mt-16">
-          {STEPS.map((step, index) => (
-            <li key={step.title} className="grid items-center gap-6 rounded-2xl border bg-background p-6 shadow-sm md:grid-cols-2 md:gap-10 md:p-8">
-              <div className={cn("flex gap-4", index % 2 === 1 && "md:order-2")}>
-                <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-sky-700 text-lg font-semibold text-white">
-                  {index + 1}
-                </span>
-                <div>
-                  <h3 className="text-foreground text-xl font-semibold">{step.title}</h3>
-                  <p className="text-muted-foreground mt-2">{step.description}</p>
-                </div>
-              </div>
-              <div className="flex justify-center rounded-xl bg-[linear-gradient(135deg,#f0f9ff_0%,#f8fafc_100%)] p-6" aria-hidden="true">
-                {step.illustration}
-              </div>
-            </li>
-          ))}
-        </ol>
+        <IllustratedSteps steps={STEPS} />
 
         <ShareWithStudents />
       </div>
@@ -127,21 +111,6 @@ function ShareWithStudents() {
 }
 
 // Small static mock-ups of what the supervisor sees at each step
-
-function MockCard({ children, className }: { children: React.ReactNode; className?: string }) {
-  return <div className={cn("w-full max-w-xs rounded-xl border border-slate-200 bg-white p-4 shadow-md", className)}>{children}</div>;
-}
-
-function MockField({ label, value, active = false }: { label: string; value?: string; active?: boolean }) {
-  return (
-    <div>
-      <p className="text-[11px] font-medium text-slate-500">{label}</p>
-      <div className={cn("mt-1 h-8 rounded-md border px-2 text-xs leading-8 text-slate-700", active ? "border-sky-600 ring-2 ring-sky-100" : "border-slate-200")}>
-        {value}
-      </div>
-    </div>
-  );
-}
 
 function SignUpIllustration() {
   return (

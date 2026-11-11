@@ -2,12 +2,13 @@
 
 import Link from "next/link";
 import { useSession } from "next-auth/react";
-import { ChevronRight, Clock, CreditCard, School, ShieldCheck, UserRound } from "lucide-react";
+import { CalendarDays, ChevronRight, Clock, CreditCard, School, ShieldCheck, UserRound } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { pricing } from "@/config/pricing";
 import { stages } from "@/config/stages";
 import { SUPERVISOR_APPLY_PATH, supervisorApplyHref } from "./paths";
+import { conferenceDatesLong } from "@/lib/conference";
 
 const EXAMPLE_STUDENTS = [
   { initials: "AK", committee: "WHO", role: "France" },
@@ -67,8 +68,8 @@ export default function SupervisorHero() {
 
           <ul className="mt-8 flex flex-wrap gap-3 text-sm">
             <li className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-slate-700 shadow-sm">
-              <Clock className="h-4 w-4 text-sky-700" />
-              About 5 minutes to apply
+              <CalendarDays className="h-4 w-4 text-sky-700" />
+              {conferenceDatesLong}
             </li>
             <li className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-slate-700 shadow-sm">
               <CreditCard className="h-4 w-4 text-sky-700" />
