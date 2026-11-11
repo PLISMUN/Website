@@ -7,7 +7,7 @@ import { Badge } from '@/components/ui/badge'
 import { Card } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 import { cn } from '@/lib/utils'
-import { documentGroups } from '@/config/documents'
+import { useSiteConfig } from '@/features/site-config/context'
 import { getDocuments } from './api'
 import type { DocumentEntry } from './types'
 
@@ -71,6 +71,7 @@ function UnavailableCard({ doc }: { doc: DocumentEntry }) {
 // `compact` drops the extra top padding that clears the fixed header, for when
 // this section is embedded below another one rather than opening a page.
 export default function Documents({ compact = false }: { compact?: boolean }) {
+    const { documents: documentSettings } = useSiteConfig()
     // null until known
     const [documents, setDocuments] = useState<DocumentEntry[] | null>(null)
     const [failed, setFailed] = useState(false)
@@ -90,7 +91,7 @@ export default function Documents({ compact = false }: { compact?: boolean }) {
         fetchDocuments()
     }, [])
 
-    const groups = documentGroups
+    const groups = documentSettings.groups
         .map((group) => ({ ...group, documents: (documents ?? []).filter((doc) => doc.groupId === group.id) }))
         .filter((group) => group.documents.length > 0)
 

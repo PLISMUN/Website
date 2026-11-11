@@ -1,8 +1,7 @@
-import { pricing } from '@/config/pricing';
-import { stages } from '@/config/stages';
 import { getTursoClient } from '@/server/db';
 import { escapeHtml, sendEmail } from '@/server/email';
 import { normalizeBirth, normalizePhone, validDiets } from '@/server/people-validation';
+import { getLatestSiteConfig } from '@/server/site-config';
 import { requireUserId } from '@/server/users';
 import { withApi } from '@/server/with-api';
 
@@ -28,6 +27,7 @@ import { withApi } from '@/server/with-api';
  */
 export default withApi({ auth: 'user' }, async ({ req, res, user }) => {
   const { email } = user;
+  const { pricing, stages } = await getLatestSiteConfig();
 
   if (!stages.supervisorApplication) {
     return res.status(403).json({ message: 'Supervisor applications are currently closed' });

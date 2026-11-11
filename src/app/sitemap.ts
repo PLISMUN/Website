@@ -1,9 +1,11 @@
 import type { MetadataRoute } from 'next'
-import { conference } from '@/config/conference'
+import { getSiteConfig } from '@/server/site-config'
+
+export const revalidate = 3600
 
 // Next.js serves this as XML at /sitemap.xml
-export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = conference.siteUrl
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const baseUrl = (await getSiteConfig()).conference.siteUrl.replace(/\/+$/, '')
 
   return [
     { url: `${baseUrl}/`, lastModified: new Date() },

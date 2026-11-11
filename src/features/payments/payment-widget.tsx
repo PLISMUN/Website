@@ -8,15 +8,16 @@ import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
-import { paymentDetails } from '@/config/payment'
-import { pricing } from '@/config/pricing'
-import { stages } from '@/config/stages'
+import { useSiteConfig } from '@/features/site-config/context'
+import type { SiteConfig } from '@/features/site-config/schema'
 import { cn, isPaid } from '@/lib/utils'
 import { getPayment } from './api'
 import type { PaymentInfo } from './types'
 
+type PaymentDetails = SiteConfig['payment']
+
 // The Czech bank QR code format. Its message field is limited to 60 characters.
-const qrPayload = (iban: string, currency: string, message: string, amount: string | number) =>
+const qrPayload = (paymentDetails: PaymentDetails, iban: string, currency: string, message: string, amount: string | number) =>
     `SPD*1.0*ACC:${iban.replaceAll(' ', '')}*CC:${currency}*MSG:${message.slice(0, 60)}*X-VS:${paymentDetails.variableSymbol}*AM:${amount}`
 
 // Letters that don't split into a base letter plus an accent
@@ -42,6 +43,7 @@ type Detail = {
 }
 
 const bankDetails = (
+    paymentDetails: PaymentDetails,
     account: { accountNumber: string; iban: string },
     amount: { shown: string; copy: string },
     reference: string,
@@ -199,6 +201,7 @@ function BankDetails({ details, qrValue }: { details: Detail[]; qrValue: string 
 }
 
 export default function PaymentWidget() {
+    const { payment: paymentDetails, pricing, stages } = useSiteConfig()
     const [payment, setPayment] = useState<PaymentInfo | undefined>(undefined)
     const [loaded, setLoaded] = useState(false)
 
@@ -277,14 +280,14 @@ export default function PaymentWidget() {
                     </TabsList>
                     <TabsContent value="czk">
                         <BankDetails
-                            qrValue={qrPayload(paymentDetails.czk.iban, 'CZK', `PLISMUN ${reference}`, czkAmount)}
-                            details={bankDetails(paymentDetails.czk, { shown: `${czkAmount} CZK`, copy: czkAmount }, reference)}
+                            qrValue={qrPayload(paymentDetails, paymentDetails.czk.iban, 'CZK', `PLISMUN ${reference}`, czkAmount)}
+                            details={bankDetails(paymentDetails, paymentDetails.czk, { shown: `${czkAmount} CZK`, copy: czkAmount }, reference)}
                         />
                     </TabsContent>
                     <TabsContent value="eur">
                         <BankDetails
-                            qrValue={qrPayload(paymentDetails.eur.iban, 'EUR', `PLISMUN ${reference}`, eurAmount)}
-                            details={bankDetails(paymentDetails.eur, { shown: `€${eurAmount}`, copy: eurAmount }, reference)}
+                            qrValue={qrPayload(paymentDetails, paymentDetails.eur.iban, 'EUR', `PLISMUN ${reference}`, eurAmount)}
+                            details={bankDetails(paymentDetails, paymentDetails.eur, { shown: `€${eurAmount}`, copy: eurAmount }, reference)}
                         />
                     </TabsContent>
                 </Tabs>

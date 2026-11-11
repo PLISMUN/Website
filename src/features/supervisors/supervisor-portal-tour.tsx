@@ -1,7 +1,8 @@
 import React from "react";
 import { Lock } from "lucide-react";
 
-import { siteDomain } from "@/lib/conference";
+import { getSiteConfig } from "@/server/site-config";
+import { describeConference } from "@/lib/conference";
 import { cn } from "@/lib/utils";
 
 const CALLOUTS = [
@@ -19,7 +20,9 @@ const EXAMPLE_ROWS = [
   { name: "Student D", email: "student.d@school.edu", diet: "Omnivore", app: "SPECPOL – Brazil", status: "Accepted", paid: true },
 ];
 
-export default function SupervisorPortalTour() {
+export default async function SupervisorPortalTour() {
+  const { siteDomain } = describeConference((await getSiteConfig()).conference);
+
   return (
     <section id="portal" className="scroll-mt-24 py-16 md:py-24">
       <div className="mx-auto max-w-6xl px-6">
@@ -32,7 +35,7 @@ export default function SupervisorPortalTour() {
         </div>
 
         <div className="mt-12 grid gap-10 lg:grid-cols-[minmax(0,1fr)_18rem] lg:items-start">
-          <PortalMock />
+          <PortalMock siteDomain={siteDomain} />
           <ol className="space-y-5">
             {CALLOUTS.map((callout, index) => (
               <li key={callout.title} className="flex gap-3">
@@ -65,7 +68,7 @@ function Marker({ number, className }: { number: number; className?: string }) {
 }
 
 // A static picture of the My Delegation page, with numbered markers matching CALLOUTS
-function PortalMock() {
+function PortalMock({ siteDomain }: { siteDomain: string }) {
   return (
     <figure
       className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xl shadow-slate-900/5"

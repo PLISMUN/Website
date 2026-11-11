@@ -1,5 +1,5 @@
-import { pricing } from '@/config/pricing';
 import { getTursoClient } from '@/server/db';
+import { getLatestSiteConfig } from '@/server/site-config';
 import { requireUserId } from '@/server/users';
 import { withApi } from '@/server/with-api';
 
@@ -15,6 +15,7 @@ export default withApi({ auth: 'adminOrSelf' }, async ({ req, res }) => {
   let rows = paymentsResult.rows;
 
   if (!rows.length) {
+    const { pricing } = await getLatestSiteConfig();
     const newPayment = await turso.execute({
       sql: 'INSERT INTO payments (id, valueCzk, valueEur) VALUES (?, ?, ?) RETURNING *',
       args: [userId, pricing.delegate.czk, pricing.delegate.eur],

@@ -7,24 +7,23 @@ import { useSession } from "next-auth/react";
 import { CalendarDays, ChevronRight, MapPin } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { conference } from "@/config/conference";
-import { hero } from "@/config/hero";
-import { partners } from "@/config/partners";
-import { stages } from "@/config/stages";
-import { conferenceDatesShort, conferenceEdition } from "@/lib/conference";
+import { useSiteConfig } from "@/features/site-config/context";
+import { describeConference } from "@/lib/conference";
 
 export default function HeroSection() {
+  const { conference, hero, partners, stages } = useSiteConfig();
+  const { datesShort, edition } = describeConference(conference);
   const { data: session } = useSession();
   const [randomImage, setRandomImage] = React.useState(hero.images[0]);
   const [randomImageStacked, setRandomImageStacked] = React.useState(hero.stackedImages[0]);
 
   React.useEffect(() => {
     setRandomImageStacked(hero.stackedImages[Math.floor(Math.random() * hero.stackedImages.length)]);
-  }, []);
+  }, [hero.stackedImages]);
 
   React.useEffect(() => {
     setRandomImage(hero.images[Math.floor(Math.random() * hero.images.length)]);
-  }, []);
+  }, [hero.images]);
 
   return (
     <main className="overflow-hidden">
@@ -36,13 +35,13 @@ export default function HeroSection() {
         <div className="relative z-10 mx-auto max-w-6xl px-6">
           <div className="md:w-[45%]">
             <h1 className="max-w-xl text-balance text-5xl font-semibold tracking-tight text-slate-950 md:text-7xl">
-              {conferenceEdition}
+              {edition}
             </h1>
 
             <div className="mt-5 flex flex-wrap gap-3 text-sm">
               <span className="inline-flex items-center gap-2 rounded-full border border-sky-200/80 bg-sky-100/70 px-3 py-1.5 text-sky-900 shadow-sm backdrop-blur">
                 <CalendarDays className="h-4 w-4 text-sky-700" />
-                {conferenceDatesShort}
+                {datesShort}
               </span>
 
               <span className="inline-flex items-center gap-2 rounded-full border border-sky-200/80 bg-sky-100/70 px-3 py-1.5 text-sky-900 shadow-sm backdrop-blur">

@@ -1,11 +1,12 @@
 import { Card } from '@/components/ui/card'
-import { conference } from '@/config/conference'
+import { getSiteConfig } from '@/server/site-config'
 
 export const dynamic = 'force-static';
 
 const MYMUN_API = 'https://mymun.com/api/conferences';
 
 export default async function StatsSection() {
+  const { conference } = await getSiteConfig();
   const { conferenceId } = conference.mymun;
   const responsePrevConf = await fetch(`${MYMUN_API}/${conferenceId}/previous-conferences`, { cache: 'force-cache' });
   const resultPrevConf = await responsePrevConf.json();

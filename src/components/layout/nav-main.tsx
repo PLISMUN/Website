@@ -11,7 +11,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
 import Link from 'next/link'
-import { conference } from "@/config/conference"
+import { useSiteConfig } from "@/features/site-config/context"
 
 export function NavMain({
   items,
@@ -22,6 +22,8 @@ export function NavMain({
     icon?: Icon
   }[]
 }) {
+  const { conference } = useSiteConfig()
+
   return (
     <SidebarGroup>
       <SidebarGroupContent className="flex flex-col gap-2">

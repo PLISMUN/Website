@@ -22,9 +22,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { CountryDropdown } from '@/components/ui/country-dropdown'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import CalendarBirthday from '@/components/birthday-picker'
-import { conference } from '@/config/conference'
-import { pricing } from '@/config/pricing'
-import { stages } from '@/config/stages'
+import { useSiteConfig } from '@/features/site-config/context'
 import { errorMessage } from '@/lib/api-client'
 import { cn } from '@/lib/utils'
 import { getDelegations } from '@/features/delegations/api'
@@ -49,6 +47,7 @@ const emptyForm = {
 }
 
 export default function SupervisorApplicationPage() {
+    const { conference, stages } = useSiteConfig()
     const { data: session } = useSession()
     const sessionEmail = session?.user?.email || ''
     const sessionName = session?.user?.name || ''
@@ -144,6 +143,7 @@ function SupervisorForm({
     onCancel?: () => void
     onSuccess: () => Promise<void>
 }) {
+    const { pricing } = useSiteConfig()
     const [form, setForm] = useState(emptyForm)
     const [existing, setExisting] = useState(false)
     const [delegations, setDelegations] = useState<PublicDelegation[]>([])
@@ -391,6 +391,7 @@ function SupervisorForm({
 }
 
 function ApplicationStatus({ application }: { application: SupervisorApplication }) {
+    const { conference, pricing } = useSiteConfig()
     const { status, linked, paid, memberCount, delegation } = application
     const approved = status === 'accepted' && linked
     const rejected = status === 'rejected'

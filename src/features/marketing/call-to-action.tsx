@@ -1,7 +1,7 @@
 "use client"
 
 import { Button } from '@/components/ui/button'
-import { stages } from '@/config/stages';
+import { useSiteConfig } from '@/features/site-config/context';
 import Link from 'next/link'
 import { ChevronRight } from "lucide-react";
 import { useSession } from "next-auth/react";
@@ -14,6 +14,7 @@ type CallToActionProps = {
 };
 
 export function CallToAction({ text, buttonText = "Get Started", next }: CallToActionProps) {
+  const { stages } = useSiteConfig();
   const { data: session } = useSession();
   const nextQuery = next ? `?next=${encodeURIComponent(next)}` : "";
   const startHref = next && session ? next : `/user/signup${nextQuery}`;

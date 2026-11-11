@@ -1,6 +1,7 @@
 import FaqSection from '@/components/faq-section'
-import { supervisorFaq } from '@/config/faq'
+import { getSiteConfig } from '@/server/site-config'
 
-export default function SupervisorFAQ() {
-    return <FaqSection title="Supervisor questions" subtitle="The things teachers ask us most often." items={supervisorFaq} />
+export default async function SupervisorFAQ() {
+    const { faq } = await getSiteConfig()
+    return <FaqSection title="Supervisor questions" subtitle="The things teachers ask us most often." items={faq.supervisor} />
 }

@@ -2,14 +2,16 @@ import React from "react"
 import { Separator } from "@/components/ui/separator"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Mail, ShieldAlert } from "lucide-react"
-import { conference } from "@/config/conference"
+import { getSiteConfig } from "@/server/site-config"
 
 export const metadata = {
   title: "PLISMUN | Privacy Policy",
   description: "PLISMUN Privacy Policy."
 }
 
-function PrivacyPage() {
+async function PrivacyPage() {
+    const { conference } = await getSiteConfig()
+
     return (
      <>
         <section>

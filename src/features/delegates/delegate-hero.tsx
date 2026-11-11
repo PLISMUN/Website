@@ -5,10 +5,8 @@ import { useSession } from "next-auth/react";
 import { CalendarDays, Check, ChevronRight, CreditCard, ListChecks, MailCheck, MapPin } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { conference } from "@/config/conference";
-import { pricing } from "@/config/pricing";
-import { stages } from "@/config/stages";
-import { conferenceDatesLong, conferenceEdition } from "@/lib/conference";
+import { useSiteConfig } from "@/features/site-config/context";
+import { describeConference } from "@/lib/conference";
 
 // The sections further down /delegate-info, for the "On this page" links. Their ids are set in src/app/delegate-info/page.tsx.
 const DELEGATE_SECTIONS = [
@@ -21,6 +19,8 @@ const DELEGATE_SECTIONS = [
 ];
 
 export default function DelegateHero() {
+  const { conference, pricing, stages } = useSiteConfig();
+  const { datesLong: conferenceDatesLong, edition: conferenceEdition } = describeConference(conference);
   const { data: session } = useSession();
   const canApply = stages.accountCreation || !!session;
   const applyHref = session ? "/user/dashboard" : "/user/signup";
@@ -104,6 +104,8 @@ export default function DelegateHero() {
 
 // A delegate's country placard in committee, with the application around it
 function PlacardIllustration() {
+  const conferenceEdition = describeConference(useSiteConfig().conference).edition;
+
   return (
     <figure className="relative mx-auto w-full max-w-md" aria-label="Illustration: a delegate's country placard for their committee">
       <div className="rounded-[1.75rem] border border-slate-200 bg-white/80 p-6 pb-14 pt-14 shadow-xl shadow-slate-900/5 backdrop-blur sm:p-10 sm:pt-14">

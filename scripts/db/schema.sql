@@ -89,6 +89,15 @@ CREATE TABLE IF NOT EXISTS documents (
   uploadedAt TEXT
 );
 
+-- Settings changed from the Settings admin page, one row per section of src/config. A section without a
+-- row uses its default from src/config. value is the whole section as JSON.
+CREATE TABLE IF NOT EXISTS site_config (
+  section TEXT PRIMARY KEY,
+  value JSON NOT NULL,
+  updatedAt TEXT NOT NULL,
+  updatedBy TEXT NOT NULL -- the admin's email
+);
+
 -- Supervisor ids start at 9991, because the admin endpoint that accepts applications takes the ids of
 -- both applications and supervisors, so the two must never overlap.
 INSERT INTO sqlite_sequence (name, seq)

@@ -1,7 +1,9 @@
 import { Fragment } from 'react'
-import { about } from '@/config/about'
+import { getSiteConfig } from '@/server/site-config'
 
-export default function AboutSection() {
+export default async function AboutSection() {
+    const { about } = await getSiteConfig()
+
     return (
         <section>
             <div className="pt-24">

@@ -2,7 +2,7 @@ import React from "react"
 import Header from "@/components/layout/header"
 import FooterSection from "@/components/layout/footer"
 import Signup from "@/features/auth/signup-form"
-import { stages } from "@/config/stages"
+import { getSiteConfig } from "@/server/site-config"
 
 
 export const metadata = {
@@ -10,7 +10,8 @@ export const metadata = {
   description: "Sign up for PLISMUN."
 }
 
-function SignupPage() {
+async function SignupPage() {
+    const { stages } = await getSiteConfig()
       if (!stages.accountCreation) {
         return null
       }

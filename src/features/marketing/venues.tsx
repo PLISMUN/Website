@@ -1,7 +1,9 @@
 import { Card } from '@/components/ui/card'
-import { venues } from '@/config/venues'
+import { getSiteConfig } from '@/server/site-config'
 
-export default function Venues() {
+export default async function Venues() {
+    const { venues } = await getSiteConfig()
+
     return (
         <section>
             <div className="bg-muted/50 py-24">

@@ -1,8 +1,9 @@
 import 'server-only'
 import nodemailer from 'nodemailer'
-import { conference } from '@/config/conference'
-import { emailConfig } from '@/config/email'
+import { emailServer } from '@/config/email'
 import { getEnv } from '@/server/env'
+import { getLatestSiteConfig } from '@/server/site-config'
+import type { SiteConfig } from '@/features/site-config/schema'
 import { vitals } from '@/lib/telemetry'
 
 const ENTITIES: Record<string, string> = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
@@ -19,12 +20,12 @@ export const htmlToText = (html: string) =>
     .replace(/<[^>]*>/g, '')
     .replace(/&(?:amp|lt|gt|quot|#39);/g, entity => CHARACTERS[entity]);
 
-const footerText = () => {
+const footerText = (conference: SiteConfig['conference']) => {
   const { maintainedBy } = conference.credits
   const v = vitals()
   return (
-    `© ${new Date().getFullYear()} ${v.name} for the use by ${conference.host}<br>` +
-    `${v.pre}${v.name}, Maintained by ${maintainedBy.join(', ')}`
+    `© ${new Date().getFullYear()} ${v.name} for the use by ${escapeHtml(conference.host)}<br>` +
+    `${v.pre}${v.name}, Maintained by ${escapeHtml(maintainedBy.join(', '))}`
   )
 }
 
@@ -48,6 +49,8 @@ export async function sendEmail(email: string, title: string, body: string): Pro
     throw new Error('Email, title, and body are required')
   }
 
+  const { conference, email: emailSettings } = await getLatestSiteConfig()
+  const siteUrl = escapeHtml(conference.siteUrl.replace(/\/+$/, ''))
   const randomness = Math.random().toString(36).substring(2, 5)
 
   const html_message = `
@@ -68,11 +71,11 @@ export async function sendEmail(email: string, title: string, body: string): Pro
                       <!-- Footer -->
                       <span style="opacity: 0; display: none; font-size: 0px"> ${randomness} </span>
                       <div style="max-width:768px; margin:0 auto; padding:0 24px;">
-                        <a href="${conference.siteUrl}/" style="display:block; width:auto; margin:0 auto 12px auto;" aria-label="go home">
-                          <img src="${conference.siteUrl}/logo.png" alt="Logo" style="height:40px; width:auto;">
+                        <a href="${siteUrl}/" style="display:block; width:auto; margin:0 auto 12px auto;" aria-label="go home">
+                          <img src="${siteUrl}/logo.png" alt="Logo" style="height:40px; width:auto;">
                         </a>
                         <div style="color:#6b7280; text-align:center; font-size:14px;">
-                          ${footerText()}
+                          ${footerText(conference)}
                         </div>
                       </div>
                       <span style="opacity: 0; display: none; font-size: 0px"> ${randomness} </span>
@@ -98,11 +101,11 @@ export async function sendEmail(email: string, title: string, body: string): Pro
     `;
 
   const transporter = nodemailer.createTransport({
-    host: emailConfig.smtpHost,
-    port: emailConfig.smtpPort,
+    host: emailServer.smtpHost,
+    port: emailServer.smtpPort,
     secure: true,
     auth: {
-      user: emailConfig.senderAddress,
+      user: emailServer.senderAddress,
       pass: password,
     },
   });
@@ -110,9 +113,9 @@ export async function sendEmail(email: string, title: string, body: string): Pro
   await transporter.verify();
 
   await transporter.sendMail({
-    from: `"${emailConfig.senderName}" <${emailConfig.senderAddress}>`,
+    from: { name: emailSettings.senderName, address: emailServer.senderAddress },
     to: email,
-    bcc: emailConfig.senderAddress,
+    bcc: emailServer.senderAddress,
     subject: title,
     text: text_message,
     html: html_message,

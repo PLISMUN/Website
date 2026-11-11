@@ -1,7 +1,6 @@
 import { readFileSync } from 'fs'
 import { join } from 'path'
 import { connect, run } from './client'
-import { runMigrations } from './migrations'
 import { insertSampleData } from './sample-data'
 
 // pnpm db:setup: creates the tables and brings them up to date. A local database also gets sample data.
@@ -10,8 +9,6 @@ run(async () => {
 
   await db.executeMultiple(readFileSync(join(process.cwd(), 'scripts/db/schema.sql'), 'utf8'))
   console.log('Tables are ready')
-
-  await runMigrations(db)
 
   if (isLocal) {
     await insertSampleData(db)

@@ -1,9 +1,8 @@
+'use client'
 import Link from 'next/link'
-import { conference } from '@/config/conference'
 import { Line } from '@/components/layout/line'
+import { useSiteConfig } from '@/features/site-config/context'
 import { vitals } from '@/lib/telemetry'
-
-const { maintainedBy } = conference.credits
 
 const links = [
     { title: 'About', href: '/about' },
@@ -16,6 +15,9 @@ const links = [
 ]
 
 export default function FooterSection() {
+    const { conference } = useSiteConfig()
+    const { maintainedBy } = conference.credits
+
     return (
         <footer className="bg-muted py-16">
             <div className="mx-auto max-w-5xl px-6">

@@ -1,11 +1,12 @@
-import { conference } from '@/config/conference';
 import { getTursoClient } from '@/server/db';
+import { getLatestSiteConfig } from '@/server/site-config';
 import { requireUserId } from '@/server/users';
 import { withApi } from '@/server/with-api';
 
 export default withApi({ auth: 'adminOrSelf' }, async ({ req, res }) => {
   const userId = await requireUserId(req.body.email);
   const turso = getTursoClient();
+  const { conference } = await getLatestSiteConfig();
 
   const applicationsResult = await turso.execute({
     sql: `

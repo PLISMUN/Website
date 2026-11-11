@@ -1,10 +1,12 @@
 "use client";
 
 import React, { useState } from "react";
-import { teamMembers } from "@/config/team";
-import { conferenceEdition } from "@/lib/conference";
+import { useSiteConfig } from "@/features/site-config/context";
+import { describeConference } from "@/lib/conference";
 
 export default function TeamSection() {
+  const { conference, team: teamMembers } = useSiteConfig();
+  const conferenceEdition = describeConference(conference).edition;
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   return (

@@ -3,10 +3,12 @@ import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { IconPodium, IconLaurelWreath, IconUserShield } from "@tabler/icons-react"
-import { stages } from "@/config/stages"
+import { useSiteConfig } from "@/features/site-config/context"
 import { SUPERVISOR_APPLY_PATH } from "@/features/supervisors/paths"
 
 export default function DelegateTypePick({ onPickType }: { onPickType: (type: 'delegate' | 'chair') => void }) {
+    const { stages } = useSiteConfig()
+
     return (
         <section className="bg-muted">
             <div className="mx-auto max-w-4xl px-4 py-4 lg:px-0">

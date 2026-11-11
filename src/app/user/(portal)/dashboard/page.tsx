@@ -10,12 +10,13 @@ import DelegateApply from "@/features/applications/delegate-application-form"
 import ChairApply from "@/features/applications/chair-application-form"
 import PaymentWidget from "@/features/payments/payment-widget"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { stages } from "@/config/stages"
+import { useSiteConfig } from "@/features/site-config/context"
 import { getSupervisorApplications } from "@/features/supervisors/api"
 import { SUPERVISOR_APPLY_PATH } from "@/features/supervisors/paths"
 import React from "react"
 
 export default function Page() {
+  const { stages } = useSiteConfig()
   const [infoSubmitted, setInfoSubmitted] = useState(false)
   const [typeSubmitted, setTypeSubmitted] = useState("")
   const [applySuccess, setApplySuccess] = useState(false)

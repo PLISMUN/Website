@@ -5,10 +5,9 @@ import { useSession } from "next-auth/react";
 import { CalendarDays, ChevronRight, Clock, CreditCard, School, ShieldCheck, UserRound } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { pricing } from "@/config/pricing";
-import { stages } from "@/config/stages";
+import { useSiteConfig } from "@/features/site-config/context";
 import { SUPERVISOR_APPLY_PATH, supervisorApplyHref } from "./paths";
-import { conferenceDatesLong } from "@/lib/conference";
+import { describeConference } from "@/lib/conference";
 
 const EXAMPLE_STUDENTS = [
   { initials: "AK", committee: "WHO", role: "France" },
@@ -17,6 +16,8 @@ const EXAMPLE_STUDENTS = [
 ];
 
 export default function SupervisorHero() {
+  const { conference, pricing, stages } = useSiteConfig();
+  const conferenceDatesLong = describeConference(conference).datesLong;
   const { data: session } = useSession();
   const canApply = stages.accountCreation || !!session;
 

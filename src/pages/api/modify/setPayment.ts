@@ -1,7 +1,8 @@
-import { isPricingTier, pricing } from '@/config/pricing';
+import { isPricingTier } from '@/config/pricing';
 import { paymentStatusLabel } from '@/lib/utils';
 import { getTursoClient } from '@/server/db';
 import { sendEmail } from '@/server/email';
+import { getLatestSiteConfig } from '@/server/site-config';
 import { requireUserId } from '@/server/users';
 import { withApi } from '@/server/with-api';
 
@@ -9,7 +10,7 @@ import { withApi } from '@/server/with-api';
  * Sets what a user owes to the price of a type of participant, and emails them the new amount.
  *
  * @param req.body.email User's email
- * @param req.body.tier 'delegate' | 'chair' | 'supervisor' from src/config/pricing.ts. Defaults to 'delegate'.
+ * @param req.body.tier 'delegate' | 'chair' | 'supervisor', priced in the pricing settings. Defaults to 'delegate'.
  */
 export default withApi({ auth: 'admin' }, async ({ req, res }) => {
   const { email, tier = 'delegate' } = req.body;
@@ -20,7 +21,7 @@ export default withApi({ auth: 'admin' }, async ({ req, res }) => {
   if (!isPricingTier(tier)) {
     return res.status(400).json({ message: 'Invalid pricing tier' });
   }
-  const { czk: valueCzk, eur: valueEur } = pricing[tier];
+  const { czk: valueCzk, eur: valueEur } = (await getLatestSiteConfig()).pricing[tier];
 
   const id = await requireUserId(email);
   const turso = getTursoClient();

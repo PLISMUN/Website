@@ -11,7 +11,8 @@ import {
   IconConfetti,
   IconFlag,
   IconUsersGroup,
-  IconUserShield
+  IconUserShield,
+  IconSettings
 } from "@tabler/icons-react"
 
 import { NavCategory } from "@/components/layout/nav-category"
@@ -104,6 +105,11 @@ export function PortalSidebar({ ...props }: React.ComponentProps<typeof Sidebar>
         name: "Documents",
         url: "/user/admin/documents",
         icon: IconFileText,
+      },
+      {
+        name: "Settings",
+        url: "/user/admin/settings",
+        icon: IconSettings,
       },
     ],
   }

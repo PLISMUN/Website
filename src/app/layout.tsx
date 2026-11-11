@@ -1,14 +1,16 @@
-"use client"
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import '@/styles/main.css';
-import { SessionProvider } from "next-auth/react"
-// import { ViewTransition } from 'react' // Uncomment when View Transitions are supported in main release of react
-import { usePathname } from "next/navigation"
 
-import Header from "@/components/layout/header"
-import FooterSection from "@/components/layout/footer"
+import { SiteChrome } from "@/components/layout/site-chrome"
 import { Analytics } from "@/components/analytics"
+import { SiteConfigProvider } from "@/features/site-config/context"
+import { getSiteConfig } from "@/server/site-config"
+
+// Pages are cached. Saving on the Settings admin page clears the cached settings, so pages are rebuilt on
+// their next visit (see src/server/site-config.ts). This is the fallback for what has no save to clear it,
+// like committees edited by hand in the database: those show within an hour.
+export const revalidate = 3600
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -20,27 +22,22 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const pathname = usePathname();
-  const hideHeaderFooter = pathname?.startsWith("/user");
+  const config = await getSiteConfig();
 
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <SessionProvider>
-          {!hideHeaderFooter && <Header />}
-          {/*<ViewTransition>*/}
-            {children}
-          {/*</ViewTransition>*/}
-        </SessionProvider>
-        {!hideHeaderFooter && <FooterSection />}
-        <Analytics />
+        <SiteConfigProvider config={config}>
+          <SiteChrome>{children}</SiteChrome>
+          <Analytics />
+        </SiteConfigProvider>
       </body>
     </html>
   );

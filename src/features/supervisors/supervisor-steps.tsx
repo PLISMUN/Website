@@ -6,11 +6,11 @@ import { QRCodeSVG } from "qrcode.react";
 
 import { Button } from "@/components/ui/button";
 import { IllustratedSteps, MockCard, MockField, type IllustratedStep } from "@/components/illustrated-steps";
-import { conference } from "@/config/conference";
-import { pricing } from "@/config/pricing";
+import { useSiteConfig } from "@/features/site-config/context";
+import type { SiteConfig } from "@/features/site-config/schema";
 import { cn } from "@/lib/utils";
 
-const STEPS: IllustratedStep[] = [
+const steps = ({ pricing }: SiteConfig): IllustratedStep[] => [
   {
     title: "Create your account",
     description: "Sign up with Google or with your email address. It takes less than a minute.",
@@ -49,6 +49,8 @@ const STEPS: IllustratedStep[] = [
 ];
 
 export default function SupervisorSteps() {
+  const config = useSiteConfig();
+
   return (
     <section id="how-it-works" className="scroll-mt-24 bg-muted/50 py-16 md:py-24">
       <div className="mx-auto max-w-5xl px-6">
@@ -59,7 +61,7 @@ export default function SupervisorSteps() {
           </p>
         </div>
 
-        <IllustratedSteps steps={STEPS} />
+        <IllustratedSteps steps={steps(config)} />
 
         <ShareWithStudents />
       </div>
@@ -68,6 +70,7 @@ export default function SupervisorSteps() {
 }
 
 function ShareWithStudents() {
+  const { conference } = useSiteConfig();
   const [copied, setCopied] = useState(false);
 
   const instructions = [
@@ -193,6 +196,8 @@ function ReviewIllustration() {
 }
 
 function PaymentIllustration() {
+  const { pricing } = useSiteConfig();
+
   return (
     <MockCard>
       <p className="text-sm font-semibold text-slate-950">Payment</p>

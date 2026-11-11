@@ -1,4 +1,15 @@
-/** POSTs to one of our API routes. Throws an Error with the server's message if the request fails. */
+/** Thrown by apiPost. data is whatever the server sent back with the error, if anything. */
+export class ApiRequestError extends Error {
+  constructor(
+    message: string,
+    readonly status: number,
+    readonly data: Record<string, unknown> | null
+  ) {
+    super(message)
+  }
+}
+
+/** POSTs to one of our API routes. Throws an ApiRequestError with the server's message if the request fails. */
 export async function apiPost<T = unknown>(path: string, fallbackError: string, body?: unknown): Promise<T> {
   const res = await fetch(path, {
     method: 'POST',
@@ -8,7 +19,7 @@ export async function apiPost<T = unknown>(path: string, fallbackError: string, 
     }),
   })
   const data = await res.json().catch(() => null)
-  if (!res.ok) throw new Error(data?.message || fallbackError)
+  if (!res.ok) throw new ApiRequestError(data?.message || fallbackError, res.status, data)
   return data as T
 }
 

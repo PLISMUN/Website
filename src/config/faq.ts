@@ -1,10 +1,8 @@
-import { conference } from '@/config/conference'
-import { pricing } from '@/config/pricing'
-
 export type FaqItem = {
   id: string
   question: string
-  // Line breaks (\n) in an answer on the /faq page are kept
+  // Line breaks (\n) in an answer are kept. {contactEmail} and prices like {delegate.czk} or
+  // {supervisor.eur} are filled in from the current settings when the page is shown.
   answer: string
 }
 
@@ -13,7 +11,7 @@ export const generalFaq: FaqItem[] = [
     {
         id: 'item-1',
         question: 'How can I contact you?',
-        answer: `Write an email to ${conference.contactEmail}`,
+        answer: 'Write an email to {contactEmail}',
     },
     {
         id: 'item-2',
@@ -53,7 +51,7 @@ export const generalFaq: FaqItem[] = [
     {
         id: 'item-8',
         question: 'I got an unknown error or an error that wasnʹt my fault when submitting my application, what should I do?',
-        answer: `Firstly email us at ${conference.contactEmail} for you to be able to get your confirmation email.\nAdditionally, in the email send us the screenshot of the console so we are able to know how to fix it for next time. (Right click anywhere on the page, then Inspect Element, then the console.)\nWe apologise for the issues and we will attempt to get back to you within 24 hours an error occuring.`
+        answer: `Firstly email us at {contactEmail} for you to be able to get your confirmation email.\nAdditionally, in the email send us the screenshot of the console so we are able to know how to fix it for next time. (Right click anywhere on the page, then Inspect Element, then the console.)\nWe apologise for the issues and we will attempt to get back to you within 24 hours an error occuring.`
     }
 ]
 
@@ -87,12 +85,12 @@ export const delegateFaq: FaqItem[] = [
     {
         id: 'pay',
         question: 'How much does it cost and how do I pay?',
-        answer: `The delegate fee is ${pricing.delegate.czk} CZK (€${pricing.delegate.eur}) and the chair fee is ${pricing.chair.czk} CZK (€${pricing.chair.eur}). You pay by bank transfer: open Payment in the portal for the bank details and a QR code to scan in your banking app. There is no card payment. If you applied to chair, wait until your chair application is accepted before you pay.`,
+        answer: `The delegate fee is {delegate.czk} CZK (€{delegate.eur}) and the chair fee is {chair.czk} CZK (€{chair.eur}). You pay by bank transfer: open Payment in the portal for the bank details and a QR code to scan in your banking app. There is no card payment. If you applied to chair, wait until your chair application is accepted before you pay.`,
     },
     {
         id: 'no-email',
         question: "I haven't heard anything about my application.",
-        answer: `You should always get an email when you submit an application. If nothing arrives within 24 hours, check your spam folder, check that there are no typos in your email address, and then email us at ${conference.contactEmail}.`,
+        answer: `You should always get an email when you submit an application. If nothing arrives within 24 hours, check your spam folder, check that there are no typos in your email address, and then email us at {contactEmail}.`,
     },
 ]
 
@@ -131,7 +129,7 @@ export const supervisorFaq: FaqItem[] = [
     {
         id: 'price',
         question: 'How much does it cost and how do I pay?',
-        answer: `The supervisor fee is ${pricing.supervisor.czk} CZK (€${pricing.supervisor.eur}). Once your application is approved, open Payment in the portal for the bank details and a QR code. Payments can take up to 7 business days to be processed.`,
+        answer: `The supervisor fee is {supervisor.czk} CZK (€{supervisor.eur}). Once your application is approved, open Payment in the portal for the bank details and a QR code. Payments can take up to 7 business days to be processed.`,
     },
     {
         id: 'visibility',

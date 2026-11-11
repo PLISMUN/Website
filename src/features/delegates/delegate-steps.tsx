@@ -6,10 +6,10 @@ import { IconLaurelWreath, IconPodium } from "@tabler/icons-react";
 import { QRCodeSVG } from "qrcode.react";
 
 import { IllustratedSteps, MockCard, MockField, type IllustratedStep } from "@/components/illustrated-steps";
-import { pricing } from "@/config/pricing";
-import { stages } from "@/config/stages";
+import { useSiteConfig } from "@/features/site-config/context";
+import type { SiteConfig } from "@/features/site-config/schema";
 
-const STEPS: IllustratedStep[] = [
+const steps = ({ pricing, stages }: SiteConfig): IllustratedStep[] => [
   {
     title: "Create your account",
     description: "Sign up with Google or with your email address. It takes less than a minute.",
@@ -71,6 +71,8 @@ const STEPS: IllustratedStep[] = [
 ];
 
 export default function DelegateSteps() {
+  const config = useSiteConfig();
+
   return (
     <section className="bg-muted/50 py-16 md:py-24">
       <div className="mx-auto max-w-5xl px-6">
@@ -81,7 +83,7 @@ export default function DelegateSteps() {
           </p>
         </div>
 
-        <IllustratedSteps steps={STEPS} />
+        <IllustratedSteps steps={steps(config)} />
       </div>
     </section>
   );
@@ -176,6 +178,8 @@ function ChoicesIllustration() {
 }
 
 function PaymentIllustration() {
+  const { pricing } = useSiteConfig();
+
   return (
     <MockCard>
       <div className="flex items-start justify-between gap-2">

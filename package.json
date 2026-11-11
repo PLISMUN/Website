@@ -10,8 +10,7 @@
     "lint": "eslint src scripts tests",
     "typecheck": "next typegen && tsc --noEmit",
     "test": "vitest run",
-    "db:setup": "tsx scripts/db/setup.ts",
-    "db:migrate": "tsx scripts/db/migrate.ts"
+    "db:setup": "tsx scripts/db/setup.ts"
   },
   "dependencies": {
     "@libsql/client": "^0.15.8",

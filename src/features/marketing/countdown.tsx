@@ -1,11 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { conference } from "@/config/conference";
-import { conferenceDatesLong, conferenceStartTime } from "@/lib/conference";
+import { useSiteConfig } from "@/features/site-config/context";
+import { describeConference } from "@/lib/conference";
 
-function getTimeLeft() {
-  const diff = Math.max(0, conferenceStartTime - Date.now());
+function getTimeLeft(startTime: number) {
+  const diff = Math.max(0, startTime - Date.now());
 
   if (diff <= 0) {
     return {
@@ -32,20 +32,22 @@ const initialTimeLeft = {
 };
 
 export default function Countdown() {
+  const { conference } = useSiteConfig();
+  const { startTime, datesLong } = describeConference(conference);
   const [timeLeft, setTimeLeft] = useState(initialTimeLeft);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
 
-    setTimeLeft(getTimeLeft());
+    setTimeLeft(getTimeLeft(startTime));
 
     const timer = window.setInterval(() => {
-      setTimeLeft(getTimeLeft());
+      setTimeLeft(getTimeLeft(startTime));
     }, 1000);
 
     return () => window.clearInterval(timer);
-  }, []);
+  }, [startTime]);
 
   const shownTimeLeft = mounted ? timeLeft : initialTimeLeft;
 
@@ -70,7 +72,7 @@ export default function Countdown() {
           </h2>
 
           <p className="mx-auto mt-3 max-w-xl text-sm leading-6 text-slate-500">
-            {conferenceDatesLong} · {conference.city}
+            {datesLong} · {conference.city}
           </p>
 
           <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4">

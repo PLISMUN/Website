@@ -1,11 +1,12 @@
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest'
 
 // No test ever sends a real email
-const sendMail = vi.hoisted(() => vi.fn<(message: { html: string; text: string }) => Promise<void>>(async () => {}))
+const sendMail = vi.hoisted(() => vi.fn<(message: { html: string; text: string; from: unknown }) => Promise<void>>(async () => {}))
 vi.mock('nodemailer', () => ({
   default: { createTransport: () => ({ verify: async () => true, sendMail }) },
 }))
 
+import { createTestDatabase } from './helpers/api'
 import { escapeHtml, htmlToText, sendEmail } from '@/server/email'
 
 describe('escapeHtml', () => {
@@ -32,12 +33,17 @@ describe('htmlToText', () => {
 })
 
 describe('sendEmail', () => {
-  beforeAll(() => {
-    vi.stubEnv('TURSO_DATABASE_URL', 'file:unused.db')
+  let database: Awaited<ReturnType<typeof createTestDatabase>>
+
+  beforeAll(async () => {
+    // For the settings, which come from the database
+    database = await createTestDatabase()
+    vi.stubEnv('TURSO_DATABASE_URL', database.url)
     vi.stubEnv('EMAIL_PASSWORD', 'not a real password')
   })
 
   afterAll(() => {
+    database.cleanup()
     vi.unstubAllEnvs()
   })
 
@@ -47,5 +53,18 @@ describe('sendEmail', () => {
     const [message] = sendMail.mock.calls[0]
     expect(message.html).toContain('Hello<br />You are Côte d&#39;Ivoire')
     expect(message.text).toContain(`Hello\nYou are Côte d'Ivoire`)
+  })
+
+  it('signs emails with the settings saved by admins', async () => {
+    await database.db.execute({
+      sql: 'INSERT INTO site_config (section, value, updatedAt, updatedBy) VALUES (?, ?, ?, ?)',
+      args: ['email', JSON.stringify({ senderName: 'Changed <Name>' }), new Date().toISOString(), 'admin@test.com'],
+    })
+    sendMail.mockClear()
+
+    await sendEmail('student@test.com', 'Title', 'Hello')
+
+    const [message] = sendMail.mock.calls[0]
+    expect(message.from).toEqual({ name: 'Changed <Name>', address: expect.any(String) })
   })
 })

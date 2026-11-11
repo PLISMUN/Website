@@ -1,6 +1,6 @@
 import { handleUpload, type HandleUploadBody } from '@vercel/blob/client';
-import { DOCUMENT_MAX_SIZE_MB } from '@/config/documents';
 import { getTursoClient } from '@/server/db';
+import { getLatestSiteConfig } from '@/server/site-config';
 import { withApi } from '@/server/with-api';
 
 const ONE_HOUR_IN_SECONDS = 60 * 60;
@@ -28,9 +28,10 @@ export default withApi({ auth: 'admin' }, async ({ req, res }) => {
         if (!existing.rows.length) {
           throw new Error('Unknown document');
         }
+        const { maxSizeMb } = (await getLatestSiteConfig()).documents;
         return {
           allowedContentTypes: ['application/pdf'],
-          maximumSizeInBytes: DOCUMENT_MAX_SIZE_MB * 1024 * 1024,
+          maximumSizeInBytes: maxSizeMb * 1024 * 1024,
           // Replacing a document keeps its URL, so links that were already shared keep working
           addRandomSuffix: false,
           allowOverwrite: true,

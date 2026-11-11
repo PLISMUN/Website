@@ -1,8 +1,9 @@
 'use client'
 import React, { useEffect } from "react"
-import { conference } from "@/config/conference"
+import { useSiteConfig } from "@/features/site-config/context"
 
 export default function News() {
+    const { conference } = useSiteConfig()
 
     useEffect(() => {
         if (!document.querySelector('script[src="https://w.behold.so/widget.js"]')) {

@@ -1,7 +1,9 @@
 import Image from 'next/image'
-import { schedule } from '@/config/schedule'
+import { getSiteConfig } from '@/server/site-config'
 
-export default function Schedule() {
+export default async function Schedule() {
+    const { schedule } = await getSiteConfig()
+
     return (
         <section>
             <div className="py-24">

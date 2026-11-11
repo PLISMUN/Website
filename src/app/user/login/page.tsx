@@ -2,14 +2,15 @@ import React from "react"
 import Header from "@/components/layout/header"
 import FooterSection from "@/components/layout/footer"
 import Login from "@/features/auth/login-form"
-import { stages } from "@/config/stages"
+import { getSiteConfig } from "@/server/site-config"
 
 export const metadata = {
   title: "PLISMUN | Login",
   description: "Login to PLISMUN."
 }
 
-function LoginPage() {
+async function LoginPage() {
+    const { stages } = await getSiteConfig()
   if (!stages.accountCreation) {
     return null
   }

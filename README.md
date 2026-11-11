@@ -25,23 +25,26 @@ Delete `local.db` and run `pnpm db:setup` again to start over.
 | `pnpm lint` | Checks the code for common mistakes |
 | `pnpm typecheck` | Checks the types |
 | `pnpm db:setup` | Creates the database tables, plus sample data for a local database |
-| `pnpm db:migrate` | Brings an existing database up to date |
 
 ## Updating the site for a new year
 
 Everything that changes each year is in [`src/config`](src/config/README.md), which has a checklist. You shouldn't have to touch any components.
 
+Admins can change all of it without a deploy from the **Settings** admin page (`/user/admin/settings`). The files in `src/config` are the defaults, used for anything nobody has changed there.
+
 ## Project structure
 
 ```
 src/
-  config/       What changes every year: dates, prices, the team, the schedule, ... Start here
+  config/       What changes every year: dates, prices, the team, the schedule, ... Start here.
+                These are the defaults for the Settings admin page (features/site-config)
   app/          The pages. A file's position is its URL: app/about/page.tsx is /about
   pages/api/    The API routes. Every file in here is a public URL, so only routes go in here
   features/     The code for each part of the site, with the components, API calls and types together
     marketing/    The public pages: hero, countdown, team, venues, pricing, ...
     committees/   auth/   applications/   people/
     delegations/  documents/   payments/   supervisors/   users/
+    site-config/  The Settings admin page, and the checks on what it saves
   components/
     ui/         Generic building blocks from shadcn: buttons, dialogs, ...
     layout/     The header, footer and portal sidebar
@@ -56,7 +59,7 @@ Each feature that talks to the API has an `api.ts` with its typed API calls and 
 Where should something go?
 
 - A new page: `src/app`, with its components in the matching folder in `src/features`.
-- Something a person would change for next year's conference: `src/config`.
+- Something a person would change for next year's conference: `src/config`, plus a field for it in `src/features/site-config` (`schema.ts` checks it, `fields.ts` shows it on the Settings page). Components read it with `useSiteConfig()`, and server code with `await getSiteConfig()`, never by importing `src/config` directly, or changes made on the Settings page won't reach them.
 - Code that needs the database or a secret: `src/server`. Importing it from a browser component fails the build, on purpose.
 
 ### API routes
@@ -81,6 +84,12 @@ export default withApi({ auth: 'admin' }, async ({ req, res, user }) => {
 - `adminOrSelf`: admins, and users whose own email is `req.body.email`. The route must only ever touch the user named by `req.body.email`.
 
 Routes are `POST` unless you pass `method: 'GET'`. To answer with an error from anywhere inside a handler, throw `new ApiError(404, 'message')`. Anything else that's thrown becomes a 500.
+
+One route lives in the App Router instead: `src/app/api/modify/setSiteConfig/route.ts`, which saves the Settings admin page. It has to, because it clears the cached settings with `revalidateTag`, which `src/pages/api` routes can't call. It uses `withAdminRoute` from `src/server/with-route.ts`, the App Router version of `withApi` for admins. A route can't exist in both places, so don't add a `src/pages/api` file with the same path.
+
+### Caching
+
+Public pages are cached and rebuilt at most once an hour (`revalidate` in `src/app/layout.tsx`). Pages read the settings with `getSiteConfig()`, which comes from Next's data cache, and saving on the Settings page clears it, so the change shows straight away without touching the database on every visit. API routes and emails use `getLatestSiteConfig()` instead, which always reads the database, so what they charge or enforce is never out of date. The portal under `/user` is rendered on every request but still reads the cached settings.
 
 ## GIT Workflow
 
@@ -125,16 +134,6 @@ We use [TursoDB](https://turso.tech/) as our database. It is a LibSQL-esque data
 
 [`scripts/db/schema.sql`](scripts/db/schema.sql) is the whole database as it should look today, with what each table is for. [`scripts/db/sample-data.ts`](scripts/db/sample-data.ts) shows what goes in it, including the format of a committee's roles and topics, which are JSON.
 
-### Migrations
-
-To change a table, update `schema.sql` and add a migration to `scripts/db/migrations`. Every migration runs each time, so it has to check what's already there and skip it.
-
-The database commands use `TURSO_DATABASE_URL` from your environment or `.env`. They refuse to touch a remote database unless you add `--yes`, because it could be production:
-
-```sh
-TURSO_DATABASE_URL="libsql://..." TURSO_AUTH_TOKEN="..." pnpm db:migrate --yes
-```
-
 ## Supervisors
 
 Supervisors (teachers / delegation leaders) have their own application at `/user/supervisor/apply`, separate from the student flow, and a public guide at `/supervisors`. A supervisor either joins an existing delegation or requests a new one; admins create and link requested delegations from the Delegations admin page. Accepted supervisors of an existing delegation get the My Delegation page.
@@ -144,7 +143,7 @@ Supervisors (teachers / delegation leaders) have their own application at `/user
 The PDFs on `/documents` and `/delegate-info` are uploaded by admins from the Documents admin page, and stored in [Vercel Blob](https://vercel.com/docs/vercel-blob) because a Vercel deployment can't write to its own filesystem.
 
 - **Setup:** in the Vercel project, go to Storage and create a Blob store with **Public** access, connected to the environments you use. This adds `BLOB_READ_WRITE_TOKEN`.
-- **Adding a document:** on the Documents admin page, choose "New document" in a section, then upload its PDF. Until then it shows as "Unavailable". There are no defaults: documents live in the `documents` table, and a section with none is hidden. The sections themselves are in `src/config/documents.ts`.
+- **Adding a document:** on the Documents admin page, choose "New document" in a section, then upload its PDF. Until then it shows as "Unavailable". There are no defaults: documents live in the `documents` table, and a section with none is hidden. The sections themselves are on the Settings admin page (defaults in `src/config/documents.ts`).
 - **Deleting a document** also deletes its PDF, so links to it stop working.
 - **How an upload works:** the browser sends the file straight to Blob, which avoids the 4.5 MB limit on Vercel functions. `api/modify/uploadDocument` only hands out a token for a document that exists, then `api/modify/setDocument` records the upload in the `documents` table, which is what the public page reads.
 - **Replacing a document** overwrites the same URL, so links that were already shared keep working. Someone who already opened the old file may see their cached copy for up to an hour.
@@ -152,7 +151,7 @@ The PDFs on `/documents` and `/delegate-info` are uploaded by admins from the Do
 
 ## Environment variables
 
-Only secrets, and what differs between environments or is read by a library, are environment variables. Everything else is in `src/config`. [`.env.example`](.env.example) has them all, and the site tells you what's missing when it starts.
+Only secrets, and what differs between environments or is read by a library, are environment variables. Everything else is in `src/config` and on the Settings admin page. [`.env.example`](.env.example) has them all, and the site tells you what's missing when it starts.
 
 | Variable | Needed for |
 | --- | --- |
@@ -170,19 +169,12 @@ I've tried to make the website take as much as possible from the database, so ge
 
 Things to do every year:
 
-- Go through the checklist in [`src/config`](src/config/README.md)
+- Go through the checklist in [`src/config`](src/config/README.md), on the Settings admin page or in the files
 - Update the committees in the database
 - Replace last year's documents from the Documents admin page. Delete them there rather than clearing out the table, or their PDFs stay in the Blob store
 - Get the databases ready: clear out last year's applications, people, payments and users, then run `pnpm db:setup --yes` against them
 
 Things to implement:  
 
-- [ ] Properly handle cacheing
-- [ ] Reset password by email
-- [X] Put new conference id in config
-- [X] Pre-compute stats and make static on runtime
-- [ ] Pre-compute committees and make static on runtime
-- [X] Change paths to use routing files, dynamic routes, and route groups (project structure next.js app router)
 - [ ] Add a url param to bypass application stages for testing
-- [ ] Better instagram feed integration
 - [ ] Create a skeleton UI for loading states

@@ -23,13 +23,8 @@ import {
     DialogHeader,
     DialogTitle,
 } from '@/components/ui/dialog'
-import {
-    DOCUMENT_DESCRIPTION_MAX_LENGTH,
-    DOCUMENT_MAX_SIZE_MB,
-    DOCUMENT_TITLE_MAX_LENGTH,
-    documentGroups,
-    type DocumentGroup,
-} from '@/config/documents'
+import type { DocumentGroup } from '@/config/documents'
+import { useSiteConfig } from '@/features/site-config/context'
 import { errorMessage } from '@/lib/api-client'
 import { DOCUMENT_UPLOAD_URL, getDocuments, setDocument } from './api'
 import type { DocumentEntry } from './types'
@@ -37,6 +32,7 @@ import type { DocumentEntry } from './types'
 const formatSize = (bytes: number) => `${(bytes / (1024 * 1024)).toFixed(1)} MB`
 
 export default function DocumentsAdmin() {
+    const { groups: documentGroups, maxSizeMb, titleMaxLength, descriptionMaxLength } = useSiteConfig().documents
     const [documents, setDocuments] = useState<DocumentEntry[]>([])
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState<string | null>(null)
@@ -124,8 +120,8 @@ export default function DocumentsAdmin() {
         if (file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')) {
             return setActionError({ id: doc.id, message: 'Please choose a PDF file' })
         }
-        if (file.size > DOCUMENT_MAX_SIZE_MB * 1024 * 1024) {
-            return setActionError({ id: doc.id, message: `The file must be ${DOCUMENT_MAX_SIZE_MB} MB or smaller` })
+        if (file.size > maxSizeMb * 1024 * 1024) {
+            return setActionError({ id: doc.id, message: `The file must be ${maxSizeMb} MB or smaller` })
         }
 
         runAction(doc.id, async () => {
@@ -156,7 +152,7 @@ export default function DocumentsAdmin() {
 
         <div className="mx-auto max-w-4xl px-4 py-4 lg:px-0 min-h-screen space-y-4">
             <p className="text-sm text-muted-foreground">
-                Create a document, then upload its PDF (up to {DOCUMENT_MAX_SIZE_MB} MB). Until then it shows as unavailable on the public Documents page, and sections with no documents are hidden. Replacing a PDF keeps its link.
+                Create a document, then upload its PDF (up to {maxSizeMb} MB). Until then it shows as unavailable on the public Documents page, and sections with no documents are hidden. Replacing a PDF keeps its link.
             </p>
             {documentGroups.map(group => {
                 const groupDocuments = documents.filter(doc => doc.groupId === group.id)
@@ -234,7 +230,7 @@ export default function DocumentsAdmin() {
                             <Input
                                 required
                                 id="document-title"
-                                maxLength={DOCUMENT_TITLE_MAX_LENGTH}
+                                maxLength={titleMaxLength}
                                 value={title}
                                 onChange={e => setTitle(e.target.value)}
                             />
@@ -244,7 +240,7 @@ export default function DocumentsAdmin() {
                             <Input
                                 required
                                 id="document-description"
-                                maxLength={DOCUMENT_DESCRIPTION_MAX_LENGTH}
+                                maxLength={descriptionMaxLength}
                                 value={description}
                                 onChange={e => setDescription(e.target.value)}
                             />

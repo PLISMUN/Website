@@ -1,10 +1,11 @@
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
-import { pricing } from '@/config/pricing'
-import { stages } from '@/config/stages'
+import { getSiteConfig } from '@/server/site-config'
 
-export default function Pricing() {
+export default async function Pricing() {
+    const { pricing, stages } = await getSiteConfig()
+
     return (
         <div className="bg-muted relative py-16 md:py-32">
             <div className="mx-auto max-w-5xl px-6">
