@@ -4,18 +4,32 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
-import { CalendarDays, ChevronRight, MapPin } from "lucide-react";
+import { CalendarDays, ChevronRight, CircleAlert, MapPin } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { useStages } from "@/features/access/context";
 import { useSiteConfig } from "@/features/site-config/context";
 import { describeConference } from "@/lib/conference";
 
+// The application types, in the order the notice names them
+const APPLICATION_TYPES = [
+  { stage: "delegateApplication", label: "delegate" },
+  { stage: "chairApplication", label: "chair" },
+  { stage: "supervisorApplication", label: "supervisor" },
+] as const;
+
+const listFormat = new Intl.ListFormat("en-GB", { type: "conjunction" });
+
 export default function HeroSection() {
   const { conference, hero, partners } = useSiteConfig();
   const stages = useStages();
   const { datesShort, edition } = describeConference(conference);
   const { data: session } = useSession();
+  const closedApplications = APPLICATION_TYPES.filter(({ stage }) => !stages[stage]).map(({ label }) => label);
+  const closedList = listFormat.format(closedApplications);
+  const closedNotice =
+    closedApplications.length > 0 &&
+    `${closedList.charAt(0).toUpperCase()}${closedList.slice(1)} applications are currently closed.`;
   const [randomImage, setRandomImage] = React.useState(hero.images[0]);
   const [randomImageStacked, setRandomImageStacked] = React.useState(hero.stackedImages[0]);
 
@@ -56,7 +70,17 @@ export default function HeroSection() {
               {hero.tagline}
             </p>
 
-            <div className="mt-8 flex flex-wrap items-center gap-3">
+            {closedNotice && (
+              <p
+                role="status"
+                className="mt-8 inline-flex max-w-xl items-center gap-2 rounded-xl border border-amber-200 bg-amber-50/90 px-3 py-2 text-sm text-amber-900 shadow-sm"
+              >
+                <CircleAlert className="h-4 w-4 shrink-0 text-amber-700" aria-hidden="true" />
+                <span>{closedNotice}</span>
+              </p>
+            )}
+
+            <div className={`${closedNotice ? "mt-4" : "mt-8"} flex flex-wrap items-center gap-3`}>
               <Button
                 asChild
                 size="lg"
