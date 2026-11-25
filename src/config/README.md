@@ -40,7 +40,9 @@ In the FAQs, write `{contactEmail}`, `{delegate.czk}`, `{supervisor.eur}` and so
 
 **What's open** on the Settings page (the defaults are in `stages.ts`): account creation, payments, and delegate, chair and supervisor applications.
 
-Closing account creation also hides the login page. Admins who are still signed in can reach the Settings page to open it again. If nobody can, a developer can put the defaults from `stages.ts` back by running `DELETE FROM site_config WHERE section = 'stages'` against the database. The same works for any section that's gone wrong. Since that skips the Settings page, the site takes up to an hour to notice.
+**The access link** (Settings › Access link, the default password is in `access.ts`) opens everything that's closed for whoever has it: `https://plismun.com/?access=<password>`. The Settings page copies it. It's for letting someone sign up or apply late. Once it's been opened, the browser keeps the password until it's closed, so the link keeps working on pages reached without it, and redirects keep `?access=` and any other query parameters in the address. Change the password to stop links you've shared from working. The default is in this public repository, so change it before relying on it. The password is only ever sent to admins: the settings that pages get leave it out (`PRIVATE_SECTION_IDS` in `src/features/site-config/schema.ts`), and the browser asks the server whether a password is right (`/api/retrieve/checkAccess`).
+
+Closing account creation also hides the login page. Admins who are still signed in can reach the Settings page to open it again. The access link works for that too. If nobody can, a developer can put the defaults from `stages.ts` back by running `DELETE FROM site_config WHERE section = 'stages'` against the database. The same works for any section that's gone wrong. Since that skips the Settings page, the site takes up to an hour to notice.
 
 ## What isn't here
 

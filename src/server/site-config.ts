@@ -3,10 +3,13 @@ import { cache } from 'react'
 import { unstable_cache } from 'next/cache'
 import { getTursoClient } from '@/server/db'
 import {
+  PUBLIC_SECTION_IDS,
   SECTION_IDS,
   defaultSiteConfig,
   parseSection,
+  toPublicSiteConfig,
   type ConfigIssue,
+  type PublicSiteConfig,
   type SectionId,
   type SiteConfig,
 } from '@/features/site-config/schema'
@@ -94,26 +97,28 @@ function resolveSection<Id extends SectionId>(id: Id, saved: SavedRow | undefine
   return { value: fallback, problem }
 }
 
-const resolveAll = (saved: SavedRows) =>
-  Object.fromEntries(SECTION_IDS.map((id) => [id, resolveSection(id, saved[id]).value])) as SiteConfig
+// Leaves out the private sections (PRIVATE_SECTION_IDS), so they can't end up in a page by accident
+const resolvePublic = (saved: SavedRows) =>
+  Object.fromEntries(PUBLIC_SECTION_IDS.map((id) => [id, resolveSection(id, saved[id]).value])) as PublicSiteConfig
 
 /**
  * The site's settings, for pages and layouts. Comes from Next's data cache, which saving on the Settings
  * page clears, so this normally doesn't touch the database. Read once per render.
  *
- * Not for API routes: use getLatestSiteConfig() there.
+ * Not for API routes: use getLatestSiteConfig() there. Neither has the access link's password, which only
+ * getAccessPassword() reads.
  *
  * If the database can't be reached while the site is being built, the build uses the defaults rather than
  * failing, and the pages pick up the real settings on the next save or within an hour. At any other time
  * the error is thrown, so a page that's being rebuilt keeps its last good version.
  */
-export const getSiteConfig = cache(async (): Promise<SiteConfig> => {
+export const getSiteConfig = cache(async (): Promise<PublicSiteConfig> => {
   try {
-    return resolveAll(await readSavedRowsCached())
+    return resolvePublic(await readSavedRowsCached())
   } catch (err) {
     if (process.env.NEXT_PHASE !== 'phase-production-build') throw err
     console.error('Could not read the site settings, so this build uses the defaults from src/config:', err)
-    return defaultSiteConfig
+    return toPublicSiteConfig(defaultSiteConfig)
   }
 })
 
@@ -121,8 +126,16 @@ export const getSiteConfig = cache(async (): Promise<SiteConfig> => {
  * The site's settings straight from the database, for API routes and emails, so that what they enforce
  * or charge is never out of date.
  */
-export async function getLatestSiteConfig(): Promise<SiteConfig> {
-  return resolveAll(await readSavedRows())
+export async function getLatestSiteConfig(): Promise<PublicSiteConfig> {
+  return resolvePublic(await readSavedRows())
+}
+
+/**
+ * The access link's password, straight from the database. Only for checking a password someone gave
+ * (hasAccess in src/server/access.ts): never send it to a page.
+ */
+export async function getAccessPassword(): Promise<string> {
+  return resolveSection('access', (await readSavedRows()).access).value.password
 }
 
 /** For the Settings admin page: every section, its default, and who last changed it. */

@@ -10,6 +10,7 @@ import { useEffect } from 'react'
 import { useState } from "react"
 
 import { signIn } from "next-auth/react"
+import { keepParams, withParams } from "@/lib/url-params"
 
 export default function ForgotPage() {
     const [email, setEmail] = useState("")
@@ -17,10 +18,13 @@ export default function ForgotPage() {
     const [success, setSuccess] = useState(false)
     const { status } = useSession()
     const router = useRouter()
+    // The page's query, so the link back to sign in keeps it. Read after mount, like on the sign-in page
+    const [search, setSearch] = useState("")
+    useEffect(() => setSearch(window.location.search), [])
 
     useEffect(() => {
         if (status === "authenticated") {
-            router.push("/user/dashboard")
+            router.push(keepParams("/user/dashboard"))
         }
     }, [status, router])
 
@@ -99,7 +103,7 @@ export default function ForgotPage() {
                             asChild
                             variant="link"
                             className="px-2">
-                            <Link href="/user/login">Sign In</Link>
+                            <Link href={withParams("/user/login", search)}>Sign In</Link>
                         </Button>
                     </p>
                 </div>

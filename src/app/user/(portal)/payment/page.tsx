@@ -1,10 +1,10 @@
 "use client"
 import PaymentWidget from "@/features/payments/payment-widget"
-import { useSiteConfig } from "@/features/site-config/context"
+import { useStages } from "@/features/access/context"
 import React from "react"
 
 export default function Page() {
-  const { stages } = useSiteConfig()
+  const stages = useStages()
 
   React.useEffect(() => {
     document.title = "PLISMUN | Payment";

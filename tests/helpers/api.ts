@@ -7,7 +7,10 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 type Route = (req: NextApiRequest, res: NextApiResponse) => unknown
 
 /** Calls an API route as if a request had come in, and returns its response. */
-export async function call(route: Route, { method = 'POST', body = {} }: { method?: string; body?: unknown } = {}) {
+export async function call(
+  route: Route,
+  { method = 'POST', body = {}, cookies = {} }: { method?: string; body?: unknown; cookies?: Record<string, string> } = {}
+) {
   const result = { status: 0, data: undefined as unknown as Record<string, unknown> }
   const res = {
     headersSent: false,
@@ -24,7 +27,7 @@ export async function call(route: Route, { method = 'POST', body = {} }: { metho
       return res
     },
   }
-  await route({ method, body, url: '/test', headers: {}, cookies: {}, query: {} } as unknown as NextApiRequest, res as unknown as NextApiResponse)
+  await route({ method, body, url: '/test', headers: {}, cookies, query: {} } as unknown as NextApiRequest, res as unknown as NextApiResponse)
   return result
 }
 

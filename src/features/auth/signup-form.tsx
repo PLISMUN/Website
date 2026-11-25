@@ -11,6 +11,7 @@ import { signIn } from "next-auth/react"
 import { Checkbox } from "@/components/ui/checkbox"
 import { errorMessage } from '@/lib/api-client'
 import { portalRedirect } from '@/lib/utils'
+import { keepParams, withParams } from '@/lib/url-params'
 import { SUPERVISOR_APPLY_PATH } from '@/features/supervisors/paths'
 import { signup } from './api'
 
@@ -27,16 +28,19 @@ export default function LoginPage() {
 
     // Where to go once signed in, from ?next= (e.g. the supervisor application). Read after mount
     // because useSearchParams would need a Suspense boundary; undefined until then.
+    // The page's query too, so the links to the other sign-in pages keep it (and ?next=)
     const [next, setNext] = useState<string | null | undefined>(undefined)
+    const [search, setSearch] = useState("")
     useEffect(() => {
         setNext(new URLSearchParams(window.location.search).get("next"))
+        setSearch(window.location.search)
     }, [])
     const redirectTo = portalRedirect(next)
     const isSupervisor = redirectTo === SUPERVISOR_APPLY_PATH
 
     useEffect(() => {
         if (status === "authenticated" && next !== undefined) {
-            router.push(redirectTo)
+            router.push(keepParams(redirectTo))
         }
     }, [status, router, redirectTo, next])
 
@@ -59,7 +63,7 @@ export default function LoginPage() {
       setSuccess(true);
       // Sign straight in and carry on, instead of making the user log in again
       const login = await signIn("credentials", { redirect: false, email, password });
-      if (login?.ok) window.location.href = redirectTo;
+      if (login?.ok) window.location.href = keepParams(redirectTo);
     } catch (err) {
       setError(errorMessage(err, 'An error occurred'));
     } finally {
@@ -94,7 +98,7 @@ export default function LoginPage() {
                             variant="outline"
                             size="default"
                             className="w-full"
-                            onClick={() => signIn("google", { callbackUrl: redirectTo })}
+                            onClick={() => signIn("google", { callbackUrl: keepParams(redirectTo) })}
                             >
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -192,7 +196,7 @@ export default function LoginPage() {
                             asChild
                             variant="link"
                             className="px-2">
-                            <Link href={next ? `/user/login?next=${encodeURIComponent(next)}` : "/user/login"}>Sign In</Link>
+                            <Link href={withParams("/user/login", search)}>Sign In</Link>
                         </Button>
                     </p>
                 </div>

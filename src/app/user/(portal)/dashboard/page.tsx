@@ -10,13 +10,14 @@ import DelegateApply from "@/features/applications/delegate-application-form"
 import ChairApply from "@/features/applications/chair-application-form"
 import PaymentWidget from "@/features/payments/payment-widget"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { useSiteConfig } from "@/features/site-config/context"
+import { useStages } from "@/features/access/context"
 import { getSupervisorApplications } from "@/features/supervisors/api"
 import { SUPERVISOR_APPLY_PATH } from "@/features/supervisors/paths"
+import { keepParams } from "@/lib/url-params"
 import React from "react"
 
 export default function Page() {
-  const { stages } = useSiteConfig()
+  const stages = useStages()
   const [infoSubmitted, setInfoSubmitted] = useState(false)
   const [typeSubmitted, setTypeSubmitted] = useState("")
   const [applySuccess, setApplySuccess] = useState(false)
@@ -35,7 +36,7 @@ export default function Page() {
       try {
         const { applications } = await getSupervisorApplications()
         const applicant = applications.some((a) => a.status !== "rejected")
-        if (applicant) router.replace(SUPERVISOR_APPLY_PATH)
+        if (applicant) router.replace(keepParams(SUPERVISOR_APPLY_PATH))
         setIsSupervisor(applicant)
       } catch {
         setIsSupervisor(false)

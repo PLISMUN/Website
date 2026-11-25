@@ -27,7 +27,7 @@ vi.mock('@/server/email', async (original) => ({
   sendEmail: vi.fn(async () => {}),
 }))
 
-import { defaultSiteConfig } from '@/features/site-config/schema'
+import { defaultSiteConfig, toPublicSiteConfig } from '@/features/site-config/schema'
 import { getLatestSiteConfig, getSiteConfig, getSiteConfigSections, SITE_CONFIG_TAG } from '@/server/site-config'
 import { POST as setSiteConfig } from '@/app/api/modify/setSiteConfig/route'
 import getSiteConfigRoute from '@/pages/api/retrieve/getSiteConfig'
@@ -76,7 +76,7 @@ const save = (section: string, value: unknown, expectedUpdatedAt: string | null 
 
 describe('the site settings', () => {
   it('are the defaults from src/config until an admin changes them', async () => {
-    expect(await getSiteConfig()).toEqual(defaultSiteConfig)
+    expect(await getSiteConfig()).toEqual(toPublicSiteConfig(defaultSiteConfig))
   })
 
   it('show a section an admin saved, and who saved it', async () => {
@@ -194,7 +194,7 @@ describe('the site settings', () => {
     const cachedClient = global.__globalTurso__
     global.__globalTurso__ = undefined
     try {
-      expect(await getSiteConfig()).toEqual(defaultSiteConfig)
+      expect(await getSiteConfig()).toEqual(toPublicSiteConfig(defaultSiteConfig))
     } finally {
       // The client getSiteConfig() made for the other database. TypeScript thinks it's still undefined from above.
       ;(global.__globalTurso__ as Client | undefined)?.close()

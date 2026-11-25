@@ -10,6 +10,7 @@ import { useSession } from 'next-auth/react'
 import { useRouter } from "next/navigation"
 import { useEffect } from 'react'
 import { portalRedirect } from '@/lib/utils'
+import { keepParams, withParams } from '@/lib/url-params'
 
 export default function LoginPage() {
     const [email, setEmail] = useState("")
@@ -22,15 +23,18 @@ export default function LoginPage() {
 
     // Where to go once signed in, from ?next= (e.g. the supervisor application). Read after mount
     // because useSearchParams would need a Suspense boundary; undefined until then.
+    // The page's query too, so the links to the other sign-in pages keep it (and ?next=)
     const [next, setNext] = useState<string | null | undefined>(undefined)
+    const [search, setSearch] = useState("")
     useEffect(() => {
         setNext(new URLSearchParams(window.location.search).get("next"))
+        setSearch(window.location.search)
     }, [])
     const redirectTo = portalRedirect(next)
 
     useEffect(() => {
         if (status === "authenticated" && next !== undefined) {
-            router.push(redirectTo)
+            router.push(keepParams(redirectTo))
         }
     }, [status, router, redirectTo, next])
 
@@ -50,7 +54,7 @@ export default function LoginPage() {
             setError(res.error)
         } else if (res?.ok) {
             setSuccess(true)
-            window.location.href = redirectTo
+            window.location.href = keepParams(redirectTo)
         }
         setLoading(false)
     }
@@ -77,7 +81,7 @@ export default function LoginPage() {
                             variant="outline"
                             size="default"
                             className="w-full"
-                            onClick={() => signIn("google", { callbackUrl: redirectTo })}
+                            onClick={() => signIn("google", { callbackUrl: keepParams(redirectTo) })}
                         >
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -147,7 +151,7 @@ export default function LoginPage() {
                             className="w-full"
                             size="sm"
                             variant="outline"
-                            onClick={() => window.location.href = '/user/forgot'}>
+                            onClick={() => window.location.href = withParams('/user/forgot', window.location.search)}>
                             
                             Forgot your password?
                         </Button>
@@ -161,7 +165,7 @@ export default function LoginPage() {
                             asChild
                             variant="link"
                             className="px-2">
-                            <Link href={next ? `/user/signup?next=${encodeURIComponent(next)}` : "/user/signup"}>Create account</Link>
+                            <Link href={withParams("/user/signup", search)}>Create account</Link>
                         </Button>
                     </p>
                 </div>

@@ -71,18 +71,32 @@ export const SECTION_FORMS: SectionForm[] = [
   {
     id: 'stages',
     title: 'What’s open',
-    description: 'Open and close parts of the conference during the year.',
+    description: 'Open and close parts of the conference during the year. Someone with the access link can still do everything.',
     file: 'stages.ts',
     root: root([
       toggle(
         'accountCreation',
         'Accounts and the portal',
-        'When off, nobody can sign up or log in, and the portal pages are hidden. Admins who are already signed in can still use the admin pages, including this one.'
+        'When off, nobody can sign up or log in, and the portal pages are hidden. Admins who are already signed in can still use the admin pages.'
       ),
       toggle('delegateApplication', 'Delegate applications', 'When off, the buttons to apply as a delegate are disabled.'),
       toggle('chairApplication', 'Chair applications', 'When off, the buttons to apply as a chair are disabled.'),
       toggle('supervisorApplication', 'Supervisor applications', 'When off, supervisors can’t submit an application.'),
       toggle('paymentsAccepted', 'Payments', 'When off, the Payment page says payments aren’t being accepted instead of showing the bank details.'),
+    ]),
+  },
+  {
+    id: 'access',
+    title: 'Access link',
+    description:
+      'Whoever opens this link can do everything that’s closed under What’s open: sign up, log in, apply and pay. Use it to let someone in late. It keeps working in their browser until they close it.',
+    file: 'access.ts',
+    root: root([
+      text(
+        'password',
+        'Password',
+        'The end of the link. Change it to stop links you’ve already shared from working. Only admins can see it.'
+      ),
     ]),
   },
   {

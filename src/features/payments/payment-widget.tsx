@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
+import { useStages } from '@/features/access/context'
 import { useSiteConfig } from '@/features/site-config/context'
 import type { SiteConfig } from '@/features/site-config/schema'
 import { cn, isPaid } from '@/lib/utils'
@@ -201,7 +202,8 @@ function BankDetails({ details, qrValue }: { details: Detail[]; qrValue: string 
 }
 
 export default function PaymentWidget() {
-    const { payment: paymentDetails, pricing, stages } = useSiteConfig()
+    const { payment: paymentDetails, pricing } = useSiteConfig()
+    const stages = useStages()
     const [payment, setPayment] = useState<PaymentInfo | undefined>(undefined)
     const [loaded, setLoaded] = useState(false)
 

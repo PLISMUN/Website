@@ -5,6 +5,7 @@ import { useSession } from "next-auth/react";
 import { CalendarDays, ChevronRight, CreditCard, School, ShieldCheck, UserRound } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { useStages } from "@/features/access/context";
 import { useSiteConfig } from "@/features/site-config/context";
 import { SUPERVISOR_APPLY_PATH, supervisorApplyHref } from "./paths";
 import { describeConference } from "@/lib/conference";
@@ -16,7 +17,8 @@ const EXAMPLE_STUDENTS = [
 ];
 
 export default function SupervisorHero() {
-  const { conference, pricing, stages } = useSiteConfig();
+  const { conference, pricing } = useSiteConfig();
+  const stages = useStages();
   const conferenceDatesLong = describeConference(conference).datesLong;
   const { data: session } = useSession();
   const canApply = stages.accountCreation || !!session;
