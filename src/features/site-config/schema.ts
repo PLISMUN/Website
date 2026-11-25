@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import { about } from '@/config/about'
+import { access } from '@/config/access'
 import { conference } from '@/config/conference'
 import { documents } from '@/config/documents'
 import { email } from '@/config/email'
@@ -137,6 +138,14 @@ export const sectionSchemas = {
     supervisorApplication: z.boolean(),
   }),
 
+  access: z.object({
+    password: z
+      .string()
+      .trim()
+      .min(8, 'Use at least 8 characters, so the link can’t be guessed')
+      .max(100, 'Keep this to 100 characters or fewer'),
+  }),
+
   pricing: z.object({
     delegate: price,
     chair: price,
@@ -220,9 +229,25 @@ export const SECTION_IDS = Object.keys(sectionSchemas) as SectionId[]
 export const isSectionId = (value: unknown): value is SectionId =>
   typeof value === 'string' && Object.hasOwn(sectionSchemas, value)
 
+// Sections that only the server and the Settings page see. Pages get the settings without them
+// (PublicSiteConfig), because whatever a page gets is sent to every visitor's browser.
+export const PRIVATE_SECTION_IDS = ['access'] as const satisfies readonly SectionId[]
+type PrivateSectionId = (typeof PRIVATE_SECTION_IDS)[number]
+
+export type PublicSectionId = Exclude<SectionId, PrivateSectionId>
+export type PublicSiteConfig = Omit<SiteConfig, PrivateSectionId>
+
+export const PUBLIC_SECTION_IDS = SECTION_IDS.filter(
+  (id) => !(PRIVATE_SECTION_IDS as readonly SectionId[]).includes(id)
+) as PublicSectionId[]
+
+export const toPublicSiteConfig = (config: SiteConfig): PublicSiteConfig =>
+  Object.fromEntries(PUBLIC_SECTION_IDS.map((id) => [id, config[id]])) as PublicSiteConfig
+
 export const defaultSiteConfig: SiteConfig = {
   conference,
   stages,
+  access,
   pricing,
   payment: paymentDetails,
   hero,

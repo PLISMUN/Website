@@ -1,3 +1,5 @@
+import { ACCESS_COOKIE } from '@/features/access/constants';
+import { hasAccess } from '@/server/access';
 import { getTursoClient } from '@/server/db';
 import { escapeHtml, sendEmail } from '@/server/email';
 import { normalizeBirth, normalizePhone, validDiets } from '@/server/people-validation';
@@ -29,7 +31,8 @@ export default withApi({ auth: 'user' }, async ({ req, res, user }) => {
   const { email } = user;
   const { pricing, stages } = await getLatestSiteConfig();
 
-  if (!stages.supervisorApplication) {
+  // Someone with the access link can apply while applications are closed
+  if (!stages.supervisorApplication && !(await hasAccess(req.cookies?.[ACCESS_COOKIE]))) {
     return res.status(403).json({ message: 'Supervisor applications are currently closed' });
   }
 

@@ -1,7 +1,7 @@
 "use client"
 import { useCallback, useEffect, useState, type ReactNode } from 'react'
 import { useRouter } from 'next/navigation'
-import { CircleAlert, CircleCheck } from 'lucide-react'
+import { CircleAlert, CircleCheck, Copy } from 'lucide-react'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import {
     AlertDialog,
@@ -16,11 +16,13 @@ import {
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { ApiRequestError, errorMessage } from '@/lib/api-client'
 import { describeConference } from '@/lib/conference'
 import { cn } from '@/lib/utils'
+import { accessLink } from '@/features/access/constants'
 import { getSiteConfigSections, resetSiteConfigSection, saveSiteConfigSection } from './api'
 import { FieldEditor } from './field-editor'
 import { describePath, SECTION_FORMS, type SectionForm } from './fields'
@@ -267,6 +269,11 @@ function SectionEditor({
 
             {preview && <p className="rounded-md bg-sky-50 px-3 py-2 text-sm text-sky-900">{preview}</p>}
 
+            {/* The saved password's link, since a password that hasn't been saved doesn't work yet */}
+            {form.id === 'access' && (
+                <AccessLinkBox password={(section.value as SiteConfig['access']).password} unsaved={unsaved} />
+            )}
+
             <FieldEditor field={form.root} value={value} path={[]} issues={issues} onChange={change} isRoot />
 
             <div className="sticky bottom-0 -mx-6 -mb-6 flex flex-wrap items-center gap-2 border-t bg-card px-6 py-4 sm:-mx-8 sm:-mb-8 sm:px-8">
@@ -309,6 +316,50 @@ function SectionEditor({
                 </AlertDialogContent>
             </AlertDialog>
         </Card>
+    )
+}
+
+function AccessLinkBox({ password, unsaved }: { password: string; unsaved: boolean }) {
+    // This site's address, so the link works wherever the settings are being changed (locally too)
+    const [origin, setOrigin] = useState('')
+    const [copied, setCopied] = useState<boolean | null>(null)
+    useEffect(() => setOrigin(window.location.origin), [])
+    useEffect(() => {
+        if (!copied) return
+        const timer = setTimeout(() => setCopied(null), 2000)
+        return () => clearTimeout(timer)
+    }, [copied])
+
+    const link = origin ? accessLink(origin, password) : ''
+
+    const copy = async () => {
+        try {
+            await navigator.clipboard.writeText(link)
+            setCopied(true)
+        } catch {
+            setCopied(false)
+        }
+    }
+
+    return (
+        <div className="space-y-2 rounded-md bg-sky-50 px-3 py-3 text-sm text-sky-900">
+            <p className="font-medium">The link to share</p>
+            <div className="flex flex-wrap items-center gap-2">
+                <Input
+                    readOnly
+                    value={link}
+                    aria-label="Access link"
+                    onFocus={(e) => e.target.select()}
+                    className="min-w-0 flex-1 bg-white font-mono text-xs"
+                />
+                <Button type="button" variant="outline" onClick={copy} disabled={!link}>
+                    <Copy />
+                    {copied ? 'Copied' : 'Copy link'}
+                </Button>
+            </div>
+            {copied === false && <p className="text-red-600">Your browser didn&apos;t let the page copy it. Select the link and copy it yourself.</p>}
+            {unsaved && <p>This is the link for the saved password. Save your change to get the link for the new one.</p>}
+        </div>
     )
 }
 

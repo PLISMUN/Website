@@ -4,6 +4,7 @@ import '@/styles/main.css';
 
 import { SiteChrome } from "@/components/layout/site-chrome"
 import { Analytics } from "@/components/analytics"
+import { AccessProvider } from "@/features/access/context"
 import { SiteConfigProvider } from "@/features/site-config/context"
 import { getSiteConfig } from "@/server/site-config"
 
@@ -27,6 +28,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Everything given to SiteConfigProvider is sent to every visitor, so this leaves out the access link's password
   const config = await getSiteConfig();
 
   return (
@@ -35,7 +37,9 @@ export default async function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <SiteConfigProvider config={config}>
-          <SiteChrome>{children}</SiteChrome>
+          <AccessProvider>
+            <SiteChrome>{children}</SiteChrome>
+          </AccessProvider>
           <Analytics />
         </SiteConfigProvider>
       </body>

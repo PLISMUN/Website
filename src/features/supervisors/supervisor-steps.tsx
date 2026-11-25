@@ -7,10 +7,10 @@ import { QRCodeSVG } from "qrcode.react";
 import { Button } from "@/components/ui/button";
 import { IllustratedSteps, MockCard, MockField, type IllustratedStep } from "@/components/illustrated-steps";
 import { useSiteConfig } from "@/features/site-config/context";
-import type { SiteConfig } from "@/features/site-config/schema";
+import type { PublicSiteConfig } from "@/features/site-config/schema";
 import { cn } from "@/lib/utils";
 
-const steps = ({ pricing }: SiteConfig): IllustratedStep[] => [
+const steps = ({ pricing }: Pick<PublicSiteConfig, "pricing">): IllustratedStep[] => [
   {
     title: "Create your account",
     description: "Sign up with Google or with your email address. It takes less than a minute.",

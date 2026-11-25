@@ -1,10 +1,9 @@
-import { Button } from '@/components/ui/button'
-import Link from 'next/link'
 import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { getSiteConfig } from '@/server/site-config'
+import { PricingButton } from './pricing-button'
 
 export default async function Pricing() {
-    const { pricing, stages } = await getSiteConfig()
+    const { pricing } = await getSiteConfig()
 
     return (
         <div className="bg-muted relative py-16 md:py-32">
@@ -23,13 +22,9 @@ export default async function Pricing() {
                                     <CardDescription className="text-sm">€{pricing.chair.eur}</CardDescription>
                                 </CardHeader>
                                 <div className="border-y px-8 py-4">
-                                    <Button
-                                        asChild
-                                        className="w-full"
-                                        variant="neutral"
-                                        disabled={!stages.chairApplication}>
-                                        <Link href="/user/signup">Get Started</Link>
-                                    </Button>
+                                    <PricingButton stage="chairApplication" href="/user/signup" variant="neutral">
+                                        Get Started
+                                    </PricingButton>
                                 </div>
                             </div>
                             <div className="ring-foreground/10 bg-background rounded-(--radius) @3xl:mx-0 @3xl:-my-3 -mx-1 border-transparent shadow ring-1">
@@ -40,12 +35,9 @@ export default async function Pricing() {
                                         <CardDescription className="text-sm">€{pricing.delegate.eur}</CardDescription>
                                     </CardHeader>
                                     <div className="@3xl:mx-0 -mx-1 border-y px-8 py-4">
-                                        <Button
-                                            asChild
-                                            className="w-full"
-                                            disabled={!stages.delegateApplication}>
-                                            <Link href="/user/signup">Get Started</Link>
-                                        </Button>
+                                        <PricingButton stage="delegateApplication" href="/user/signup">
+                                            Get Started
+                                        </PricingButton>
                                     </div>
                                 </div>
                             </div>
@@ -56,13 +48,9 @@ export default async function Pricing() {
                                     <CardDescription className="text-sm">€{pricing.supervisor.eur}</CardDescription>
                                 </CardHeader>
                                 <div className="border-y px-8 py-4">
-                                    <Button
-                                        asChild
-                                        className="w-full"
-                                        variant="neutral"
-                                        disabled={!stages.supervisorApplication}>
-                                        <Link href="/supervisors">Supervisor guide</Link>
-                                    </Button>
+                                    <PricingButton stage="supervisorApplication" href="/supervisors" variant="neutral">
+                                        Supervisor guide
+                                    </PricingButton>
                                 </div>
                             </div>
                         </div>

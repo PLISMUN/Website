@@ -5,6 +5,7 @@ import { useSession } from "next-auth/react";
 import { CalendarDays, Check, ChevronRight, CreditCard, ListChecks, MailCheck } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { useStages } from "@/features/access/context";
 import { useSiteConfig } from "@/features/site-config/context";
 import { describeConference } from "@/lib/conference";
 
@@ -19,7 +20,8 @@ const DELEGATE_SECTIONS = [
 ];
 
 export default function DelegateHero() {
-  const { conference, pricing, stages } = useSiteConfig();
+  const { conference, pricing } = useSiteConfig();
+  const stages = useStages();
   const { datesLong: conferenceDatesLong, edition: conferenceEdition } = describeConference(conference);
   const { data: session } = useSession();
   const canApply = stages.accountCreation || !!session;

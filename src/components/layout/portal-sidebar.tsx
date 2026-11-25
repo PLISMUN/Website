@@ -34,6 +34,7 @@ import { useRouter } from "next/navigation"
 import { getSupervisorApplications } from "@/features/supervisors/api"
 import { SUPERVISOR_APPLY_PATH } from "@/features/supervisors/paths"
 import { getIsAdmin } from "@/features/users/api"
+import { keepParams } from "@/lib/url-params"
 
 
 export function PortalSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
@@ -122,7 +123,7 @@ export function PortalSidebar({ ...props }: React.ComponentProps<typeof Sidebar>
 
   React.useEffect(() => {
     if (status === "unauthenticated") {
-      router.replace("/user/login")
+      router.replace(keepParams("/user/login"))
     }
   }, [status, router])
 

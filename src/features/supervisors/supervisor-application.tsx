@@ -22,6 +22,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { CountryDropdown } from '@/components/ui/country-dropdown'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import CalendarBirthday from '@/components/birthday-picker'
+import { useStages } from '@/features/access/context'
 import { useSiteConfig } from '@/features/site-config/context'
 import { errorMessage } from '@/lib/api-client'
 import { cn } from '@/lib/utils'
@@ -47,7 +48,8 @@ const emptyForm = {
 }
 
 export default function SupervisorApplicationPage() {
-    const { conference, stages } = useSiteConfig()
+    const { conference } = useSiteConfig()
+    const stages = useStages()
     const { data: session } = useSession()
     const sessionEmail = session?.user?.email || ''
     const sessionName = session?.user?.name || ''

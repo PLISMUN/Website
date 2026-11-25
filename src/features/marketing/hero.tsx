@@ -7,11 +7,13 @@ import { useSession } from "next-auth/react";
 import { CalendarDays, ChevronRight, MapPin } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { useStages } from "@/features/access/context";
 import { useSiteConfig } from "@/features/site-config/context";
 import { describeConference } from "@/lib/conference";
 
 export default function HeroSection() {
-  const { conference, hero, partners, stages } = useSiteConfig();
+  const { conference, hero, partners } = useSiteConfig();
+  const stages = useStages();
   const { datesShort, edition } = describeConference(conference);
   const { data: session } = useSession();
   const [randomImage, setRandomImage] = React.useState(hero.images[0]);

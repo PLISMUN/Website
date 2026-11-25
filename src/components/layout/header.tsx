@@ -8,6 +8,7 @@ import { useSession } from "next-auth/react";
 import { Menu, X } from "lucide-react";
 
 import { cn } from "@/lib/utils";
+import { useStages } from "@/features/access/context";
 import { useSiteConfig } from "@/features/site-config/context";
 import { Button } from "@/components/ui/button";
 
@@ -23,7 +24,8 @@ const links = [
 ];
 
 export function Header() {
-  const { conference, stages } = useSiteConfig();
+  const { conference } = useSiteConfig();
+  const stages = useStages();
   const { data: session } = useSession();
   const pathname = usePathname();
 
