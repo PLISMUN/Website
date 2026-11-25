@@ -1,0 +1,26 @@
+import Module from 'module'
+
+// Sends one email through src/server/email.ts, in the site's template, with a copy to the sender.
+//   pnpm tsx --env-file=.env scripts/send-email.ts <to> <subject> <html body>
+// Without EMAIL_PASSWORD it only prints the email.
+
+// 'server-only' exists only inside Next's bundler, so stand in for it here
+const resolve = (Module as any)._resolveFilename
+;(Module as any)._resolveFilename = function (request: string, ...rest: unknown[]) {
+  if (request === 'server-only') return require.resolve('./empty-module')
+  return resolve.call(this, request, ...rest)
+}
+
+const [to, subject, body] = process.argv.slice(2)
+if (!to || !subject || !body) {
+  console.error('Usage: pnpm tsx --env-file=.env scripts/send-email.ts <to> <subject> <html body>')
+  process.exit(1)
+}
+
+import('@/server/email')
+  .then(({ sendEmail }) => sendEmail(to, subject, body))
+  .then(() => console.log(`Done: ${to}`))
+  .catch((err) => {
+    console.error(err)
+    process.exit(1)
+  })
